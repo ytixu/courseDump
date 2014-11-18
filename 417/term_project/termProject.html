@@ -1,16 +1,25 @@
 <html>
 	<head>
 		<title>COMP 417 project</title>
+		<script type="text/javascript">
+			var XMAP_SIZE = 1000;
+			var YMAP_SIZE = 500;
+		</script>
 	</head>
 	<body><center>
 		 <canvas id="map" style="border:1px solid #000000;">
 		</canvas> 
 	</br>
-		 <button type="button">Start</button> 
-		<table id="result">
-			<!-- display staticstics here -->
+		 <button type="button" id="startBTN">Start</button> <button type="button" id="resetBTN">Reset</button> 
+		<table>
+			<tr>
+				<td id="result"></td>
+				<td id="setter"></td>
+			</tr>
 		</table>
 	</center>
+	<script type="text/javascript" src="target.js"></script>
+	<script type="text/javascript" src="camera.js"></script>
 	<script type="text/javascript" src="map.js"></script>
 	</body>
 </html>

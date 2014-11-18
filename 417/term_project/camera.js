@@ -1,8 +1,12 @@
 // camera object
 
 // half of the sizes
-var XCAM_SIZE = 25;
-var YCAM_SIZE = 15;
+var XCAM_SIZE = 60;
+var YCAM_SIZE = 40;
+
+var cameras = [];
+var clickCamera = true;
+var MAX_CAM = 6;
 
 function createCamera(xPos, yPos){
 	return {
@@ -16,6 +20,12 @@ function createCamera(xPos, yPos){
 				this.y + YCAM_SIZE < y ||
 				this.y - YCAM_SIZE > y) return false;
 			return true;
+		},
+		draw : function(context){
+			context.beginPath();
+			context.rect(Math.max(0,this.x-XCAM_SIZE), Math.max(0,this.y-YCAM_SIZE),
+					Math.min(XMAP_SIZE-this.x+XCAM_SIZE, XCAM_SIZE*2), Math.min(YMAP_SIZE-this.y+YCAM_SIZE, YCAM_SIZE*2));
+			context.stroke();
 		}
 	}
 }
