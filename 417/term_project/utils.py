@@ -4,6 +4,7 @@ import json
 import numpy as np
 
 TESTPROBS = [0.99, 0.01]
+MAX_VAR = 1000
 
 # assume normal speed
 def randSpeed():
@@ -69,14 +70,16 @@ def get_exit(zone, p): # given previous zone and a random float, generate the ex
 	if p<zone['next'][0]['prob']: return zone['next'][0]
 	return zone['next'][1]	
 
-def rand_zone(zone0, zone1):
-	# calculate distance 
-	entry = np.random.multivariate_normal(zone0['coord'], zone0['var'])
-	exit = np.random.multivariate_normal(zone1['coord'], zone0['var'])
-	d = np.linalg.norm(entry - exit)
-	return (entry, d/randSpeed(), exit)
+def rand_zone(zone):
+	return np.random.multivariate_normal(zone['coord'], zone['var'])
+
+def get_dist(coord1,coord2):
+	return np.linalg.norm(coord1 - coord2)/randSpeed()
 
 ZONES = zones()
+
+def rand_time():
+	return random.random()*5000
 
 # generate n targets
 # according to the GMM
@@ -88,50 +91,85 @@ def genTargets(n):
 	# 		(exit, time)
 	# 	), ...]
 	start = ZONES.Mickey
-	time = random.random()*n
+	prior = rand_zone(start)
+	time = rand_time()
+	hasExited = True
 	while n:
 		exit = get_exit(start, random.random())
-		prior, tranTime, post = rand_zone(start, exit)
-		targets.append((
-				(prior.tolist(), time),
-				(post.tolist(), time+tranTime) 
-		))
+		post = rand_zone(exit)
+		tranTime = get_dist(prior, post)
+		if hasExited:
+			targets.append(("enter", prior.tolist(), time))
+			targets.append(("exit", post.tolist(), time+tranTime))
+			hasExited = False
+		else:
+			hasExited = True
 		if exit['next']:
 			start = exit
+			prior = post
 			time += tranTime
 		else:
 			start = ZONES.Mickey
-			time = random.random()*n
+			prior = rand_zone(start)
+			time = rand_time()
+			hasExited = True
 			n -= 1
 
 	return targets
 
-def addToDict(d, k, v):
+def addToDict(d, k, v, coord):
 	try:
-		d[k] += v
+		d[k]['p'] += v
+		d[k]['n'] += 1.0
+		d[k]['m'] += (coord - d[k]['m'])/d[k]['n']
+		d[k]['sample'].append(coord)
 	except:
-		d[k] = v	
+		d[k] = {
+			'n' : 1.0,
+			'p' : v,
+			'm' : coord,
+			'sample' : [coord],
+			'v' : [0, 0]
+		}
 
 def getZones(n):
 	tot = n
 	entry_zones = {}
 	exit_zones = {}
 	start = ZONES.Mickey
+	prior = rand_zone(start)
 	hasExited = True
 	# addToDict(entry_zones, start['ID'], 1.0/tot)		
 	while n:
 		exit = get_exit(start, random.random())
+		post = rand_zone(exit)
 		if hasExited:
-			addToDict(entry_zones, start['ID'], 1.0/tot)		
-			addToDict(exit_zones, exit['ID'], 1.0/tot)		
+			addToDict(entry_zones, start['ID'], 1.0/tot, prior)		
+			addToDict(exit_zones, exit['ID'], 1.0/tot, post)		
 			n -= 1
 			hasExited = False
 		else:
 			hasExited = True
 		if exit['next']:
 			start = exit
+			prior = post
 		else:
 			start = ZONES.Mickey
+			prior = rand_zone(start)
+			hasExited = True
+
+	var = 0
+	for zs in (entry_zones, exit_zones):
+		for k in zs:
+			if zs[k]['n'] > 1:
+				for s in zs[k]['sample']:
+					zs[k]['v'] += (s-zs[k]['m'])*(s-zs[k]['m'])/(zs[k]['n']-1)
+				zs[k]['v'] = [[zs[k]['v'][0], 0],[0, zs[k]['v'][1]]]
+			else:
+				zs[k]['v'] = [[MAX_VAR, 0],[0, MAX_VAR]]
+			del zs[k]['sample']
+			zs[k]['m'] = zs[k]['m'].tolist()
+
 	return (entry_zones, exit_zones)
 
 json.dump(genTargets(100), open('dataTarget.json', 'w'))
