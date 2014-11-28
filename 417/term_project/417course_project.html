@@ -1,0 +1,74 @@
+<!DOCTYPE HTML>
+<HTML>
+	<HEAD>
+		<TITLE>
+		 	COMP 417 project
+		</TITLE>
+		<style>
+		body {
+			margin: 5% 25%;
+			font-size: 16pt;
+		}
+		p.abstract {
+		    font-style: italic;
+			margin-left: 30px;
+		}
+
+		h1, h2 {
+		    font-family: Arial, Helvetica, sans-serif;
+		}
+		</style>
+	</HEAD>
+<BODY>
+	<center>
+		<H1>
+			Investigation on Network Calibration
+		</H1>
+		by Yi Tian Xu 
+	</center>
+	<P class="abstract">
+		This project outlines the idea proposed by Dimitrios Makris, Tim Ellis and James Black through their paper "<a href="http://www.cim.mcgill.ca/~dudek/417/Papers/sensenet-markis-e-b.pdf" target="blank">Briging the Gaps between Camera</a>" published in 2004. This
+		project was required work for the 
+		<a href="http://www.cim.mcgill.ca/~dudek/417.html">
+		Introduction to Robotics
+		</a>
+		taught by <a href="http://www.cim.mcgill.ca/~dudek">Gregory Dudek</a>.
+	<P>
+
+<h2>Introduction</h2>
+<p>To track objects in an environmnet partially monitored by cameras, an intelligent surveillance system need to know how to deal with targets transiting through the blind regions between two spatially adjacent cameras. Such system would be able to continuously track targets and to generate complete target activity records. </p>
+
+<p>Past research has been done on single camera tracking and matching tracks in overlapping camera views. Some methods have been proposed to track single object through multiple camera views. Notably, Javed et al suggest to correspond the individial tracks of a target using feature matching by maximizing the posterior probability of the spatio-temporal and color apparance of the target. However, color is not guaranteed to be always reliable to match targets across multiple cameras.</p>
+
+<p> An alternative approach is to find a model of the environment and of the camera connectivity, enabling the system to predict the bahavior its targets. This allows one camera to "handover" the track to the next camera as the target move across the two, and thus avoids the need of establishing any correspondence. This model can carry spacial (topology) and temporal (time taken for targets to move between views) information of the network.
+</p>
+
+<p>The topology of the camera can be determined by using calibrated cameras, whose transformation function of pixel coordinates into 3D coordinates is already defined. A geometric analysis of each camera views would then allows spatial adjacency to be established. However, in a large network of cameras, it would be preferable if the system can calibrate itself automatically.</p> 
+
+<p>This project inverstigates on unsupervised learning method, "network calibration",proposed by Makris et al, that estabilishes links between camera views without any requirement of correspondence of target tracks and pre-calibration. This method trains itself on a dataset of observed target trajectories and infers the topology of the camera network based on statistics. 
+</p>
+
+<h2>Theory</h2>
+<p>For each camera view, there is a set of zones that describe where targets enter or leave the camera view. These entry/exit zones can be represented as nodes in a spatio-temporal graphical model. Each edge between two nodes denote an transition which is either visibile or invisible to the cameras. </p>
+
+
+<h2>Implementation</h2>
+
+<h2>Results</h2>
+
+We found.....  illustrated here:
+<img src="http://www.cs.mcgill.ca/~me/whatever" alt="radiosity illustrated">
+
+Our results could be expanded as follows....
+Other data that could be collected is...
+
+<h2>Conclusions </h2>
+In summary, our results indicates that....
+The advantages of the method are....
+The disadvantages of the method include....
+Other possible avenues for exploration include....
+
+
+
+</BODY>
+
