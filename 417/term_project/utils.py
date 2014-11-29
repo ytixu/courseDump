@@ -8,7 +8,7 @@ MAX_VAR = 1000
 
 # assume normal speed
 def randSpeed():
-	return np.random.normal(2,1)
+	return np.random.normal(2,0.05)
 
 # fixed zones 
 class zones:
@@ -79,7 +79,7 @@ def get_dist(coord1,coord2):
 ZONES = zones()
 
 def rand_time():
-	return random.random()*5000
+	return random.random()*3
 
 # generate n targets
 # according to the GMM

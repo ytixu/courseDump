@@ -60,22 +60,22 @@ def getCrossCorrelation():
 	return R
 
 def getCovar(R):
+	thrs = {}
 	cov = collections.defaultdict(dict)
-
-	Rlst = np.array([v for k in R for _,v in R[k].iteritems()])
-	# median
-	medR = np.median(Rlst)
-	# mean
-	mR = np.mean(Rlst)
-	# standard deviation
-	sR = np.std(Rlst)
-	# threshold
-	thr = mR - sR*w_const
-
 	for k in R:
+		Rlst = np.array([v for _,v in R[k].iteritems()])
+		# median
+		medR = np.median(Rlst)
+		# mean
+		mR = np.mean(Rlst)
+		# standard deviation
+		sR = np.std(Rlst)
+		# threshold
+		thr = mR - sR*w_const
 		for t in R[k]:
 			cov[k][t] = R[k][t] - medR
-	return (cov, thr)
+		thrs[k] = thr
+	return (cov, thrs)
 
 def checkRepeted(k,t,dic):
 	try:
@@ -85,24 +85,45 @@ def checkRepeted(k,t,dic):
 		pass
 
 def getTransitionProb(fromCovar):
-	cov, thr = fromCovar
+	cov, thrs = fromCovar
 	trans = collections.defaultdict(dict)
+	print thrs
+	sum_tran = 0
 	for k in cov:
+		thr = thrs[k]
 		for t in cov[k]:
 			if cov[k][t] > thr:
+				if cov[k][t] < 0: print cov[k][t], t
 				if t < 0:
 					checkRepeted(k[::-1], -t, trans)
 					p = zone_exit[str(k[1])]['p']
 					trans[k[::-1]][-t] = cov[k][t]/p/(1-p)
+					sum_tran += trans[k[::-1]][-t]
 				else:
 					checkRepeted(k, t, trans)
 					p = zone_entry[str(k[0])]['p']
 					trans[k][t] = cov[k][t]/p/(1-p)
+					sum_tran += trans[k][t]
+	#normalization
+	for k in trans:
+		for t in trans[k]:
+			trans[k][t] = trans[k][t]/sum_tran
 	return trans
 
 
 if __name__ == "__main__":
+	import csv
 	R = getCrossCorrelation()
 	cov_thr = getCovar(R)
 	tran = getTransitionProb(cov_thr)
-	# print tran
+
+	for k in tran:
+		with open(('%s_%s.csv'%(k[0], k[1])), 'wb') as csvfile:
+			spamwriter = csv.writer(csvfile, delimiter=',',
+				 quotechar='|', quoting=csv.QUOTE_MINIMAL)
+			spamwriter.writerow(["TIME","PROB"])
+			for t in tran[k]:
+				spamwriter.writerow([t, tran[k][t]])
+
+
+	

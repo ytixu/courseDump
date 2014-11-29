@@ -1,3 +1,5 @@
 old/*
 data*.json
 *.pyc
+*.csv
+*.R
