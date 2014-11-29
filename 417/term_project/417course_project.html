@@ -17,6 +17,9 @@
 		h1, h2 {
 		    font-family: Arial, Helvetica, sans-serif;
 		}
+		figure{
+			text-align: center;
+		}
 		</style>
 	</HEAD>
 <BODY>
@@ -35,7 +38,16 @@
 		taught by <a href="http://www.cim.mcgill.ca/~dudek">Gregory Dudek</a>.
 	<P>
 
-<h2>Introduction</h2>
+<h2>Content</h2>
+<ol>
+	<li><a href="#1">Introduction</a></li>
+	<li><a href="#2">Theory</a></li>
+	<li><a href="#3">Implementation</a></li>
+	<li><a href="#4">Experiment</a></li>
+	<li><a href="#5">Conclusion</a></li>
+</ol>
+
+<a name="1"></a><h2>Introduction</h2>
 <p>To track objects in an environmnet partially monitored by cameras, an intelligent surveillance system need to know how to deal with targets transiting through the blind regions between two spatially adjacent cameras. Such system would be able to continuously track targets and to generate complete target activity records. </p>
 
 <p>Past research has been done on single camera tracking and matching tracks in overlapping camera views. Some methods have been proposed to track single object through multiple camera views. Notably, Javed et al suggest to correspond the individial tracks of a target using feature matching by maximizing the posterior probability of the spatio-temporal and color apparance of the target. However, color is not guaranteed to be always reliable to match targets across multiple cameras.</p>
@@ -43,18 +55,26 @@
 <p> An alternative approach is to find a model of the environment and of the camera connectivity, enabling the system to predict the bahavior its targets. This allows one camera to "handover" the track to the next camera as the target move across the two, and thus avoids the need of establishing any correspondence. This model can carry spacial (topology) and temporal (time taken for targets to move between views) information of the network.
 </p>
 
-<p>The topology of the camera can be determined by using calibrated cameras, whose transformation function of pixel coordinates into 3D coordinates is already defined. A geometric analysis of each camera views would then allows spatial adjacency to be established. However, in a large network of cameras, it would be preferable if the system can calibrate itself automatically.</p> 
+<p>The topology of the camera can be determined by using calibrated cameras, whose transformation function of pixel coordinates into 3D coordinates is already defined. If the coordinate system in which calibration is done is common to all the cameras, a geometric analysis of each camera views would then allows spatial adjacency to be established. However, in a large network of cameras, it would be preferable if the system can calibrate itself automatically. Furthermore, a common coordinate system might not be necessary since establishing spatial adjacency requires simply the knowledge of the cameras position relative to each other.</p> 
 
 <p>This project inverstigates on unsupervised learning method, "network calibration",proposed by Makris et al, that estabilishes links between camera views without any requirement of correspondence of target tracks and pre-calibration. This method trains itself on a dataset of observed target trajectories and infers the topology of the camera network based on statistics. 
 </p>
 
-<h2>Theory</h2>
-<p>For each camera view, there is a set of zones that describe where targets enter or leave the camera view. These entry/exit zones can be represented as nodes in a spatio-temporal graphical model. Each edge between two nodes denote an transition which is either visibile or invisible to the cameras. </p>
+<a name="2"></a><h2>Theory</h2>
+<p>Each camera view has a set of zones describing where targets enter or leave. These entry/exit zones can be represented as nodes in a tempo-topographical model. Each edge between two nodes denote an transition which is either visibile or invisible to the cameras. A target appearing and dissapearing in a camera view will kindle two signals to the cameras: one at the entry zone <i>i</i> and one at the exit zone <i>j</i>. These signals are modeled as Bernoulli processes, <i>N<sub>i</sub></i> and <i>M<sub>j</sub></i>. That is, at some time <i>t</i>, the probability of seeing a target appearig at zone <i>i</i> is 
+<center>
+	<i>p(n<sub>i</sub>(t) = 1) = E[N<sub>i</sub>]</i>
+</center></p>
 
+<p> 
+<figure>
+	<img src="graphmodel.png" alt="Tempo-topographical model">
+	<figcaption><b>Figure 1</b> The tempo-topographical model showing entry zone <i>i</i> and exit zone <i>j</i>.</figcaption>
+</figure> 
 
-<h2>Implementation</h2>
+<a name="3"></a><h2>Implementation</h2>
 
-<h2>Results</h2>
+<a name="4"></a><h2>Results</h2>
 
 We found.....  illustrated here:
 <img src="http://www.cs.mcgill.ca/~me/whatever" alt="radiosity illustrated">
@@ -62,13 +82,13 @@ We found.....  illustrated here:
 Our results could be expanded as follows....
 Other data that could be collected is...
 
-<h2>Conclusions </h2>
+<a name="5"></a><h2>Conclusions </h2>
 In summary, our results indicates that....
 The advantages of the method are....
 The disadvantages of the method include....
 Other possible avenues for exploration include....
 
 
-
+<!-- <a href=>[top]</a> -->
 </BODY>
 
