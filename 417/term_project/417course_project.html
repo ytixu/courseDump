@@ -71,7 +71,12 @@
 <ol>
 	<li><a href="#1">Introduction</a></li>
 	<li><a href="#2">Theory</a></li>
-	<li><a href="#3">Implementation</a></li>
+	<li><a href="#3">Implementation</a>
+		<ol>
+			<li><a href="#31">Data Classification</a></li>
+			<li><a href="#32">Parameter Estimation</a></li>
+			<li><a href="#33">Interpretation</a></li>
+		</ol></li>
 	<li><a href="#4">Experiment</a></li>
 	<li><a href="#5">Conclusion</a></li>
 </ol>
@@ -116,20 +121,20 @@ If zone $i$ and zone $j$ are adjacent or overlapping, then their associated sign
 
 and the covariance, 
 
-\begin{equation*}\mbox{Cov}_{ij}(\tau) = R_{ij}(t) - p_np_m\end{equation*}
+\begin{equation}\mbox{Cov}_{ij}(\tau) = R_{ij}(t) - p_np_m\end{equation}
 
 If $\int$Cov$_{ij}(\tau) d\tau = 0$, then the signals are independent. Finally, the transition probability can be estimated using
 
-\begin{equation*}\alpha_{ij}(\tau) = \mbox{Cov}_{ij}(\tau) / p_n(1-p_n)\end{equation*}
+\begin{equation}\alpha_{ij}(\tau) = \mbox{Cov}_{ij}(\tau) / p_n(1-p_n)\end{equation}
 
 </p>
 <a href='#top'>[top]</a>
 
 <a name="3"></a><h2>Implementation</h2>
 <p>The entry/exit zones are known before starting Network Calibration. They can be leant using Expectation-Maximization on a dataset of trajectories as did Makris et al for their implementation, which is presented in one of their preious works. <a href="#r3">[3]</a> Let $Z$ be the set of learnt zones. Each signal $N_i$ from some zone $i\in Z$ is modeled as a Guassian distribution with mean $\boldsymbol\mu_i$, covariance $\boldsymbol\Sigma_i$ and a prior probability $p_i = p_n$. Together, the network is represented by a Gaussian Mixture $\theta = \{\boldsymbol\mu_i, \boldsymbol\Sigma_i, p_i | i\in Z\}$. </p>
-<p>Further observations of trajectories are done by the cameras to learn the topology. This process is mainly divided into three parts: data classification, parameter estimations, interpretation. </p>
+<p>Further observations of trajectories are done by the cameras to learn the topology. This process is mainly divided into three parts: data classification, parameter estimation, interpretation. </p>
 
-<a name="33"></a><h3>Data Classification</h3>
+<a name="31"></a><h3>Data Classification</h3>
 <p>For each signal $x$ related to an appearance/disappearance of a target, Maximum-a-Posteriori is used to estimate which entry/exit zone $x$ belongs to using the following equations.
 
 \begin{equation*}\mbox{most likely zone = arg}\max_{i\in Z} (p(i|x,\theta))\end{equation*}
@@ -141,10 +146,33 @@ where
 	&p(x|i) = \frac{1}{\sqrt{2\pi|\boldsymbol\Sigma_i|}} \exp{\left(-\frac{1}{2}(x - \boldsymbol\mu_i)^\top \boldsymbol\Sigma_i^{-1}(x - \boldsymbol\mu_i)\right)}
 \end{align}
 
-Equation (1) follows from Bayes Rule; $\eta = \sum_{j\in Z} p_j p(x|j)$ is the normalization factor. Equation (2) decribes the probability of having a signal at zone $i$, which is assumed to follow the guassian distribution. The logarithm of the probabilities is used instead and the equations can be simplified into the following.
+Equation (3) follows from Bayes Rule; $\eta = \sum_{j\in Z} p_j p(x|j)$ is the normalization factor. Equation (4) decribes the probability of having a signal at zone $i$, which is assumed to follow the guassian distribution. The logarithm of the probabilities is used instead and the equations can be simplified into the following.
 
 \begin{equation*} p(i|x,\theta) \propto \log{(p_i p(x|i))} - \frac{1}{2}\log{|\boldsymbol\Sigma_i|} -\frac{1}{2}(x - \boldsymbol\mu_i)^\top \boldsymbol\Sigma_i^{-1}(x - \boldsymbol\mu_i)\end{equation*}
 </p> 
+
+<a name="32"></a><h3>Parameter Estimation</h3>
+<p>The cross-correlation function $R_{ij}(\tau)$ is estimated for $-T\leq \tau \leq T$ and are implemented as counters. When an appearance event at zone $i$ is observed at some time $t_1$, the method searches for a disappearance event at zone $j$ at time $t_2$ such that $t_2 \in [-T+t_1, T+t_1]$. It then increment $R_{ij}(\lfloor t_2 - t_1 \rceil)$ by 1, where $\lfloor t_2 - t_1 \rceil = \lfloor t_2 - t_1 + 0.5 \rfloor$ is the time difference rounded to the nearest integer.</p>
+<p>After gathering enough data to shape the cross-correlation functions, the covariance can be then estimated. As the stationary assumption about the signal is wrong, equation (1) is replaced by 
+
+\begin{equation*}\mbox{Cov}_{ij}(\lfloor\tau\rceil) = R_{ij}(\lfloor\tau\rceil) - \mbox{median}_{\tau}R_{ij}(\tau)\end{equation*}
+
+<p>If the covariance $C_{ij}(\lfloor\tau\rceil)$ has a clear peak at some $\lfloor\tau\rceil$, then $\lfloor\tau\rceil$ represents the most popular transition time period between zone $i$ and $j$, implying that the signals from these two zones are correlated. A threashold defined as 
+
+\begin{equation*} thr = E[R_{ij}(\tau)] - \omega\sqrt{V[R_{ij}(\tau)]}\end{equation*}
+
+is used to filter out the peaks that are not significant. Correlated entry/exit pairs are assumed to have interconnected pathways, each with transition probability that can be estimated with equation (2) and by enforcing the constraint
+
+\begin{equation*}0 < \int \alpha_{ij}(\tau) d\tau < 1\end{equation*} 
+
+However, if the most popular transition time is strictly negative, the following equation is used instead.
+
+\begin{equation*}\alpha_{ji}(\tau) = \mbox{Cov}_{ij}(\tau) / p_m(1-p_m)\end{equation*}</p>
+
+<a name="33"></a><h3>Interpretation</h3>
+<p>The topology of the cameras can be inferred by the set of correlated pairs of zones and their transition times. Considering two zones $i$ and $j$, each from a different camera view, if the transition time form $i$ to $j$ is approximately zero, then the two zones are overlapping. If the transition time is strictly positive, then targets can move from $i$ to $j$ through an unseen path. Finally, if the transition time is strictly negative, then targets enter $j$ before they leave $i$, implying that both zones are either patially or completely visible on both cameras.</p>
+
+
 <a href='#top'>[top]</a>
 
 <a name="4"></a><h2>Results</h2>
