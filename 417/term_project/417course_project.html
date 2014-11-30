@@ -123,7 +123,7 @@ and the covariance,
 
 \begin{equation}\mbox{Cov}_{ij}(\tau) = R_{ij}(t) - p_np_m\end{equation}
 
-If $\int$Cov$_{ij}(\tau) d\tau = 0$, then the signals are independent. Finally, the transition probability can be estimated using
+If $\int$Cov$_{ij}(\tau) d\tau = 0$, then the signals are independent. Links formed by dependent zones are called "valid". The transition probability can be estimated using
 
 \begin{equation}\alpha_{ij}(\tau) = \mbox{Cov}_{ij}(\tau) / p_n(1-p_n)\end{equation}
 
@@ -157,7 +157,7 @@ Equation (3) follows from Bayes Rule; $\eta = \sum_{j\in Z} p_j p(x|j)$ is the n
 
 \begin{equation*}\mbox{Cov}_{ij}(\lfloor\tau\rceil) = R_{ij}(\lfloor\tau\rceil) - \mbox{median}_{\tau}R_{ij}(\tau)\end{equation*}
 
-<p>If the covariance $C_{ij}(\lfloor\tau\rceil)$ has a clear peak at some $\lfloor\tau\rceil$, then $\lfloor\tau\rceil$ represents the most popular transition time period between zone $i$ and $j$, implying that the signals from these two zones are correlated. A threashold defined as 
+<p>If the covariance $C_{ij}(\lfloor\tau\rceil)$ has a clear peak at some $\lfloor\tau\rceil$, then $\lfloor\tau\rceil$ represents the most popular transition time period between zone $i$ and $j$, implying that the signals from these two zones are correlated, i.e.: they form a valid link. A threashold defined as 
 
 \begin{equation*} thr = E[R_{ij}(\tau)] - \omega\sqrt{V[R_{ij}(\tau)]}\end{equation*}
 
@@ -170,18 +170,18 @@ However, if the most popular transition time is strictly negative, the following
 \begin{equation*}\alpha_{ji}(\tau) = \mbox{Cov}_{ij}(\tau) / p_m(1-p_m)\end{equation*}</p>
 
 <a name="33"></a><h3>Interpretation</h3>
-<p>The topology of the cameras can be inferred by the set of correlated pairs of zones and their transition times. Considering two zones $i$ and $j$, each from a different camera view, if the transition time form $i$ to $j$ is approximately zero, then the two zones are overlapping. If the transition time is strictly positive, then targets can move from $i$ to $j$ through an unseen path. Finally, if the transition time is strictly negative, then targets enter $j$ before they leave $i$, implying that both zones are either patially or completely visible on both cameras.</p>
-
+<p>The topology of the cameras can be inferred by the set of valid links and their transition times. Considering two zones $i$ and $j$, each from a different camera view, if the transition time form $i$ to $j$ is approximately zero, then the two zones are overlapping. If the transition time is strictly positive, then targets can move from $i$ to $j$ through an unseen path. Finally, if the transition time is strictly negative, then targets enter $j$ before they leave $i$, implying that both zones are either patially or completely visible on both cameras.</p>
 
 <a href='#top'>[top]</a>
 
-<a name="4"></a><h2>Results</h2>
+<a name="4"></a><h2>Experiment</h2>
+<p>Makris et al experimented their method on a set of 6 cameras monitoring street passengers (pedestrains and vehicles) for a period of 13 hours. Their result showed that Network Calibration can successfully determine the topology of the cameras as discussed in the previous section.</p>
 
-We found.....  illustrated here:
-<img src="http://www.cs.mcgill.ca/~me/whatever" alt="radiosity illustrated">
+<p>We decide to carry an experiment on the completeness of their method. More specifically, we are interested in knowing if Network Calibration can find all the valid links. Theoretically, if there's a transition between two zones, regardless of how small its probability is, running Network Calibration long enough will eventually lead to the discovery of that link. However, as running time is restricted in real world applications, the question of how much data is enough arises. It may be intuitive to think that to find a valid link, the zones of that link need to be detected and signals from these zones must be observed when performing Network Calibration. Yet, as the method is correspondence-free, trajectory information are discarded and thus one observation of a target moving along that link is not enough for the method to detect that link.</p>
 
-Our results could be expanded as follows....
-Other data that could be collected is...
+<p>We construct a compter simulated environment with fixed cameras. </p>
+
+<a href='#top'>[top]</a>
 
 <a name="5"></a><h2>Conclusions </h2>
 In summary, our results indicates that....

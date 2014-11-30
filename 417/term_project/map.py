@@ -38,6 +38,8 @@ def mapClasify(zone):
 	max_prob = 0
 	for k,zone in zones.iteritems():
 		p = math.log(zone['p']) + log_normal_p(zone['m'], zone['v'], coord)
+		# if k in (u'entry_minny', u'exit_daisy'):
+		# 	print k, p
 		if p > max_prob or not max_entry:
 			max_prob = p
 			max_entry = k
@@ -49,8 +51,10 @@ def getCrossCorrelation():
 	enter_targets = []
 	exit_targets = []
 	for obs in data:
-		tpe, _, t = obs
+		tpe, coord, t = obs
 		z = mapClasify(obs)
+		# if z in (u'exit_donald', u'entry_minny'):
+		# 	print coord, z
 		if tpe == 'enter':
 			enter_targets.append((z,t))
 		else:
@@ -95,6 +99,8 @@ def getTransitionProb(fromCovar):
 	trans = collections.defaultdict(dict)
 	for k in cov:
 		thr = thrs[k]
+		# if k == (u'exit_donald', u'entry_minny'):
+		# 	print thr, cov[k]
 		for t in cov[k]:
 			if cov[k][t] >= thr:
 				# if cov[k][t] < 0: print cov[k][t], t
@@ -105,26 +111,29 @@ def getTransitionProb(fromCovar):
 				else:
 					checkRepeted(k, t, trans)
 					trans[k][t] = cov[k][t]/p/(1-p)
-		#normalization
-		if k in trans:
-			sum_tran = 0
-			for t in trans[k]:
-				sum_tran += trans[k][t]
-			for t in trans[k]:
-				trans[k][t] = trans[k][t]/sum_tran
+	#normalization
+	for k in trans:
+		sum_tran = 0
+		for t in trans[k]:
+			sum_tran += trans[k][t]
+		# print k, sum_tran, trans[k]
+		for t in trans[k]:
+			trans[k][t] = trans[k][t]/sum_tran
+		# print trans[k]
 	return trans
 
-def run(dirName, zoneFile, zn, targetFile, tn):
-	if not os.path.exists(dirName):
-		os.makedirs(dirName)
-	utils.gen_data(dirName+'/'+zoneFile, zn, dirName+'/'+targetFile, tn)
-	loadData(dirName+'/'+zoneFile, dirName+'/'+targetFile)
+def getProbs(zn, tn):
+	global zones, data
+	zones, data = utils.gen_data(zn, tn)
 	
 	R = getCrossCorrelation()
 	# print R
 	cov_thr = getCovar(R)
-	tran = getTransitionProb(cov_thr)
+	return (cov_thr[0], getTransitionProb(cov_thr))
 
+def saveToCSV(tran, dirName):
+	if not os.path.exists(dirName):
+		os.makedirs(dirName)
 	for k in tran:
 		with open(('%s/%s_%s.csv'%(dirName, k[0], k[1])), 'wb') as csvfile:
 			spamwriter = csv.writer(csvfile, delimiter=',',
@@ -132,7 +141,37 @@ def run(dirName, zoneFile, zn, targetFile, tn):
 			spamwriter.writerow(["TIME","PROB"])
 			for t in tran[k]:
 				spamwriter.writerow([t, tran[k][t]])
+
+def findLink(link, cov, tran):
+	inCov, inTran = (None, None)
+	if tran[link]:
+		inTran = tran[link]
+	if cov[link]:
+		inCov = True #cov[link]
+	return (inCov, inTran)
 	
 if __name__ == "__main__":
-	for n in [100, 500, 1000, 5000]:
-		run('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
+	result = {}
+	for n in [100, 500, 800, 1000, 2000, 5000]:
+	# for n in [1000]:
+		print n
+		result[n] = []
+		for i in range(20000/n):
+		# for i in range(1):
+			print "-",i
+			cov, tran = getProbs(n,n)
+			result[n].append(findLink((u'exit_donald', u'entry_minny'), cov, tran))
+		#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
+	# json.dump(result, open("result.json", 'w'))
+	with open('result3.csv', 'wb') as csvfile:
+		spamwriter = csv.writer(csvfile, delimiter=',',
+			 quotechar='|', quoting=csv.QUOTE_MINIMAL)
+		spamwriter.writerow(["NUM", "OBSERVED", "TIME","PROB"])
+		for n, v in result.iteritems():
+			for e in v:
+				obs, tran = e
+				if not obs or not tran:
+					spamwriter.writerow([n, obs, 0.0, 0.0])
+				else:
+					for t, p in tran.iteritems():
+						spamwriter.writerow([n, obs, t, p])

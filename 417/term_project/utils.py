@@ -149,9 +149,9 @@ def getZones(n):
 
 	var = 0
 	# for zs in (entry_zones, exit_zones):
-	nn = 0
+	# nn = 0
 	for k in zs:
-		nn += zs[k]['n']
+		# nn += zs[k]['n']
 		if zs[k]['n'] > 1:
 			for s in zs[k]['sample']:
 				zs[k]['v'] += (s-zs[k]['m'])*(s-zs[k]['m'])/(zs[k]['n']-1)
@@ -160,12 +160,16 @@ def getZones(n):
 			zs[k]['v'] = [[MAX_VAR, 0],[0, MAX_VAR]]
 		del zs[k]['sample']
 		zs[k]['m'] = zs[k]['m'].tolist()
-	print nn
+	# print nn
 	return zs
 
-def gen_data(zoneFile, zn, targetFile, tn):
+def gen_data(zn, tn):
+	return (getZones(zn), genTargets(tn))
+
+def save_data(zoneFile, zn, targetFile, tn):
 	json.dump(getZones(zn), open('%s.json'%zoneFile, 'w'))
 	json.dump(genTargets(tn), open('%s.json'%targetFile, 'w'))
+
 
 if __name__ == "__main__":
 	json.dump(getZones(100), open('dataZones.json', 'w'))
