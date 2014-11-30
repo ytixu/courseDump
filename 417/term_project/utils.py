@@ -16,7 +16,7 @@ class zones:
 		# zone names
 		# camera 2
 		self.Daisy = { # exit zone
-			'ID': 1,
+			'ID': "exit_daisy",
 			'cam': 2,
 			'coord': (23.23, 5.6),
 			'var': ((0.5, 0.0), (0.0, 0.5)),
@@ -24,7 +24,7 @@ class zones:
 			'next': []
 		}
 		self.Minni = { # entry zone
-			'ID': 2,	
+			'ID': "entry_minny",	
 			'cam': 2,
 			'coord': (15.9,5.2),
 			'var': ((0.5, 0.0), (0.0, 0.5)),
@@ -33,7 +33,7 @@ class zones:
 		}
 		# camera 1
 		self.Goofy = { # exit zone
-			'ID': 3,
+			'ID': "exit_goofy",
 			'cam': 1,
 			'coord': (4.9, 16.2),
 			'var': ((0.5, 0.0), (0.0, 0.5)),
@@ -41,7 +41,7 @@ class zones:
 			'next': []
 		}
 		self.Donald = { # exit zone
-			'ID': 4,
+			'ID': "exit_donald",
 			'cam': 1,
 			'coord': (15.8, 5.2),
 			'var': ((0.5, 0.0), (0.0, 0.5)),
@@ -49,7 +49,7 @@ class zones:
 			'next': [self.Minni]
 		}
 		self.Mickey = { # entry zone
-			'ID': 5,
+			'ID': "entry_micky",
 			'cam': 1,
 			'coord': (5.0,5.0),
 			'var': ((0.5, 0.0), (0.0, 0.5)),
@@ -78,8 +78,8 @@ def get_dist(coord1,coord2):
 
 ZONES = zones()
 
-def rand_time():
-	return random.random()*3
+def rand_time(n):
+	return random.random()*n
 
 # generate n targets
 # according to the GMM
@@ -92,7 +92,7 @@ def genTargets(n):
 	# 	), ...]
 	start = ZONES.Mickey
 	prior = rand_zone(start)
-	time = rand_time()
+	time = rand_time(n)
 	hasExited = True
 	while n:
 		exit = get_exit(start, random.random())
@@ -111,7 +111,7 @@ def genTargets(n):
 		else:
 			start = ZONES.Mickey
 			prior = rand_zone(start)
-			time = rand_time()
+			time = rand_time(n)
 			hasExited = True
 			n -= 1
 
@@ -134,44 +134,39 @@ def addToDict(d, k, v, coord):
 
 def getZones(n):
 	tot = n
-	entry_zones = {}
-	exit_zones = {}
-	start = ZONES.Mickey
-	prior = rand_zone(start)
-	hasExited = True
-	# addToDict(entry_zones, start['ID'], 1.0/tot)		
+	# entry_zones = {}
+	# exit_zones = {}
+	zs = {}
+	curr = ZONES.Mickey
 	while n:
-		exit = get_exit(start, random.random())
-		post = rand_zone(exit)
-		if hasExited:
-			addToDict(entry_zones, start['ID'], 1.0/tot, prior)		
-			addToDict(exit_zones, exit['ID'], 1.0/tot, post)		
-			n -= 1
-			hasExited = False
+		position = rand_zone(curr)
+		addToDict(zs, curr['ID'], 1.0/tot, position)	
+		if curr['next']:
+			curr = get_exit(curr, random.random())
 		else:
-			hasExited = True
-		if exit['next']:
-			start = exit
-			prior = post
-		else:
-			start = ZONES.Mickey
-			prior = rand_zone(start)
-			hasExited = True
+			curr = ZONES.Mickey
+		n -= 1
 
 	var = 0
-	for zs in (entry_zones, exit_zones):
-		for k in zs:
-			if zs[k]['n'] > 1:
-				for s in zs[k]['sample']:
-					zs[k]['v'] += (s-zs[k]['m'])*(s-zs[k]['m'])/(zs[k]['n']-1)
-				zs[k]['v'] = [[zs[k]['v'][0], 0],[0, zs[k]['v'][1]]]
-			else:
-				zs[k]['v'] = [[MAX_VAR, 0],[0, MAX_VAR]]
-			del zs[k]['sample']
-			zs[k]['m'] = zs[k]['m'].tolist()
+	# for zs in (entry_zones, exit_zones):
+	nn = 0
+	for k in zs:
+		nn += zs[k]['n']
+		if zs[k]['n'] > 1:
+			for s in zs[k]['sample']:
+				zs[k]['v'] += (s-zs[k]['m'])*(s-zs[k]['m'])/(zs[k]['n']-1)
+			zs[k]['v'] = [[zs[k]['v'][0], 0],[0, zs[k]['v'][1]]]
+		else:
+			zs[k]['v'] = [[MAX_VAR, 0],[0, MAX_VAR]]
+		del zs[k]['sample']
+		zs[k]['m'] = zs[k]['m'].tolist()
+	print nn
+	return zs
 
-	return (entry_zones, exit_zones)
+def gen_data(zoneFile, zn, targetFile, tn):
+	json.dump(getZones(zn), open('%s.json'%zoneFile, 'w'))
+	json.dump(genTargets(tn), open('%s.json'%targetFile, 'w'))
 
-json.dump(genTargets(100), open('dataTarget.json', 'w'))
-json.dump(getZones(100), open('dataZones.json', 'w'))
-# serialize the gmm 
+if __name__ == "__main__":
+	json.dump(getZones(100), open('dataZones.json', 'w'))
+	json.dump(genTargets(100), open('dataTarget.json', 'w'))

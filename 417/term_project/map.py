@@ -1,19 +1,24 @@
-# Maximum-a-posteriori
 import json
 import math
 import collections
+import csv
+import os
 
 import numpy as np
 
-from utils import zones
+import utils
 
 # constants
-w_const = 1
+w_const = 0
+T = 50
 
-# trajectory data
-data = json.load(open('dataTarget.json', 'r'))
-zone_entry, zone_exit = json.load(open('dataZones.json', 'r'))
+zones = {}
+data = {}
 
+def loadData(zoneFile, targetFile):
+	global zones, data
+	zones = json.load(open('%s.json'%zoneFile, 'r'))
+	data = json.load(open('%s.json'%targetFile, 'r'))
 
 # p(x|i) = e^{-0.5(x-mean)^T var^-1 (x-mean)} / sqrt(2pi |var|)
 # proportional to -(x-mean)^T var^-1 (x-mean) - log(|var|)
@@ -25,10 +30,10 @@ def log_normal_p(mean, var, x):
 
 def mapClasify(zone):
 	tpe, coord,_ = zone 
-	if tpe == 'enter':
-		zones = zone_entry
-	else:
-		zones = zone_exit
+	# if tpe == 'enter':
+	# 	zones = zone_entry
+	# else:
+	# 	zones = zone_exit
 	max_entry = None
 	max_prob = 0
 	for k,zone in zones.iteritems():
@@ -53,6 +58,7 @@ def getCrossCorrelation():
 	for i, ti in enter_targets:
 		for j, tj in exit_targets:
 			time = math.floor(tj-ti+0.5)
+			if abs(time) > T: continue
 			try:
 				R[(i,j)][time] += 1.0
 			except:
@@ -71,7 +77,7 @@ def getCovar(R):
 		# standard deviation
 		sR = np.std(Rlst)
 		# threshold
-		thr = mR - sR*w_const
+		thr = mR + sR*w_const
 		for t in R[k]:
 			cov[k][t] = R[k][t] - medR
 		thrs[k] = thr
@@ -87,43 +93,46 @@ def checkRepeted(k,t,dic):
 def getTransitionProb(fromCovar):
 	cov, thrs = fromCovar
 	trans = collections.defaultdict(dict)
-	print thrs
-	sum_tran = 0
 	for k in cov:
 		thr = thrs[k]
 		for t in cov[k]:
-			if cov[k][t] > thr:
-				if cov[k][t] < 0: print cov[k][t], t
+			if cov[k][t] >= thr:
+				# if cov[k][t] < 0: print cov[k][t], t
+				p = zones[str(k[0])]['p']
 				if t < 0:
 					checkRepeted(k[::-1], -t, trans)
-					p = zone_exit[str(k[1])]['p']
 					trans[k[::-1]][-t] = cov[k][t]/p/(1-p)
-					sum_tran += trans[k[::-1]][-t]
 				else:
 					checkRepeted(k, t, trans)
-					p = zone_entry[str(k[0])]['p']
 					trans[k][t] = cov[k][t]/p/(1-p)
-					sum_tran += trans[k][t]
-	#normalization
-	for k in trans:
-		for t in trans[k]:
-			trans[k][t] = trans[k][t]/sum_tran
+		#normalization
+		if k in trans:
+			sum_tran = 0
+			for t in trans[k]:
+				sum_tran += trans[k][t]
+			for t in trans[k]:
+				trans[k][t] = trans[k][t]/sum_tran
 	return trans
 
-
-if __name__ == "__main__":
-	import csv
+def run(dirName, zoneFile, zn, targetFile, tn):
+	if not os.path.exists(dirName):
+		os.makedirs(dirName)
+	utils.gen_data(dirName+'/'+zoneFile, zn, dirName+'/'+targetFile, tn)
+	loadData(dirName+'/'+zoneFile, dirName+'/'+targetFile)
+	
 	R = getCrossCorrelation()
+	# print R
 	cov_thr = getCovar(R)
 	tran = getTransitionProb(cov_thr)
 
 	for k in tran:
-		with open(('%s_%s.csv'%(k[0], k[1])), 'wb') as csvfile:
+		with open(('%s/%s_%s.csv'%(dirName, k[0], k[1])), 'wb') as csvfile:
 			spamwriter = csv.writer(csvfile, delimiter=',',
 				 quotechar='|', quoting=csv.QUOTE_MINIMAL)
 			spamwriter.writerow(["TIME","PROB"])
 			for t in tran[k]:
 				spamwriter.writerow([t, tran[k][t]])
-
-
 	
+if __name__ == "__main__":
+	for n in [100, 500, 1000, 5000]:
+		run('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
