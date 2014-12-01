@@ -143,7 +143,7 @@ def saveToCSV(tran, dirName):
 				spamwriter.writerow([t, tran[k][t]])
 
 def findLink(link, cov, tran):
-	inCov, inTran = (None, None)
+	inCov, inTran = (False, None)
 	if tran[link]:
 		inTran = tran[link]
 	if cov[link]:
@@ -153,17 +153,18 @@ def findLink(link, cov, tran):
 if __name__ == "__main__":
 	result = {}
 	for n in [100, 500, 800, 1000, 2000, 5000]:
-	# for n in [1000]:
+	# for n in [5000]:
 		print n
 		result[n] = []
-		for i in range(20000/n):
+		for i in range(100):
 		# for i in range(1):
 			print "-",i
 			cov, tran = getProbs(n,n)
 			result[n].append(findLink((u'exit_donald', u'entry_minny'), cov, tran))
+			# saveToCSV(tran, "data_%d"%n)
 		#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
 	# json.dump(result, open("result.json", 'w'))
-	with open('result3.csv', 'wb') as csvfile:
+	with open('result.csv', 'wb') as csvfile:
 		spamwriter = csv.writer(csvfile, delimiter=',',
 			 quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		spamwriter.writerow(["NUM", "OBSERVED", "TIME","PROB"])

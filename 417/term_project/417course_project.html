@@ -23,6 +23,12 @@
 		span.author{
 			font-size: 14pt;
 		}
+		table{
+			border:1px solid black;
+		}
+		td{
+			min-width: 100px;
+		}
 		</style>
 		<head>
 		<script type="text/x-mathjax-config">
@@ -78,6 +84,10 @@
 			<li><a href="#33">Interpretation</a></li>
 		</ol></li>
 	<li><a href="#4">Experiment</a></li>
+		<ol>
+			<li><a href="#41">Design</a></li>
+			<li><a href="#42">Result</a></li>
+		</ol></li>
 	<li><a href="#5">Conclusion</a></li>
 </ol>
 
@@ -175,11 +185,67 @@ However, if the most popular transition time is strictly negative, the following
 <a href='#top'>[top]</a>
 
 <a name="4"></a><h2>Experiment</h2>
-<p>Makris et al experimented their method on a set of 6 cameras monitoring street passengers (pedestrains and vehicles) for a period of 13 hours. Their result showed that Network Calibration can successfully determine the topology of the cameras as discussed in the previous section.</p>
+<p>Makris et al tested their method on a set of 6 cameras monitoring street passengers (pedestrains and vehicles) for a period of 13 hours. Their result showed that Network Calibration can successfully determine the topology of the cameras as discussed in the previous section.</p>
 
 <p>We decide to carry an experiment on the completeness of their method. More specifically, we are interested in knowing if Network Calibration can find all the valid links. Theoretically, if there's a transition between two zones, regardless of how small its probability is, running Network Calibration long enough will eventually lead to the discovery of that link. However, as running time is restricted in real world applications, the question of how much data is enough arises. It may be intuitive to think that to find a valid link, the zones of that link need to be detected and signals from these zones must be observed when performing Network Calibration. Yet, as the method is correspondence-free, trajectory information are discarded and thus one observation of a target moving along that link is not enough for the method to detect that link.</p>
 
-<p>We construct a compter simulated environment with fixed cameras. </p>
+<a name="41"></a><h3>Design</h3>
+<p>We construct a compter simulated environment with two cameras. For simplicity, the entry/exit zones, their probability distribution and parameters are fixed, and all targets start from one zone and move to the others in a random walk fashion.</p>
+<figure>
+	<img src="exp1.png" alt="Computer simulated setting">
+	<figcaption><b>Figure 2</b> The simulated setting showing the viewfield of the two cameras and their entry/exit zones. </figcaption>
+</figure>
+<p>During the simulation, targets are generated with a random entering time and a position sampled from the dirtibution at zone 1. Then, they move to the next according to the transition probabilities and a speed drawn from a fixed distribution. In the experiment, $\alpha_{12}$ is set to be much larger than $\alpha_{13}$, and result are gathered to estimate the chance for Network calibration to find link 3-4 after observing a sample size of 100, 500, 800, 1000, 2000 and 5000 targets.</p> 
+<p>Since the generation of signals is not ordered by time, we do not run Network Calibration at the same time as we gather data, unlike how it was originally designed.</p>
+
+<a name="42"></a><h3>Result</h3>
+We fixed the transition probabilities $\alpha_{12} = 0.99$, $\alpha_{13} = 0.01$ and $\alpha_{34} = 1.0$, and the distance between zone 1 and 3 very small compared to the distance between the other zones. We run the simuation 100 times for each sample size. For each simulation, we gather the sam amount of data to learn the entry/exit zones.  
+<figure>
+	<img src="exp1-signalVSnum.jpeg" alt="Number of observation v.s. detected pairs of signals at link 1-3", style="width:70%; height:70%;">
+	<figcaption><b>Figure 3</b> Number of observation v.s. detected pairs of signals at link 1-3, showing that the chance of detecting such signals is higher as there are more observations. The tickness of the bars represents the amount of transition probabilities found for link 1-3. </figcaption>
+</figure>
+
+<figure>
+	<img src="exp1-timeVSnum.jpeg" alt="Number of observation v.s. found transition time", style="width:70%; height:70%;">
+	<figcaption><b>Figure 3</b> Number of observation v.s. found transition times at link 1-3, showing that as the number of sample increases, more albeit transition times are produced. </figcaption>
+</figure>
+
+<figure>
+	<img src="exp1-probVSnum.jpeg" alt="Number of observation v.s. found transition probability", style="width:70%; height:70%;">
+	<figcaption><b>Figure 4</b> Number of observation v.s. found transition probabilities at link 1-3, showing that at size 5000, the system is sure that the probability of a target transiting from zone 1 to 3 is non-zero. </figcaption>
+</figure>
+
+
+<!-- <center><table>
+	<caption><b>Table 1</b> True Links</caption>
+	<tr>
+		<td><b>Link</b></td><td>1-2</td><td>1-3</td><td>3-4</td><td>4-5</td>
+	</tr><tr>
+		<td>$\boldsymbol\alpha_{\boldsymbol i\boldsymbol j}$</td><td>0.99</td><td>0.01</td><td>1.0</td><td>1.0</td>
+	</tr>
+</table></center>
+
+<center><table>
+	<caption><b>Table 2</b> Found Links</caption>
+	<tr>
+		<td>100 samples</td><td>500 samples</td><td></td><td></td><td></td>
+	</tr><tr>
+		<td>
+			<table>
+				<caption>Link 1-2</caption>
+				<tr><td>$\boldsymbol\tau$</td><td>$\boldsymbol\alpha_{\boldsymbol i\boldsymbol j}(\boldsymbol\tau)$</td></tr>
+				<tr><td>3.0</td><td>0.119691</td></tr>
+				<tr><td>4.0</td><td>0.163449</td></tr>
+				<tr><td>5.0</td><td>0.217503</td></tr>
+				<tr><td>6.0</td><td>0.223938</td></tr>
+				<tr><td>7.0</td><td>0.153153</td></tr>
+				<tr><td>8.0</td><td>0.122265</td></tr>
+			</table>
+		</td><td></td><td></td><td></td><td></td>
+	</tr>
+</table></center> -->
+
+
 
 <a href='#top'>[top]</a>
 

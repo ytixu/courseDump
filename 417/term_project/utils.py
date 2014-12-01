@@ -174,3 +174,28 @@ def save_data(zoneFile, zn, targetFile, tn):
 if __name__ == "__main__":
 	json.dump(getZones(100), open('dataZones.json', 'w'))
 	json.dump(genTargets(100), open('dataTarget.json', 'w'))
+
+
+
+# draw the camera position
+def draw():
+	import turtle
+	turtle.pensize(3)
+ 	turtle.hideturtle()
+ 	turtle.pencolor('red')
+	for z in ZONES.entry:
+		turtle.pu()
+		turtle.setposition(z['coord'][0]*20-200, z['coord'][1]*20-200)
+		turtle.pd()
+		turtle.circle(z['var'][0][0]*10)  
+
+	turtle.pencolor('blue')
+	for z in ZONES.exit:
+		turtle.pu()
+		turtle.setposition(z['coord'][0]*20-200, z['coord'][1]*20-200)
+		turtle.pd()
+		turtle.circle(z['var'][0][0]*10)        
+	turtle.mainloop()
+
+if __name__ == "__main__":
+	draw()
