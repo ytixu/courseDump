@@ -6,7 +6,7 @@
 		</TITLE>
 		<style>
 		body {
-			margin: 5% 25%;
+			margin: 5% 20%;
 			font-size: 16pt;
 		}
 		p.abstract {
@@ -29,17 +29,16 @@
 		td{
 			min-width: 100px;
 		}
+		img.small{
+			width:38%;
+			height:38%;
+			margin-right:-6%;
+			float:right;
+		}
 		</style>
 		<head>
 		<script type="text/x-mathjax-config">
 		  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-		  // MathJax.Hub.Register.StartupHook("AsciiMath Jax Config",function () {
-		  //   var AM = MathJax.InputJax.AsciiMath.AM;
-		  //   AM.symbols.push(
-		  //     {input:"mathbi", tag:"mstyle", atname:"mathvariant", atval:"bold-italic",
-		  //      output:"mathbi", tex:null, ttype:AM.TOKEN.UNARY}
-		  //   );
-		  // });
 		  MathJax.Hub.Config({ TeX: { equationNumbers: {autoNumber: "AMS"} } });
 		</script>
 		<script type="text/javascript"
@@ -92,11 +91,11 @@
 </ol>
 
 <a name="1"></a><h2>Introduction</h2>
-<p>To track objects in an environmnet partially monitored by cameras, an intelligent surveillance system need to know how to deal with targets transiting through the blind regions between two spatially adjacent cameras. Such system would be able to continuously track targets and to generate complete target activity records. </p>
+<p>In an environmnet partially monitored by cameras, an intelligent surveillance system may  benefit itself by knowing how to track targets transiting through the blind regions between two spatially adjacent cameras. Such system may allow continuous tracking of targets and generation of complete activity records. </p>
 
-<p>Past research has been done on single camera tracking and matching tracks in overlapping camera views. Some methods have been proposed to track single object through multiple camera views. Notably, Javed et al suggest to correspond the individial tracks of a target using feature matching by maximizing the posterior probability of the spatio-temporal and color apparance of the target. <a href="#r2">[2]</a> However, color is not guaranteed to be always reliable to match targets across multiple cameras.</p>
+<p>Makis et al at Kingston University have put a considable effort on solving single camera tracking and matching tracks in overlapping camera views. Meanwhile, some methods have been proposed by other researchsers to track single object through multiple camera views. Notably, Javed et al suggest to correspond the individial tracks of a target using feature matching by maximizing the posterior probability of the spatio-temporal and color apparance of the target. <a href="#r2">[2]</a> However, color is not guaranteed to be always reliable to match targets across multiple cameras.</p>
 
-<p> An alternative approach is to find a model of the environment and of the camera connectivity, enabling the system to predict the bahavior its targets. This allows one camera to "handover" the track to the next camera as the target move across the two, and thus avoids the need of establishing any correspondence. This model can carry spacial (topology) and temporal (time taken for targets to move between views) information of the network.
+<p> An alternative approach is to learn and build a model of the environment and of the camera connectivity, enabling the system to predict the bahavior its targets. This allows one camera to "handover" the track to the next camera as the target move across the two, and thus avoids the need of establishing any correspondence. This model can carry spacial (topology) and temporal (time taken for targets to move between views) information of the network.
 </p>
 
 <p>The topology of the camera can be determined by using calibrated cameras, whose transformation function of pixel coordinates into 3D coordinates is already defined. If the coordinate system in which calibration is done is common to all the cameras, a geometric analysis of each camera views would then allows spatial adjacency to be established. However, in a large network of cameras, it would be preferable if the system can calibrate itself automatically. Furthermore, a common coordinate system might not be necessary since establishing spatial adjacency requires simply the knowledge of the cameras position relative to each other.</p> 
@@ -109,7 +108,7 @@
 <p>Each camera view has a set of zones describing where targets enter or leave. These entry/exit zones can be represented as nodes in a network. Each edge between two nodes denote an transition which is either visibile or invisible to the cameras. Figure 1 shows an exmples of such network with two zones. </p> 
 
 <figure>
-	<img src="graphmodel.png" alt="Tempo-topographical model">
+	<img src="graphmodel.png" alt="< Picture unable to loaded :( >">
 	<figcaption><b>Figure 1</b> The network showing entry zone $i$ and exit zone $j$.</figcaption>
 </figure> 
 
@@ -192,60 +191,43 @@ However, if the most popular transition time is strictly negative, the following
 <a name="41"></a><h3>Design</h3>
 <p>We construct a compter simulated environment with two cameras. For simplicity, the entry/exit zones, their probability distribution and parameters are fixed, and all targets start from one zone and move to the others in a random walk fashion.</p>
 <figure>
-	<img src="exp1.png" alt="Computer simulated setting">
+	<img src="exp1.png" alt="< Picture unable to loaded :( >">
 	<figcaption><b>Figure 2</b> The simulated setting showing the viewfield of the two cameras and their entry/exit zones. </figcaption>
 </figure>
-<p>During the simulation, targets are generated with a random entering time and a position sampled from the dirtibution at zone 1. Then, they move to the next according to the transition probabilities and a speed drawn from a fixed distribution. In the experiment, $\alpha_{12}$ is set to be much larger than $\alpha_{13}$, and result are gathered to estimate the chance for Network calibration to find link 3-4 after observing a sample size of 100, 500, 800, 1000, 2000 and 5000 targets.</p> 
+<p>During the simulation, targets are generated with a random entering time and a position sampled from the dirtibution at zone 1. Then, they move to the next according to the transition probabilities and a speed drawn from a fixed distribution. In the experiment, $\alpha_{12}$ is set to be much larger than $\alpha_{13}$, and result are gathered to estimate the chance for Network calibration to find link 3-4 after observing a sample size of 100, 500, 1000, 2000, 3000, 4000 and 5000 targets.</p> 
 <p>Since the generation of signals is not ordered by time, we do not run Network Calibration at the same time as we gather data, unlike how it was originally designed.</p>
 
 <a name="42"></a><h3>Result</h3>
-We fixed the transition probabilities $\alpha_{12} = 0.99$, $\alpha_{13} = 0.01$ and $\alpha_{34} = 1.0$, and the distance between zone 1 and 3 very small compared to the distance between the other zones. We run the simuation 100 times for each sample size. For each simulation, we gather the sam amount of data to learn the entry/exit zones.  
+We fixed the transition probabilities $\alpha_{12} = 0.99$, $\alpha_{13} = 0.01$ and $\alpha_{34} = 1.0$, and the distance between zone 1 and 3 very small compared to the distance between the other zones. We run the simuation 300 times for each sample size. For each simulation, we gather the sam amount of data to learn the entry/exit zones.  
 <figure>
-	<img src="exp1-signalVSnum.jpeg" alt="Number of observation v.s. detected pairs of signals at link 1-3", style="width:70%; height:70%;">
+	<img src="exp1-signalVSnum.jpeg" alt="< Picture unable to loaded :( >", style="width:70%; height:70%;">
 	<figcaption><b>Figure 3</b> Number of observation v.s. detected pairs of signals at link 1-3, showing that the chance of detecting such signals is higher as there are more observations. The tickness of the bars represents the amount of transition probabilities found for link 1-3. </figcaption>
 </figure>
 
 <figure>
-	<img src="exp1-timeVSnum.jpeg" alt="Number of observation v.s. found transition time", style="width:70%; height:70%;">
+	<img src="exp1-timeVSnum.jpeg" alt="< Picture unable to loaded :( >", style="width:70%; height:70%;">
 	<figcaption><b>Figure 3</b> Number of observation v.s. found transition times at link 1-3, showing that as the number of sample increases, more albeit transition times are produced. </figcaption>
 </figure>
 
 <figure>
-	<img src="exp1-probVSnum.jpeg" alt="Number of observation v.s. found transition probability", style="width:70%; height:70%;">
-	<figcaption><b>Figure 4</b> Number of observation v.s. found transition probabilities at link 1-3, showing that at size 5000, the system is sure that the probability of a target transiting from zone 1 to 3 is non-zero. </figcaption>
+	<img src="exp1-probVSnum.jpeg" alt="< Picture unable to loaded :( >", style="width:70%; height:70%;">
+	<figcaption><b>Figure 4</b> Number of observation v.s. found transition probabilities at link 1-3, showing that when the sample size is too large, the system is likely to become more uncertain about the behavor of the targets. </figcaption>
 </figure>
 
-
-<!-- <center><table>
-	<caption><b>Table 1</b> True Links</caption>
-	<tr>
-		<td><b>Link</b></td><td>1-2</td><td>1-3</td><td>3-4</td><td>4-5</td>
-	</tr><tr>
-		<td>$\boldsymbol\alpha_{\boldsymbol i\boldsymbol j}$</td><td>0.99</td><td>0.01</td><td>1.0</td><td>1.0</td>
-	</tr>
-</table></center>
-
-<center><table>
-	<caption><b>Table 2</b> Found Links</caption>
-	<tr>
-		<td>100 samples</td><td>500 samples</td><td></td><td></td><td></td>
-	</tr><tr>
-		<td>
-			<table>
-				<caption>Link 1-2</caption>
-				<tr><td>$\boldsymbol\tau$</td><td>$\boldsymbol\alpha_{\boldsymbol i\boldsymbol j}(\boldsymbol\tau)$</td></tr>
-				<tr><td>3.0</td><td>0.119691</td></tr>
-				<tr><td>4.0</td><td>0.163449</td></tr>
-				<tr><td>5.0</td><td>0.217503</td></tr>
-				<tr><td>6.0</td><td>0.223938</td></tr>
-				<tr><td>7.0</td><td>0.153153</td></tr>
-				<tr><td>8.0</td><td>0.122265</td></tr>
-			</table>
-		</td><td></td><td></td><td></td><td></td>
-	</tr>
-</table></center> -->
-
-
+<div style="display:block;">
+<figure>
+	<!-- 
+	<img src="exp100-probVStime.jpeg" class="hidden" alt="< Picture unable to loaded :( >">
+	<img src="exp500-probVStime.jpeg" class="hidden" alt="< Picture unable to loaded :( >"> 
+	<img src="exp3000-probVStime.jpeg" class="small" alt="< Picture unable to loaded :( >"> 
+	<img src="exp4000-probVStime.jpeg" class="small" alt="< Picture unable to loaded :( >">
+	-->
+	<img src="exp5000-probVStime.jpeg" class="small" alt="< Picture unable to loaded :( >">
+	<img src="exp2000-probVStime.jpeg" class="small" alt="< Picture unable to loaded :( >">
+	<img src="exp1000-probVStime.jpeg" class="small" alt="< Picture unable to loaded :( >">
+	<figcaption><b>Figure 4</b> Number of observation v.s. found transition probabilities at link 1-3, showing that when the sample size is too large, the system is likely to become more uncertain about the behavor of the targets. </figcaption>
+</figure>
+</div>
 
 <a href='#top'>[top]</a>
 
