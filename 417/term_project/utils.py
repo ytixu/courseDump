@@ -98,6 +98,7 @@ def genTargets(n):
 		exit = get_exit(start, random.random())
 		post = rand_zone(exit)
 		tranTime = get_dist(prior, post)
+		# if exit["ID"] == "exit_goofy": print tranTime
 		if hasExited:
 			targets.append(("enter", prior.tolist(), time))
 			targets.append(("exit", post.tolist(), time+tranTime))

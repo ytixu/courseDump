@@ -131,6 +131,9 @@ def getProbs(zn, tn):
 	cov_thr = getCovar(R)
 	return (cov_thr[0], getTransitionProb(cov_thr))
 
+
+### for serialization
+
 def saveToCSV(tran, dirName):
 	if not os.path.exists(dirName):
 		os.makedirs(dirName)
@@ -149,26 +152,57 @@ def findLink(link, cov, tran):
 	if cov[link]:
 		inCov = True #cov[link]
 	return (inCov, inTran)
-	
-if __name__ == "__main__":
-	result = {}
-	for n in [100, 500, 1000, 2000, 3000, 4000, 5000]:
-	# for n in [5000]:
-		print n
-		result[n] = []
-		for i in range(300):
-		# for i in range(1):
-			print "-",i
-			cov, tran = getProbs(n,n)
-			result[n].append(findLink((u'exit_donald', u'entry_minny'), cov, tran))
-			# saveToCSV(tran, "data_%d"%n)
-		#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
-	# json.dump(result, open("result.json", 'w'))
-	with open('result300s.csv', 'wb') as csvfile:
+
+
+def saveAllLinks(dic, cov, tran, n):
+	for link in cov:
+		# print link
+		if link not in dic:
+			dic[link] = {
+				n: {}
+			}
+		elif n not in dic[link]:
+			dic[link][n] = {}
+		if link not in tran:
+			continue
+		# take average tran probability
+		for t in tran[link]:
+			try:
+				dic[link][n][t]["n"] += 1
+				dic[link][n][t]["p"] += (dic[link][n][t]["p"]-tran[link][t])/dic[link][n][t]["n"] 
+			except:
+				dic[link][n][t]={
+					'n': 1,
+					'p': tran[link][t]
+				}
+
+def allLinkToCSV(res, filename, ns):
+	with open(filename, 'wb') as csvfile:
+		spamwriter = csv.writer(csvfile, delimiter=',',
+			 quotechar='|', quoting=csv.QUOTE_MINIMAL)
+		spamwriter.writerow(["LINK", "NUM", "OBSERVED", "TRANTIME","AVGPROB", "NDETECT"])
+		for link, v in res.iteritems():
+			for n in ns:
+				if n in v:
+					if not v[n]:
+						spamwriter.writerow([link, n, True, 0.0, 0.0, 0.0])
+					for t in v[n]:
+						spamwriter.writerow([link, n, True, t, v[n][t]['p'], v[n][t]['n']])
+				else:
+					spamwriter.writerow([link, n, False, 0.0, 0.0, 0.0])
+
+
+def saveOneLink(dic, cov, tran):
+	if n not in dic:
+		dic[n] = []
+	dic[n].append(findLink((u'exit_donald', u'entry_minny'), cov, tran))
+
+def oneLinkToCSV(res, filename):
+	with open(filename, 'wb') as csvfile:
 		spamwriter = csv.writer(csvfile, delimiter=',',
 			 quotechar='|', quoting=csv.QUOTE_MINIMAL)
 		spamwriter.writerow(["NUM", "OBSERVED", "TIME","PROB"])
-		for n, v in result.iteritems():
+		for n, v in res.iteritems():
 			for e in v:
 				obs, tran = e
 				if not obs or not tran:
@@ -176,3 +210,23 @@ if __name__ == "__main__":
 				else:
 					for t, p in tran.iteritems():
 						spamwriter.writerow([n, obs, t, p])
+	
+if __name__ == "__main__":
+	result = {}
+	ns = [100, 500, 1000, 2000, 3000, 4000, 5000]
+	for n in ns:
+	# for n in [1000]:
+		print n
+		for i in range(300):
+		# for i in range(1):
+			print "-",i
+			cov, tran = getProbs(n,n)
+			# saveOneLink(result, cov, tran)
+			saveAllLinks(result, cov, tran, n)
+			# print tran
+			# result[n].append(findLink((u'exit_donald', u'entry_minny'), cov, tran))
+			# saveToCSV(tran, "data_%d"%n)
+		#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
+	# json.dump(result, open("result.json", 'w'))
+	# oneLinkToCSV(result,'result.csv')
+	allLinkToCSV(result, 'resultAll.csv', ns)
