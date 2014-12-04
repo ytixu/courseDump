@@ -41,7 +41,7 @@ var hypothesis = {
 				<center>\
 				$H_0$: the treatments are equivalent<br>\
 				$H_1$: at leat one treatment differ \
-				</center> This is only one-sided.",
+				</center> This is only two-sided.",
 	multiTreatOrder: "Given many treatments, we are interested in testing:\
 				<center>\
 				$H_0$: the treatments are equivalent<br>\
@@ -52,14 +52,19 @@ var hypothesis = {
 				$H_0$: no difference between the treatments<br>\
 				$H_1$: there is a difference between the level of the response variable\
 				</center>Note that the alternative is not assumed to be specific, but the difference between\
-				the treatments should not be in terms of dispersion, say."
+				the treatments should not be in terms of dispersion, say. This is only two-sided.",
+	indepTime: "Given data collected at different points in time, we are interested in testing:\
+				<center>\
+				$H_0$: no difference between variables at different time<br>\
+				$H_1$: there is a trend\
+				</center>This is only one-sided."
 }
 
 var tests = {
 	wilcox: {
 		name: "Wilcoxon Rank Sum Test",
 		hypo: hypothesis.shiftTwoIndep,
-		procedure: "Given samples $X_1, ..., X_m$ and $Y_1, ... Y_n$. Let $N=n+m$.\
+		procedure: "Given samples $X_1, ..., X_m$ and $Y_1, ..., Y_n$. Let $N=n+m$.\
 					Find the ranks $S_i$ for each $Y_i, \\ i \\in \\{1, .., n\\}$.",
 		statistics: "W_s = S_1 + ... + S_n",
 		mean: "E[W_s] = \\frac{1}{2}n(N+1)",
@@ -67,7 +72,7 @@ var tests = {
 		rejection: "$W_s$ is either too big or too small (depending on $H_1$).",
 		distribution: "",
 		limiting: normalLimiting(["$m$", "$n$"], 'W_s'),
-		ties: "set the mean of the ranks to where there are ties. The statistics $W_s^*$ will have the same\
+		ties: "set the mid-ranks to where there are ties. The statistics $W_s^*$ will have the same\
 				mean and limiting distribution, but different variance, i.e.:\
 				\\begin{equation*}\
 					V[W_s^*] = \\frac{mn(N+1)}{12} - \\frac{mn}{12N(N-1)}\\sum_{i=1}^l(d_i^3-d_i)\
@@ -77,7 +82,7 @@ var tests = {
 	mannWhitney:{
 		name: "Mann-Whitney-Wilcoxon Test",
 		hypo: hypothesis.shiftTwoIndep,
-		procedure:"Given samples $X_1, ..., X_m$ and $Y_1, ... Y_n$. Let $N=n+m$.",
+		procedure:"Given samples $X_1, ..., X_m$ and $Y_1, ..., Y_n$. Let $N=n+m$.",
 		statistics: "W_{XY} = W_s - \\frac{1}{2}n(n+1) = \\sum_{i=1}^m\\sum_{j=1}^n\\boldsymbol 1(X_i < Y_i)",
 		mean: "E[W_s] = \\frac{1}{2}mn",
 		variance: "V[W_s] = \\frac{1}{12}mn(N+1)",
@@ -99,7 +104,7 @@ var tests = {
 	ansariBrad:{
 		name: "Ansari-Bradley Test",
 		hypo: hypothesis.disperTwoIndep,
-		procedure:"Given samples $X_1, ..., X_m$ and $Y_1, ... Y_n$. Give identical scores for data points that are\
+		procedure:"Given samples $X_1, ..., X_m$ and $Y_1, ..., Y_n$. Give identical scores for data points that are\
 					 \"equaly distant\" from the center of the data.",
 		notes: "This is a improvement to Siegel-Tukey test.",
 		links: ["siegelTukey", "smirnov"]
@@ -107,7 +112,7 @@ var tests = {
 	smirnov:{
 		name: "Kolmogorov-Smirnov Test",
 		hypo: hypothesis.generalTwoIndep,
-		procedure: "Given samples $X_1, ..., X_m$ and $Y_1, ... Y_n$. Compare their empirical CDF.\
+		procedure: "Given samples $X_1, ..., X_m$ and $Y_1, ..., Y_n$. Compare their empirical CDF.\
 					\\begin{align*}\
 						&F_m(x) = \\frac{1}{m}\\sum_{i=1}^m(X_i \\leq x)\
 						&G_n(y) = \\frac{1}{n}\\sum_{i=1}^n(Y_i \\leq y)\
@@ -127,7 +132,7 @@ var tests = {
 	sign:{
 		name: "Sign Test",
 		hypo: hypothesis.shiftTwoPaired,
-		procedure: "Given paired data $X_1, ..., X_N$ and $Y_1, ... Y_N$. Let $D_i = Y_i - X_i$ for $i=1,...,N$.\
+		procedure: "Given paired data $X_1, ..., X_N$ and $Y_1, ..., Y_N$. Let $D_i = Y_i - X_i$ for $i=1,...,N$.\
 					Observe that under $H_0$, $P(D_i > 0) = P(D_i < 0) = 1/2$.\
 					Find the ranks $S_i$ for each $Y_i, \\ i \\in \\{1, .., n\\}$.",
 		statistics: "S_N = \\#\\{i|D_i > 0\\}",
@@ -143,7 +148,7 @@ var tests = {
 	wilcoxSign:{
 		name: "Wilcoxon Signed-Rank Test",
 		hypo: hypothesis.shiftTwoPaired,
-		procedure: "Given paired data $X_1, ..., X_N$ and $Y_1, ... Y_N$. Let $D_i = Y_i - X_i$\
+		procedure: "Given paired data $X_1, ..., X_N$ and $Y_1, ..., Y_N$. Let $D_i = Y_i - X_i$\
 					and $Z_i = |D_i|$ for $i=1,...,N$. Rank the $Z_i$'s. With $|D_{(1)}| < ... < |D_{(N)}|$\
 					compute\
 					\\begin{equation*}\
@@ -157,7 +162,7 @@ var tests = {
 		rejection: "$V_s$ is too big or too small (depending on $H_1$).",
 		distribution: "The cumulative distribution of $V_s$ is tabulated for small $N$.",
 		limiting: normalLimiting(["$N$"], 'V_s'),
-		ties: "we score the $Z_i$'s with the mean ranks and discard the ranks for the $Z_i$'s that are equal to zero.\
+		ties: "we score the $Z_i$'s with the mid-ranks and discard the ranks for the $Z_i$'s that are equal to zero.\
 				 The mean and the variance are both affected.\
 			\\begin{align*}\
 				&E[V_s^*] = \\frac{N(N+1)}{4} - \\frac{d_0(d_0+1)}{4}\\\\\
@@ -182,7 +187,7 @@ var tests = {
 		limiting: "If $b \\rightarrow \\infty$ and $\\max(N_k)$ is bounded, or if $b$ is fixed and\
 		 			$\\min(m_k, m_k) \\rightarrow \\infty$, then\
 		 			 $\\frac{W_s^{\\text{combo}}-E[W_s^{\\text{combo}}]}{\\sqrt{V[W_s^{\\text{combo}}]}} \\approx \\mathcal{N}(0,1)$.",
-		ties: "we must find the mean and variance by ourselves.\
+		ties: "assign with mid-ranks and we must find the mean and variance by ourselves.\
 			\\begin{align*}\
 				&E[W_s^{\\text{combo}}]  = \\sum_{k=1}^b\\frac{1}{N_k+1}E[W_{s_k}]\\\\\
 				&V[W_s^{\\text{combo}}] = \\sum_{k=1}^b\\left(\\frac{1}{N_k+1}\\right)^2V[W_{s_k}]\
@@ -206,7 +211,7 @@ var tests = {
 		limiting: "As in the case of $s=2$, it can be shown that $K$ is a quadratic function of Wilcoxon's statistic, $W_2$\
 					has normal limiting distribution. It follows by Central Limit Theorem that \
 					$K \\approx \\chi^2(s-1)$ when the size $n_1, ..., n_s$ are large." , 
-		ties:"we score the data with the mean of the ranks.\
+		ties:"we score the data with the mid-ranks.\
 			\\begin{equation*}\
 				K^* = \\frac{\\frac{12}{N(N+1)}\\sum_{i=1}^s\\frac{W_i^2}{n_i} - 3(N+1)}\
 					{1- \\sum_{j=l}^l\\frac{d_j^3-d_j}{N^3-N}}\
@@ -250,7 +255,7 @@ var tests = {
 		rejection: "$Q$ is too small.",
 		distribution: "The cumulative distribution of $Q$ is tabulated for $s\\leq 4$ and $n\\leq 8$.",
 		limiting: "Assymptotically, $Q\\sim \\chi_{(s-1)}^2$.",
-		ties: "we score the data with the mean of the ranks.\
+		ties: "we score the data with the mid-ranks.\
 			\\begin{align*}\
 				Q = \\frac{\\frac{12n}{s(s+1)}\\sum_{i=1}^s\\left(\\bar{R}^*_{i\\cdot} - \\frac{s+1}{2}\\right)^2}\
 				{1-\\frac{1}{ns(s^2-1)}\\sum_{j=1}^n\\sum_{i=1}^{l_j}(d_{ij}^3-d_{ij})}\
@@ -259,7 +264,7 @@ var tests = {
 				Q = \\frac{4}{N}\\left(A-\\frac{N}{2}\\right)\
 			\\end{align*}, where $A$ is the number of block where treatment 1 rank first. In this case, the limiting\
 			distribution is $\\chi_{(1)}^2$, as $A$ follows binomial distribution.",
-		links: ["kruskalW", "jonckheere", "chacko", "cochran"]
+		links: ["kruskalW", "jonckheere", "chacko", "cochran", "alignT"]
 	},
 	cochran: {
 		name: "Cochran's Test",
@@ -272,7 +277,60 @@ var tests = {
 							{s\\sum_{j=1}^sL_j-\\sum_{j=1}^sL_j^2}",
 		rejection: "$Q$ is too small.",
 		limiting: "Assymptotically, $Q\\sim \\chi_{(s-1)}^2$.",
+		links: ["friedman", "alignT"]
+	},
+	mcnemar: {
+		name: "McNemar's Test",
+		hypo: hypothesis.balancedBlock,
+		procedure: "This is a special case of Friedman's and Cochran's tests where there are $2$ treatments and the response\
+					variable is dichotomous (response pass and fail).\
+					Observe that there are a lot of tries. Let $L_j$ denote the number of response 1's in block \
+					$j$, and $B_i$, the total number of response 1 for treatment $i$. The data can be illustrated in a little table.\
+					<center><img src=\"http://mvpprograms.com/help/images/McNemarsTable.jpg\"></center>",
+		statistics: "Q^* = \\frac{(B_1-B_2)^2}{\\sum_{j=1}^NL_j(2-L_j)}=\\frac{(C-B)^2}{B+C}",
+		rejection: "$Q^*$ is too small.",
+		limiting: "Assymptotically, $Q\\sim \\chi_{(s-1)}^2$.",
+		notes: "As $B\\sim \\mbox{Bin}(k, 1/2)$ where $k=B+C$, the equivalent test would be \
+				$P\\left(\\left|B-\\frac{k}{2}\\right| \\geq \\left|b-\\frac{k}{2}\\right|\\right)$. The one-sided test would thus be\
+				$P(B\\geq b)$, which is simply the plain old sign test.",
+		links: ["sign", "friedman", "alignT"]
+	},
+	alignT: {
+		name: "Aligned Rank Test",
+		hypo: hypothesis.balancedBlock,
+		procedure: "This test is designed to compare withing blocks. Given balanced design with $s$ treatments\
+					and $n$ blocks, substract each response with the mean\
+					of the responses in its corresponding block. Rank all the data. Let $\\hat{R}_{ij}$ be the rank of the\
+					treatments $i$ at block $j$.\
+					\\begin{align*}\
+						\\hat{R}_{i\\cdot} = \\frac{1}{n}\\sum_{k=1}^{n}\\hat{R}_{ik}\
+					\\end{align*}Let\
+					\\begin{align*}\
+						\\Lambda = \\frac{s-1}{\\sum_{i=1}^{s}\\sum_{j=1}^{n}\\hat{R}_{ij}^2 - \
+							\\frac{1}{s}\\sum_{j=1}^{n}(s\\hat{R}_{\\cdot j})^2}\
+					\\end{align*}",
+		statistics: "\\hat{Q} = \\Lambda\\left(\\frac{(sn)^3(sn+1)(2sn+1)}{6} - \\frac{1}{4}sn^2(sn+1)^2\\right)",
+		rejection: "$Q$ is too small.",
+		limiting: "Assymptotically, $Q\\sim \\chi_{(s-1)}^2$.",
 		links: ["friedman"]
+	},
+	spearman:{
+		name: "Spearman' Test",
+		hypo: hypothesis.indepTime,
+		procedure:"Given samples $X_1, ..., X_N$ collected at time $t_1, ..., t_N$ respectively. Rank the $X_i$\
+					and place them in order of time. Let $R_i$ be the rank of the data point collected at time $t_i$.",
+		statistics: "D = \\sum_{i=1}^N(R_i-i)^2 = \\frac{N(N+1)(2N+1)}{3} - 2\\sum_{i=1}^NiR_i",
+		mean: "E[D] = \\frac{N^3-N}{6}",
+		variance: "V[D] = \\frac{N^2(N+1)^2(N-1)}{36}",
+		rejection: "$D$ is too small.",
+		distribution: "A table for this statistics is available for small $N\\leq 11$.",
+		limiting: normalLimiting(["$N$"], 'D'),
+		ties: "assign the data with mid-ranks. Both mean and variance are affected.\
+		\\begin{align*}\
+			&E[D^*] = \\frac{N^3-N}{6} - \\frac{1}{12}\\sum_{i=1}^l(d_i^3-d_i)\\\\\
+			&V[D^*] = \\frac{N^2(N+1)^2(N-1)}{36}\\left(1-\\sum_{i=1}^l\\frac{d_i^3-d_i}{N^3-N}\\right)\
+		\\end{align*}",
+		links: ["wilcox"]
 	}
 }
 
@@ -351,21 +409,24 @@ var presentTest = function(test, ns){
 }
 
 var index = [
+	// {
+	// 	name: "Compare Two Independent Samples",
+	// 	sub: [tests.wilcox, tests.mannWhitney, tests.smirnov]
+	// },{
+	// 	name: "Deal with Paired Data",
+	// 	sub: [tests.sign, tests.wilcoxSign, tests.wilcoxCombo]
+	// },{
+	// 	name: "Compare Several Treatments",
+	// 	sub: [tests.kruskalW, tests.friedman, tests.cochran, tests.mcnemar, tests.alignT]
+	// },
 	{
-		name: "Two Independent Samples",
-		sub: [tests.wilcox, tests.mannWhitney, tests.smirnov]
-	},
-	{
-		name: "Paired Data",
-		sub: [tests.sign, tests.wilcoxSign, tests.wilcoxCombo]
-	},{
-		name:"Several Treatments",
-		sub: [tests.kruskalW, tests.friedman, tests.cochran]
+		name: "Test Independence and Trend",
+		sub: [tests.spearman]
 	}
 ]
 
 
-function mainDisplay(){
+function cheatSheet(){
 	var content = document.getElementById("CONTENT");
 	console.log(content);
 	for (var i=0; i<index.length; i++){
@@ -377,5 +438,5 @@ function mainDisplay(){
 }
 
 window.onload = function(){
-	mainDisplay();
+	cheatSheet();
 };
