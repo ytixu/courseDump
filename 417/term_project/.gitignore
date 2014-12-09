@@ -2,5 +2,6 @@ old/*
 data*.json
 *.pyc
 *.csv
-
+r
+const-speed/*
 data_*

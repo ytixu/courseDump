@@ -8,6 +8,7 @@ MAX_VAR = 1000
 
 # assume normal speed
 def randSpeed():
+	# 0.05
 	return np.random.normal(2,0.05)
 
 # fixed zones 
@@ -18,7 +19,7 @@ class zones:
 		self.Daisy = { # exit zone
 			'ID': "exit_daisy",
 			'cam': 2,
-			'coord': (23.23, 5.6),
+			'coord': (27.23, 5.6),
 			'var': ((0.5, 0.0), (0.0, 0.5)),
 			'prob': 1.0,
 			'next': []
@@ -26,7 +27,7 @@ class zones:
 		self.Minni = { # entry zone
 			'ID': "entry_minny",	
 			'cam': 2,
-			'coord': (15.9,5.2),
+			'coord': (19.3,5.2),
 			'var': ((0.5, 0.0), (0.0, 0.5)),
 			'prob': 1.0,
 			'next': [self.Daisy]
@@ -91,8 +92,8 @@ def genTargets(n):
 	# 		(exit, time)
 	# 	), ...]
 	start = ZONES.Mickey
-	prior = rand_zone(start)
 	time = rand_time(n)
+	prior = rand_zone(start)
 	hasExited = True
 	while n:
 		exit = get_exit(start, random.random())
@@ -100,8 +101,8 @@ def genTargets(n):
 		tranTime = get_dist(prior, post)
 		# if exit["ID"] == "exit_goofy": print tranTime
 		if hasExited:
-			targets.append(("enter", prior.tolist(), time))
-			targets.append(("exit", post.tolist(), time+tranTime))
+			targets.append(("enter", prior.tolist(), time, start["ID"]))
+			targets.append(("exit", post.tolist(), time+tranTime, exit["ID"]))
 			hasExited = False
 		else:
 			hasExited = True
@@ -171,32 +172,17 @@ def save_data(zoneFile, zn, targetFile, tn):
 	json.dump(getZones(zn), open('%s.json'%zoneFile, 'w'))
 	json.dump(genTargets(tn), open('%s.json'%targetFile, 'w'))
 
+def changeProb(testprob):
+	global TESTPROBS
+	TESTPROBS = testprob
+	ZONES.Goofy['prob'] = testprob[0]
+	ZONES.Donald['prob'] = testprob[1]
+	print ZONES.Goofy['prob']
 
 if __name__ == "__main__":
 	json.dump(getZones(100), open('dataZones.json', 'w'))
 	json.dump(genTargets(100), open('dataTarget.json', 'w'))
 
 
-
-# draw the camera position
-def draw():
-	import turtle
-	turtle.pensize(3)
- 	turtle.hideturtle()
- 	turtle.pencolor('red')
-	for z in ZONES.entry:
-		turtle.pu()
-		turtle.setposition(z['coord'][0]*20-200, z['coord'][1]*20-200)
-		turtle.pd()
-		turtle.circle(z['var'][0][0]*10)  
-
-	turtle.pencolor('blue')
-	for z in ZONES.exit:
-		turtle.pu()
-		turtle.setposition(z['coord'][0]*20-200, z['coord'][1]*20-200)
-		turtle.pd()
-		turtle.circle(z['var'][0][0]*10)        
-	turtle.mainloop()
-
 if __name__ == "__main__":
-	draw()
+	print getZones(100);

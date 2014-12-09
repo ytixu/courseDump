@@ -10,7 +10,7 @@ import utils
 
 # constants
 w_const = 0
-T = 50
+T = 15
 
 zones = {}
 data = {}
@@ -29,7 +29,7 @@ def log_normal_p(mean, var, x):
 			- math.log(np.linalg.det(v)))
 
 def mapClasify(zone):
-	tpe, coord,_ = zone 
+	tpe, coord,_,_ = zone 
 	# if tpe == 'enter':
 	# 	zones = zone_entry
 	# else:
@@ -46,30 +46,43 @@ def mapClasify(zone):
 	# print coord, zones[max_entry]
 	return max_entry
 
-def getCrossCorrelation():
+def getCrossCorrelation(getAcc = False):
 	R = collections.defaultdict(dict)
 	enter_targets = []
 	exit_targets = []
+	n = 0.0
+	accuracy = 0.0
 	for obs in data:
-		tpe, coord, t = obs
+		tpe, coord, t, true_zone = obs
 		z = mapClasify(obs)
+		n += 1
+		if z==true_zone:
+			accuracy += (1.0-accuracy)/n
+		else:
+			accuracy += (0.0-accuracy)/n
+			# print z,true_zone
 		# if z in (u'exit_donald', u'entry_minny'):
 		# 	print coord, z
 		if tpe == 'enter':
 			enter_targets.append((z,t))
 		else:
 			exit_targets.append((z,t))
-	for i, ti in enter_targets:
-		for j, tj in exit_targets:
+	# print "Percentage accuracy", accuracy
+	for i, ti in exit_targets:
+		for j, tj in enter_targets:
 			time = math.floor(tj-ti+0.5)
 			if abs(time) > T: continue
 			try:
 				R[(i,j)][time] += 1.0
 			except:
 				R[(i,j)][time] = 1.0
+
+	if getAcc:
+		return (accuracy, R)
 	return R
 
 def getCovar(R):
+	# print R
 	thrs = {}
 	cov = collections.defaultdict(dict)
 	for k in R:
@@ -96,19 +109,21 @@ def checkRepeted(k,t,dic):
 
 def getTransitionProb(fromCovar):
 	cov, thrs = fromCovar
+	# print fromCovar
 	trans = collections.defaultdict(dict)
 	for k in cov:
 		thr = thrs[k]
 		# if k == (u'exit_donald', u'entry_minny'):
-		# 	print thr, cov[k]
+		# print thr, cov[k]
 		for t in cov[k]:
-			if cov[k][t] >= thr:
+			if cov[k][t] > thr:
 				# if cov[k][t] < 0: print cov[k][t], t
-				p = zones[str(k[0])]['p']
 				if t < 0:
-					checkRepeted(k[::-1], -t, trans)
+					p = zones[str(k[1])]['p']
+					# checkRepeted(k[::-1], -t, trans)
 					trans[k[::-1]][-t] = cov[k][t]/p/(1-p)
 				else:
+					p = zones[str(k[0])]['p']
 					checkRepeted(k, t, trans)
 					trans[k][t] = cov[k][t]/p/(1-p)
 	#normalization
@@ -125,14 +140,13 @@ def getTransitionProb(fromCovar):
 def getProbs(zn, tn):
 	global zones, data
 	zones, data = utils.gen_data(zn, tn)
-	
+	# print zones, data
 	R = getCrossCorrelation()
-	# print R
 	cov_thr = getCovar(R)
 	return (cov_thr[0], getTransitionProb(cov_thr))
 
 
-### for serialization
+### for saving result
 
 def saveToCSV(tran, dirName):
 	if not os.path.exists(dirName):
@@ -155,7 +169,9 @@ def findLink(link, cov, tran):
 
 
 def saveAllLinks(dic, cov, tran, n):
-	for link in cov:
+	keys = [k for k in tran if k not in cov]
+	keys += [k for k in cov]
+	for link in keys:
 		# print link
 		if link not in dic:
 			dic[link] = {
@@ -169,7 +185,7 @@ def saveAllLinks(dic, cov, tran, n):
 		for t in tran[link]:
 			try:
 				dic[link][n][t]["n"] += 1
-				dic[link][n][t]["p"] += (dic[link][n][t]["p"]-tran[link][t])/dic[link][n][t]["n"] 
+				dic[link][n][t]["p"] += (tran[link][t]-dic[link][n][t]["p"])/dic[link][n][t]["n"] 
 			except:
 				dic[link][n][t]={
 					'n': 1,
@@ -210,23 +226,61 @@ def oneLinkToCSV(res, filename):
 				else:
 					for t, p in tran.iteritems():
 						spamwriter.writerow([n, obs, t, p])
-	
+def percentAccuracy(filename, ns, times):
+	global zones, data
+	with open(filename, 'wb') as csvfile:
+		spamwriter = csv.writer(csvfile, delimiter=',',
+			 quotechar='|', quoting=csv.QUOTE_MINIMAL)
+		spamwriter.writerow(["NUM", "PERCENT ACCURACY"])
+		for n in ns:
+			print n
+			for i in range(times):
+				print "-", i
+				zones, data = utils.gen_data(n, 1000)
+				acc, _ = getCrossCorrelation(True)
+				spamwriter.writerow([n, acc*100])
+
+
+# def saveCovThr(filename, ns, times):
+# 	global zones, data
+# 	accuracy=collections.defaultdict(list)
+# 	with open(filename, 'wb') as csvfile:
+# 		spamwriter = csv.writer(csvfile, delimiter=',',
+# 			 quotechar='|', quoting=csv.QUOTE_MINIMAL)
+# 		spamwriter.writerow(["LINK", "NUM", ])
+# 		for n in ns:
+# 			print n
+# 			for i in range(times):
+# 				print "-", i
+# 				zones, data = utils.gen_data(n, 1000)
+# 				acc, R = getCrossCorrelation(True)
+# 				# print R
+# 				cov_thr = getCovar(R)
+# 				spamwriter.writerow([n, acc*100])
+
 if __name__ == "__main__":
-	result = {}
+	# resultOneLink = {}
+	resultAllLink = {}
 	ns = [100, 500, 1000, 2000, 3000, 4000, 5000]
-	for n in ns:
-	# for n in [1000]:
-		print n
-		for i in range(300):
-		# for i in range(1):
-			print "-",i
-			cov, tran = getProbs(n,n)
-			# saveOneLink(result, cov, tran)
-			saveAllLinks(result, cov, tran, n)
-			# print tran
-			# result[n].append(findLink((u'exit_donald', u'entry_minny'), cov, tran))
-			# saveToCSV(tran, "data_%d"%n)
-		#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
-	# json.dump(result, open("result.json", 'w'))
-	# oneLinkToCSV(result,'result.csv')
-	allLinkToCSV(result, 'resultAll.csv', ns)
+
+	for testprob in ([0.25, 0.75], [0.01, 0.99]):
+		utils.changeProb(testprob)
+		for n in ns:
+		# for n in [1000]:
+			print n
+			for i in range(30): # 10 300
+			# for i in range(1):
+				print "-",i
+				cov, tran = getProbs(n,n)
+				# saveOneLink(resultOneLink, cov, tran)
+				saveAllLinks(resultAllLink, cov, tran, n)
+				# print tran
+				# result[n].append(findLink((u'exit_donald', u'entry_minny'), cov, tran))
+				# saveToCSV(tran, "data_%d"%n)
+			#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
+		# json.dump(result, open("result.json", 'w'))
+		# oneLinkToCSV(resultOneLink,'result.csv')
+		allLinkToCSV(resultAllLink, 'resultAll%f.csv'%testprob[1], ns)
+
+	# get percent accuracy 
+	# percentAccuracy("percentAcc.csv", ns, 10)
