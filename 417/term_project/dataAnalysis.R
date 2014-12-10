@@ -21,6 +21,17 @@
 "('exit_goofy', 'exit_donald')"
 "('exit_goofy', 'exit_goofy')"  
 
+ [1] "('entry_micky', 'entry_micky')" "('entry_micky', 'entry_minny')"
+ [3] "('entry_micky', 'exit_daisy')"  "('entry_micky', 'exit_donald')"
+ [5] "('entry_micky', 'exit_goofy')"  "('entry_minny', 'entry_micky')"
+ [7] "('entry_minny', 'entry_minny')" "('entry_minny', 'exit_daisy')" 
+ [9] "('exit_daisy', 'entry_micky')"  "('exit_daisy', 'entry_minny')" 
+[11] "('exit_daisy', 'exit_donald')"  "('exit_donald', 'entry_micky')"
+[13] "('exit_donald', 'entry_minny')" "('exit_donald', 'exit_donald')"
+[15] "('exit_donald', 'exit_goofy')"  "('exit_goofy', 'entry_micky')" 
+[17] "('exit_goofy', 'entry_minny')"  "('exit_goofy', 'exit_donald')" 
+[19] "('exit_goofy', 'exit_goofy')"  
+
 
 
 data.source<-"/home/ytixu/courseDump/417/term_project/result300s.csv"
@@ -70,21 +81,46 @@ plot( subset( links, NUM=="100", select = c( TIME, PROB ) ) ,pch=20, main="100 s
 dev.off()
 
 
+ [1] "('entry_micky', 'entry_micky')" "('entry_micky', 'entry_minny')"
+ [3] "('entry_micky', 'exit_daisy')"  "('entry_micky', 'exit_donald')"
+ [5] "('entry_micky', 'exit_goofy')"  "('entry_minny', 'entry_micky')"
+ [7] "('entry_minny', 'entry_minny')" "('entry_minny', 'exit_daisy')" 
+ [9] "('entry_minny', 'exit_donald')" "('entry_minny', 'exit_goofy')" 
+[11] "('exit_daisy', 'entry_micky')"  "('exit_daisy', 'entry_minny')" 
+[13] "('exit_daisy', 'exit_donald')"  "('exit_daisy', 'exit_goofy')"  
+[15] "('exit_donald', 'entry_micky')" "('exit_donald', 'entry_minny')"
+[17] "('exit_donald', 'exit_daisy')"  "('exit_donald', 'exit_donald')"
+[19] "('exit_donald', 'exit_goofy')"  "('exit_goofy', 'entry_micky')" 
+[21] "('exit_goofy', 'entry_minny')"  "('exit_goofy', 'exit_daisy')"  
+[23] "('exit_goofy', 'exit_donald')"  "('exit_goofy', 'exit_goofy')"  
 
-
-data.source<-"/home/ytixu/courseDump/417/term_project/resultAll0.010000.csv"
+data.source<-"/home/ytixu/courseDump/417/term_project/resultAll.csv"
 links<-read.csv(file=data.source, quote="|")
 links$LINK <- as.factor(links$LINK)
 links$OBSERVED <- as.factor(links$OBSERVED)
 links$NUM <- as.factor(links$NUM)
+links$PROB <- as.factor(links$PROB)
 levels(links$LINK)
-levels(links$LINK) <- c(1:21)
+levels(links$LINK) <- c(1:24)
 
 
 
 plot(links$LINK, links$NDETECT)
-plot(subset(links, LINK=="11", select = c( NUM, NDETECT )))
+plot(subset(links, PROB=="0.01" & LINK=="5", select = c( NUM, OBSERVED )))
 
+for (p in levels(links$PROB)){
+	for (n in levels(links$NUM)){
+		jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_",n,".jpeg",sep = "") , 
+			width=5, height=6, units="in", res=300)
+		plot(subset(links, PROB == p & NUM == n, select = c( LINK, NDETECT )), 
+			xlab="link", ylab="number of times detected", ylim=c(0,60),
+			main=paste(n, "samples and", p, "probability"))
+		dev.off()
+	}
+}
+
+	
+# 
 
 
 data.source<-"/home/ytixu/courseDump/417/term_project/percentAcc.csv"
