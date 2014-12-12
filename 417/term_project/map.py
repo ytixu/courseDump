@@ -82,7 +82,6 @@ def getCrossCorrelation(getAcc = False):
 	return R
 
 def getCovar(R):
-	# print R
 	thrs = {}
 	cov = collections.defaultdict(dict)
 	for k in R:
@@ -263,13 +262,14 @@ if __name__ == "__main__":
 	resultAllLink = {}
 	ns = [100, 500, 1000, 2000, 3000, 4000, 5000]
 
-	for testprob in ([0.25, 0.75], [0.01, 0.99]):
+	# for testprob in ([0.99, 0.01], [0.75, 0.25], [0.50, 0.50], [0.25, 0.75], [0.01, 0.99]):
+	for testprob in ([0.99, 0.01],):
 		utils.changeProb(testprob)
-		for n in ns:
-		# for n in [1000]:
+		# for n in ns:
+		for n in [5000]:
 			print n
-			for i in range(30): # 10 300
-			# for i in range(1):
+			# for i in range(30): # 10 300
+			for i in range(1):
 				print "-",i
 				cov, tran = getProbs(n,n)
 				# saveOneLink(resultOneLink, cov, tran)
@@ -280,7 +280,8 @@ if __name__ == "__main__":
 			#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
 		# json.dump(result, open("result.json", 'w'))
 		# oneLinkToCSV(resultOneLink,'result.csv')
-		allLinkToCSV(resultAllLink, 'resultAll%f.csv'%testprob[1], ns)
+		# allLinkToCSV(resultAllLink, 'resultAll%f.csv'%testprob[1], ns)
+		allLinkToCSV(resultAllLink, 'result.csv', ns)
 
 	# get percent accuracy 
 	# percentAccuracy("percentAcc.csv", ns, 10)

@@ -207,7 +207,7 @@ However, if the most popular transition time is strictly negative, the following
 	<img src="exp1.png">
 	<figcaption><b>Figure 2</b> The simulated setting showing the viewfield of the two cameras and their entry/exit zones. </figcaption>
 </figure>
-<p>During the simulation, targets are generated with a random entering time and a position sampled from the dirtibution at zone 1. Then, they move to the next according to the transition probabilities and a speed drawn from a fixed distribution. Tests are done on varying the transition probability $\alpha_{13}$ (and $\alpha_{12}$) and the number of sample for learning the zones and the topology. For simplicity, we assume that the number of sample is the same for both learning systems. We also assume that the zones are know up to their signal distribution. Thus, each simulation first generates data to learn the parameters defining the signal distribution for each zone, then produced the data to infer topology.</p> 
+<p>During the simulation, targets are generated with a random entering time and a position sampled from the dirtibution at zone 1. Then, they move to the next according to the transition probabilities and a speed drawn from a fixed distribution. Tests are done on varying the transition probability $\alpha_{13}$ (and $\alpha_{12}$) and the number of sample for learning the zones and the topology. The other transition probabilities are fixed at 1.0. For simplicity, we assume that the number of sample is the same for both learning systems. We also assume that the zones are know up to their signal distribution. Thus, each simulation first generates data to learn the parameters defining the signal distribution for each zone, then produced the data to infer topology.</p> 
 <p>Since the generation of signals is not ordered by time, we do not run Network Calibration at the same time as we gather data, unlike how it was originally designed.</p>
 
 <a name="42"></a><h3>Result</h3>
@@ -228,6 +228,7 @@ For each combination of $\alpha_{13} \in \{0.01, 0.25, 0.50, 0.75, 0.99\}$ and s
 	<div class="scollableFigure">
 		<table></tr>
 				<td><img class="flow" src="0.01_100.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="0.01_500.jpeg" style="height:100%;"></td>
 				<td><img class="flow" src="0.01_1000.jpeg" style="height:100%;"></td>
 				<td><img class="flow" src="0.01_2000.jpeg" style="height:100%;"></td>
 				<td><img class="flow" src="0.01_3000.jpeg" style="height:100%;"></td>
@@ -263,7 +264,7 @@ For each combination of $\alpha_{13} \in \{0.01, 0.25, 0.50, 0.75, 0.99\}$ and s
 				<td><img class="flow" src="0.99_5000.jpeg" style="height:100%;"></td>
 		</tr></table>
 	</div>
-	<figcaption><b>Figure 4</b></figcaption>
+	<figcaption><b>Figure 4</b> </figcaption>
 </figure>
 
 <a href='#top'>[top]</a>
