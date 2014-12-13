@@ -262,7 +262,7 @@ if __name__ == "__main__":
 	ns = [100, 500, 1000, 2000, 3000, 4000, 5000]
 
 	# for testprob in ([0.99, 0.01], [0.75, 0.25], [0.50, 0.50], [0.25, 0.75], [0.01, 0.99]):
-	for testprob in ([0.75, 0.25],):
+	for testprob in ([0.25, 0.75],):
 		resultAllLink = {}
 		utils.changeProb(testprob)
 		# for n in ns:

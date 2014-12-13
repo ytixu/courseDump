@@ -13,6 +13,9 @@
 		    font-style: italic;
 			margin-left: 30px;
 		}
+		figcaption{
+			font-style: italic;
+		}
 
 		h1, h2, h3 {
 		    font-family: Arial, Helvetica, sans-serif;
@@ -157,7 +160,7 @@ If $\int$Cov$_{ij}(\tau) d\tau = 0$, then the signals are independent. Links for
 <p>Further observations of trajectories are done by the cameras to learn the topology. This process is mainly divided into three parts: data classification, parameter estimation, interpretation. </p>
 
 <a name="31"></a><h3>Data Classification</h3>
-<p>For each signal $x$ related to an appearance/disappearance of a target, Maximum-a-Posteriori is used to estimate which entry/exit zone $x$ belongs to using the following equations.
+<p>For each signal $x$ related to an appearance/disappearance of a target, Maximum-a-Posteriori (MAP) is used to estimate which entry/exit zone $x$ belongs to using the following equations.
 
 \begin{equation*}\mbox{most likely zone = arg}\max_{i\in Z} (p(i|x,\theta))\end{equation*}
 
@@ -211,10 +214,7 @@ However, if the most popular transition time is strictly negative, the following
 <p>Since the generation of signals is not ordered by time, we do not run Network Calibration at the same time as we gather data, unlike how it was originally designed.</p>
 
 <a name="42"></a><h3>Result</h3>
-<p>First, we examine the accuracy of the zone classification algorithm for our simulation. By varying the number of sample data needed to train the GMM model, we observe that </p>
-
-
-<p>For each combination of $\alpha_{13} \in \{0.01, 0.25, 0.50, 0.75, 0.99\}$ and sample size $n \in \{100, 500, 1000, 2000, 3000, 4000, 5000\}$ is tested 30 times, and results gathered based on the number of times a transition probability is found. As most links have transition time around 5 seconds in the setting, we choose a search window of $T=15$. Figure 4 shows how often $\alpha_{ij}(\tau)$ are found for each detected link. </p>
+<p>For each combination of $\alpha_{13} \in \{0.01, 0.25, 0.50, 0.75, 0.99\}$ and sample size $n \in \{100, 500, 1000, 2000, 3000, 4000, 5000\}$ is tested 30 times, and results gathered based on the number of times a transition probability is found. As most links have transition time around 5 seconds in the setting, we choose a search window of $T=15$. We choose a threshold $thr = E[R_{ij}(\tau)]$ to show as many potential candidates for the detected transition probabilities without tolerating too much noise. Figure 3 shows how often $\alpha_{ij}(\tau)$ are found for each detected link. </p>
 <figure>
 	<div class="scollableFigure">
 		<table></tr>
@@ -322,12 +322,36 @@ However, if the most popular transition time is strictly negative, the following
 				<td>2 &#10141; 2</td>
 		</tr>
 	</table><br>
-	<figcaption><b>Figure 4</b> Test result for different sample sizes and transition probabilities. Links with no data point indicates that only signals have been observed from their corresponding zone with a time elapsed of at most 15 seconds.</figcaption>
+	<figcaption><b>Figure 3</b> Test result for different sample sizes and transition probabilities. Links with no data point indicates that only signals have been observed from their corresponding zone with a time elapsed of at most 15 seconds. (Note that there is a total of 35 images in the scrollable table).</figcaption>
 </figure>
 
-<p>From the result, our initial hypothesis that links with low transition rate have less chance to be detected appears to be wrong. When the probability of transiting from zone 3 to zone 4 (link #17 on Figure 4) is set to 0.01, the method finds the link at least 50% of the time for sample size above 1000. When set to 0.25, the method achives to find the same transition probability for that link with a specific transition time for all the 30 runs and sample size at least 500.</p>
-<p>While it is apparent that small sample size affects the ability for the method to detect all the zones, when a link has high transition rate, a sample size too large may overload the system with too much signal data. As observed for link 3-4, when the transition rate is raised higher than 0.5, the method inundates the cross-correlation vector for that link, inflating the significance of invalid transition times. As the threshold to filter the covariance is defined according to the mean and variance of the cross-correlation (see equation 5), the peak for that link therefore looses its significance. The similar situation is observed for link 1-2 (link #5 on Figure 4), as each simulated trajectory must start from zone 1. This link is almost never detected regardless of its transition rate.</p>
-<p>As targets much cross link 4-5 (link #8 on Figure 4) after crossing link 3-4 in the simulation, these two links are correlated. In the result, this correlation is also evident. However, redundant links such as 1-3, 1-4, 1-5 and 3-5 should also be coorelated with link 4-5. As discussed previously, any link related with zone 1 is rarely detected due to the crowdedness of the signals at zone 1. On the other hand, 1-4 and 3-5 are entry-entry or exit-exit links. Since the method only detect exit-entry links (which is adequate for detecting connections between camera view), unless some zones are misclassified, detecting these links would be impossible.</p>
+<p>From the result, our initial hypothesis that links with low transition probability  $\alpha_{13}$ have less chance to be detected appears to be wrong. When the probability of transiting from zone 3 to zone 4 (link #17 on Figure 3) is set to 0.01, the method finds the link at least 50% of the time for sample size above 1000. When set to 0.25, the method achives to find the same transition probability for that link with a specific transition time for all the 30 runs and sample size at least 500.</p>
+
+<p>While it is apparent that small sample size affects the ability for the method to detect all the zones, when a link has high transition probability, a sample size too large may overload the system with too much signal data. As observed for link 3-4, when the  $\alpha_{13}$ is raised higher than 0.5, the method inundates the cross-correlation vector for that link, inflating the significance of invalid transition times. As the threshold to filter the covariance is defined according to the mean and variance of the cross-correlation (see equation 5), the peak for that link therefore looses its significance. The similar situation is observed for link 1-2 (link #5 on Figure 3), as each simulated trajectory must start from zone 1. This link is almost never detected regardless of its transition probability.</p>
+<p>As targets much cross link 4-5 (link #8 on Figure 3) after crossing link 3-4 in the simulation, these two links are correlated. In the result, this correlation is also evident. However, redundant links such as 1-3, 1-4, 1-5 and 3-5 should also be coorelated with link 4-5. As discussed previously, any link related with zone 1 is rarely detected due to the crowdedness of the signals at zone 1. On the other hand, 1-4 and 3-5 are entry-entry or exit-exit links. Since the method only detect exit-entry links (which is adequate for detecting connections between camera view), unless some signals are misclassified when performing MAP, detecting these links would be impossible.</p>
+<p>Arguably, the threshold affects how the method perform in detecting links correlated with link 3-4. However, decreasing the threshold would also increase the significance for the invalid links. In many cases, such links are detected more often or found to have more significant covariance peak than some valid links, possibly due to noise and misclassification.</p>
+<p>On the inspection of possible misclassification, we found that the percange accuracy for classifying a signal to the zone that it was generated form varies according to $\alpha_{13}$. When this rate is low, the chance of observing signal from other zones than 1 and 2 is lower, resulting zones 1 and 2 to be more popular. Thus, classification when there are mainly two choices is highly successful. When the variety of zone observed is high, there are more chance of matching a signal with the wrong zone. Figure 4 shows this result.</p>
+
+<figure>
+	<div class="scollableFigure">
+		<table></tr>
+				<td><img class="flow" src="accuracy0.01.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="accuracy0.25.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="accuracy0.5.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="accuracy0.75.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="accuracy0.99.jpeg" style="height:100%;"></td>
+		</tr></table>
+	</div><br>
+	<figcaption><b>Figure 4</b> The percentage accuracy of classifying a signal for each transition probability $\alpha_{13}$ and sample size to train the classifier. (Note that there is a total of 5 images in the scrollable table.)</figcaption>
+</figure>
+
+<p>Linking back to our main result, misclassification may explain why the link 3-5 is occasionally detected when $\alpha_{13}$ is high. Also, certain invalid links, such as 3-3 and 4-4, are found more often when the $\alpha_{13}$ is high. A possible senario is that some signals from zone 4 is classified to zone 3, and vice-versa. Since there is a valid link between the two zone, the method would find a peak for 3-3 and 4-4. However, this senario is only valid if signals for appearance and dissapearance of target are not distiguished by whether the zones to which they are associated to are entry zone or exit zones. In our implementation, we assumed that the distinction can be make by observing the signal itself. In the original paper, the authors did not clarify on this part of their design. </p>
+
+<a href='#top'>[top]</a>
+
+<a name="5"></a><h2>Conclusions </h2>
+<p>In our experiement, we constructed a scene with 2 cameras with a simple model for the behavior of the targets. Despite that it is a simulation, we were able to investigate on some edge cases where Network Calibration may have difficulty with. Mainly, when signals from a exit-entry zone pair is crowded, </p>
+<p>A direct consequence of misclassification is that the method may in some cases establish a wrong connection between two close camera. In a setting where two camera view are seperated by a wall, for example, the Gaussian assumption of the signals implies that the zones are extended infinitely far. A small accuracy error may enable the targets in the model to move through the wall. It may possible to improve the method by confining the zone within the boundary of the camera views. However, in a real experiment, noise from camera sensor may possibly cause signals to be detected beyond the bound.</p>
 
 As probability increase, the capability to detect decreases
 This justified by the fact that too much signal can overwhelm the system 
@@ -336,9 +360,7 @@ misclassified signals may potentially cause the system to find false links in th
 where we have two completely disconnected camera views but close to each other (maybe seperated by a wall), zone in one may be classified to the zone of another. Because of the gaussian assumption, we do 
 not consider the fact that signals in some zones are bounded.
 
-<a href='#top'>[top]</a>
 
-<a name="5"></a><h2>Conclusions </h2>
 In summary, our results indicates that....
 The advantages of the method are....
 The disadvantages of the method include....

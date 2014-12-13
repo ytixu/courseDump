@@ -134,7 +134,7 @@ acc3<-"/home/ytixu/courseDump/417/term_project/percentAcc0.500000.csv"
 acc4<-"/home/ytixu/courseDump/417/term_project/percentAcc0.750000.csv"
 acc5<-"/home/ytixu/courseDump/417/term_project/percentAcc0.990000.csv"
 acclist = list(acc1, acc2, acc3, acc4, acc5)
-tran = c(0.01, 0.25, 0.50, 0.75, 0.99)
+tran = c(0.99, 0.75,0.50, 0.25, 0.01)
 NUM = c()
 ACC = c()
 TRAN = c()
@@ -152,8 +152,8 @@ accP = data.frame(NUM,ACC,TRAN)
 accP$NUM <- as.factor(accP$NUM)
 accP$TRAN <- as.factor(accP$TRAN)
 for (i in 1:5){
-	jpeg(paste("/home/ytixu/courseDump/417/term_project/accuracy",tran[i],".jpeg") , width=5, 
-		height=4, units="in", res=300)
+	jpeg(paste("/home/ytixu/courseDump/417/term_project/accuracy",tran[i],".jpeg",sep = ""),
+		width=6,height=6, units="in", res=300)
 	plot(subset(accP, TRAN == toString(tran[i]), select = c( NUM, ACC )), 
 			xlab="sample size", ylab="percentage accuracy",
 			main=paste(tran[i], "probability"))
