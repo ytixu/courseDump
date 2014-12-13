@@ -1,37 +1,28 @@
-"('entry_micky', 'entry_micky')"
-"('entry_micky', 'entry_minny')"
-"('entry_micky', 'exit_daisy')"
-"('entry_micky', 'exit_donald')"
-"('entry_micky', 'exit_goofy')"
-"('entry_minny', 'entry_micky')"
-"('entry_minny', 'entry_minny')"
-"('entry_minny', 'exit_daisy')" 
-"('entry_minny', 'exit_donald')"
-"('entry_minny', 'exit_goofy')" 
-"('exit_daisy', 'entry_micky')"
-"('exit_daisy', 'entry_minny')" 
-"('exit_daisy', 'exit_donald')"
-"('exit_donald', 'entry_micky')"
-"('exit_donald', 'entry_minny')"
-"('exit_donald', 'exit_daisy')" 
-"('exit_donald', 'exit_donald')"
-"('exit_donald', 'exit_goofy')" 
-"('exit_goofy', 'entry_micky')"
-"('exit_goofy', 'entry_minny')" 
-"('exit_goofy', 'exit_donald')"
-"('exit_goofy', 'exit_goofy')"  
-
- [1] "('entry_micky', 'entry_micky')" "('entry_micky', 'entry_minny')"
- [3] "('entry_micky', 'exit_daisy')"  "('entry_micky', 'exit_donald')"
- [5] "('entry_micky', 'exit_goofy')"  "('entry_minny', 'entry_micky')"
- [7] "('entry_minny', 'entry_minny')" "('entry_minny', 'exit_daisy')" 
- [9] "('exit_daisy', 'entry_micky')"  "('exit_daisy', 'entry_minny')" 
-[11] "('exit_daisy', 'exit_donald')"  "('exit_donald', 'entry_micky')"
-[13] "('exit_donald', 'entry_minny')" "('exit_donald', 'exit_donald')"
-[15] "('exit_donald', 'exit_goofy')"  "('exit_goofy', 'entry_micky')" 
-[17] "('exit_goofy', 'entry_minny')"  "('exit_goofy', 'exit_donald')" 
-[19] "('exit_goofy', 'exit_goofy')"  
-
+<td>1 &#10141; 1</td>
+<td>1 &#10141; 4</td>
+<td>1 &#10141; 5</td>
+<td>1 &#10141; 3</td>
+<td>1 &#10141; 2</td>
+<td>4 &#10141; 1</td>
+<td>4 &#10141; 4</td>
+<td>4 &#10141; 5</td>
+<td>4 &#10141; 3</td>
+<td>4 &#10141; 2</td>
+<td>5 &#10141; 1</td>
+<td>5 &#10141; 4</td>
+<td>5 &#10141; 5</td>
+<td>5 &#10141; 3</td>
+<td>5 &#10141; 2</td>
+<td>3 &#10141; 1</td>
+<td>3 &#10141; 4</td>
+<td>3 &#10141; 5</td>
+<td>3 &#10141; 3</td>
+<td>3 &#10141; 2</td>
+<td>2 &#10141; 1</td>
+<td>2 &#10141; 4</td>
+<td>2 &#10141; 5</td>
+<td>2 &#10141; 3</td>
+<td>2 &#10141; 2</td>
 
 
 data.source<-"/home/ytixu/courseDump/417/term_project/result300s.csv"
@@ -81,51 +72,90 @@ plot( subset( links, NUM=="100", select = c( TIME, PROB ) ) ,pch=20, main="100 s
 dev.off()
 
 
- [1] "('entry_micky', 'entry_micky')" "('entry_micky', 'entry_minny')"
- [3] "('entry_micky', 'exit_daisy')"  "('entry_micky', 'exit_donald')"
- [5] "('entry_micky', 'exit_goofy')"  "('entry_minny', 'entry_micky')"
- [7] "('entry_minny', 'entry_minny')" "('entry_minny', 'exit_daisy')" 
- [9] "('entry_minny', 'exit_donald')" "('entry_minny', 'exit_goofy')" 
-[11] "('exit_daisy', 'entry_micky')"  "('exit_daisy', 'entry_minny')" 
-[13] "('exit_daisy', 'exit_donald')"  "('exit_daisy', 'exit_goofy')"  
-[15] "('exit_donald', 'entry_micky')" "('exit_donald', 'entry_minny')"
-[17] "('exit_donald', 'exit_daisy')"  "('exit_donald', 'exit_donald')"
-[19] "('exit_donald', 'exit_goofy')"  "('exit_goofy', 'entry_micky')" 
-[21] "('exit_goofy', 'entry_minny')"  "('exit_goofy', 'exit_daisy')"  
-[23] "('exit_goofy', 'exit_donald')"  "('exit_goofy', 'exit_goofy')"  
+"('entry_micky', 'entry_micky')"
+"('entry_micky', 'entry_minny')"
+"('entry_micky', 'exit_daisy')"
+"('entry_micky', 'exit_donald')"
+"('entry_micky', 'exit_goofy')"
+"('entry_minny', 'entry_micky')"
+"('entry_minny', 'entry_minny')"
+"('entry_minny', 'exit_daisy')" 
+"('entry_minny', 'exit_donald')"
+"('entry_minny', 'exit_goofy')" 
+"('exit_daisy', 'entry_micky')"
+"('exit_daisy', 'entry_minny')" 
+"('exit_daisy', 'exit_daisy')"
+"('exit_daisy', 'exit_donald')" 
+"('exit_daisy', 'exit_goofy')"
+"('exit_donald', 'entry_micky')"
+"('exit_donald', 'entry_minny')"
+"('exit_donald', 'exit_daisy')" 
+"('exit_donald', 'exit_donald')"
+"('exit_donald', 'exit_goofy')" 
+"('exit_goofy', 'entry_micky')"
+"('exit_goofy', 'entry_minny')" 
+"('exit_goofy', 'exit_daisy')"
+"('exit_goofy', 'exit_donald')" 
+"('exit_goofy', 'exit_goofy')"   
 
-data.source<-"/home/ytixu/courseDump/417/term_project/resultAll.csv"
+data.source<-"/home/ytixu/courseDump/417/term_project/result.csv"
 links<-read.csv(file=data.source, quote="|")
 links$LINK <- as.factor(links$LINK)
 links$OBSERVED <- as.factor(links$OBSERVED)
 links$NUM <- as.factor(links$NUM)
 links$PROB <- as.factor(links$PROB)
 levels(links$LINK)
-levels(links$LINK) <- c(1:24)
+levels(links$LINK) <- c(1:25)
 
 
 
 plot(links$LINK, links$NDETECT)
 plot(subset(links, PROB=="0.01" & LINK=="5", select = c( NUM, OBSERVED )))
 
+# I combine all the files in one before running this
 for (p in levels(links$PROB)){
 	for (n in levels(links$NUM)){
 		jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_",n,".jpeg",sep = "") , 
 			width=5, height=6, units="in", res=300)
 		plot(subset(links, PROB == p & NUM == n, select = c( LINK, NDETECT )), 
-			xlab="link", ylab="number of times detected", ylim=c(0,60),
+			xlab="link", ylab="number of times detected", ylim=c(0,30),
 			main=paste(n, "samples and", p, "probability"))
 		dev.off()
 	}
 }
 
 	
-# 
+# accuracy
 
 
-data.source<-"/home/ytixu/courseDump/417/term_project/percentAcc.csv"
-links<-read.csv(file=data.source, quote="|")
-links$NUM <- as.factor(links$NUM)
-jpeg("/home/ytixu/courseDump/417/term_project/accuracy1000.jpeg" , width=5, height=4, units="in", res=300)
-plot(links$NUM, links$PERCENT.ACCURACY, ,pch=20, xlab="sample size", ylab="accuracy")
-dev.off()
+acc1<-"/home/ytixu/courseDump/417/term_project/percentAcc0.010000.csv"
+acc2<-"/home/ytixu/courseDump/417/term_project/percentAcc0.250000.csv"
+acc3<-"/home/ytixu/courseDump/417/term_project/percentAcc0.500000.csv"
+acc4<-"/home/ytixu/courseDump/417/term_project/percentAcc0.750000.csv"
+acc5<-"/home/ytixu/courseDump/417/term_project/percentAcc0.990000.csv"
+acclist = list(acc1, acc2, acc3, acc4, acc5)
+tran = c(0.01, 0.25, 0.50, 0.75, 0.99)
+NUM = c()
+ACC = c()
+TRAN = c()
+ind = 1
+for (i in 1:5){
+	acc<-read.csv(file=toString(acclist[i]), quote="|")
+	for (j in 1:length(acc$NUM)){
+		NUM[ind] <- acc$NUM[j]
+		ACC[ind] <- acc$PERCENT.ACCURACY[j]
+		TRAN[ind] <- tran[i]
+		ind = ind+1
+	}
+}
+accP = data.frame(NUM,ACC,TRAN)
+accP$NUM <- as.factor(accP$NUM)
+accP$TRAN <- as.factor(accP$TRAN)
+for (i in 1:5){
+	jpeg(paste("/home/ytixu/courseDump/417/term_project/accuracy",tran[i],".jpeg") , width=5, 
+		height=4, units="in", res=300)
+	plot(subset(accP, TRAN == toString(tran[i]), select = c( NUM, ACC )), 
+			xlab="sample size", ylab="percentage accuracy",
+			main=paste(tran[i], "probability"))
+	dev.off()
+}

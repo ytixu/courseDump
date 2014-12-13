@@ -174,14 +174,14 @@ Equation (3) follows from Bayes Rule; $\eta = \sum_{j\in Z} p_j p(x|j)$ is the n
 </p> 
 
 <a name="32"></a><h3>Parameter Estimation</h3>
-<p>The cross-correlation function $R_{ij}(\tau)$ is estimated for $-T\leq \tau \leq T$ and are implemented as counters. When an appearance event at zone $i$ is observed at some time $t_1$, the method searches for a disappearance event at zone $j$ at time $t_2$ such that $t_2 \in [-T+t_1, T+t_1]$. It then increment $R_{ij}(\lfloor t_2 - t_1 \rceil)$ by 1, where $\lfloor t_2 - t_1 \rceil = \lfloor t_2 - t_1 + 0.5 \rfloor$ is the time difference rounded to the nearest integer.</p>
+<p>The cross-correlation function $R_{ij}(\tau)$ is estimated for $-T\leq \tau \leq T$ and are implemented as counters. The parameter $T$ defines the time-search window. When an appearance event at zone $i$ is observed at some time $t_1$, the method searches for a disappearance event at zone $j$ at time $t_2$ such that $t_2 \in [-T+t_1, T+t_1]$. It then increment $R_{ij}(\lfloor t_2 - t_1 \rceil)$ by 1, where $\lfloor t_2 - t_1 \rceil = \lfloor t_2 - t_1 + 0.5 \rfloor$ is the time difference rounded to the nearest integer.</p>
 <p>After gathering enough data to shape the cross-correlation functions, the covariance can be then estimated. As the stationary assumption about the signal is wrong, equation (1) is replaced by 
 
 \begin{equation*}\mbox{Cov}_{ij}(\lfloor\tau\rceil) = R_{ij}(\lfloor\tau\rceil) - \mbox{median}_{\tau}R_{ij}(\tau)\end{equation*}
 
 <p>If the covariance $C_{ij}(\lfloor\tau\rceil)$ has a clear peak at some $\lfloor\tau\rceil$, then $\lfloor\tau\rceil$ represents the most popular transition time period between zone $i$ and $j$, implying that the signals from these two zones are correlated, i.e.: they form a valid link. A threashold defined as 
 
-\begin{equation*} thr = E[R_{ij}(\tau)] - \omega\sqrt{V[R_{ij}(\tau)]}\end{equation*}
+\begin{equation} thr = E[R_{ij}(\tau)] - \omega\sqrt{V[R_{ij}(\tau)]}\end{equation}
 
 is used to filter out the peaks that are not significant. Correlated entry/exit pairs are assumed to have interconnected pathways, each with transition probability that can be estimated with equation (2) and by enforcing the constraint
 
@@ -211,20 +211,11 @@ However, if the most popular transition time is strictly negative, the following
 <p>Since the generation of signals is not ordered by time, we do not run Network Calibration at the same time as we gather data, unlike how it was originally designed.</p>
 
 <a name="42"></a><h3>Result</h3>
-For each combination of $\alpha_{13} \in \{0.01, 0.25, 0.50, 0.75, 0.99\}$ and sample size $n \in \{100, 500, 1000, 2000, 3000, 4000, 5000\}$ is tested 30 times, and results gathered based on the number of times a transition probability is found. Figure 4 shows how often $\alpha_{ij}(\tau)$ are found for each detected link. 
+<p>First, we examine the accuracy of the zone classification algorithm for our simulation. By varying the number of sample data needed to train the GMM model, we observe that </p>
+
+
+<p>For each combination of $\alpha_{13} \in \{0.01, 0.25, 0.50, 0.75, 0.99\}$ and sample size $n \in \{100, 500, 1000, 2000, 3000, 4000, 5000\}$ is tested 30 times, and results gathered based on the number of times a transition probability is found. As most links have transition time around 5 seconds in the setting, we choose a search window of $T=15$. Figure 4 shows how often $\alpha_{ij}(\tau)$ are found for each detected link. </p>
 <figure>
-	<table><caption>Legend</caption><tr>
-			<td><b>Number</b></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
-			<td><b>Link</b><td>1 &#10141; 1</td><td>1 &#10141; 4</td><td>1 &#10141; 5</td><td>1 &#10141; 3</td><td>1 &#10141; 2</td><td>4 &#10141; 1</td><td>4 &#10141; 4</td><td>4 &#10141; 5 </td><td>4 &#10141; 3</td></tr>
-	</table>
-	<table><tr>
-			<td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
-			<td>4 &#10141; 2 </td><td>5 &#10141; 1</td><td>5 &#10141; 4 </td><td>5 &#10141; 3</td><td>5 &#10141; 2  </td><td>3 &#10141; 1</td><td>3 &#10141; 4</td><td>3 &#10141; 5</td><td>3 &#10141; 3</td><td>3 &#10141; 2</td></tr>
-	</table>
-	<table><tr>
-			<td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr>
-			<td>2 &#10141; 1 </td><td>2 &#10141; 4</td><td>2 &#10141; 5  </td><td>2 &#10141; 3</td><td>2 &#10141; 2  </td></tr>
-	</table>
 	<div class="scollableFigure">
 		<table></tr>
 				<td><img class="flow" src="0.01_100.jpeg" style="height:100%;"></td>
@@ -264,8 +255,86 @@ For each combination of $\alpha_{13} \in \{0.01, 0.25, 0.50, 0.75, 0.99\}$ and s
 				<td><img class="flow" src="0.99_5000.jpeg" style="height:100%;"></td>
 		</tr></table>
 	</div>
-	<figcaption><b>Figure 4</b> </figcaption>
+	<table>
+		<caption>Legend</caption><tr>
+			<td><b>Number</b></td>
+				<td>1</td>
+				<td>2</td>
+				<td>3</td>
+				<td>4</td>
+				<td>5</td>
+				<td>6</td>
+				<td>7</td>
+				<td>8</td>
+				<td>9</td>
+		</tr><tr>
+			<td><b>Link</b></td>
+				<td>1 &#10141; 1</td>
+				<td>1 &#10141; 4</td>
+				<td>1 &#10141; 5</td>
+				<td>1 &#10141; 3</td>
+				<td>1 &#10141; 2</td>
+				<td>4 &#10141; 1</td>
+				<td>4 &#10141; 4</td>
+				<td>4 &#10141; 5</td>
+				<td>4 &#10141; 3</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+				<td>10</td>
+				<td>11</td>
+				<td>12</td>
+				<td>13</td>
+				<td>14</td>
+				<td>15</td>
+				<td>16</td>
+				<td>17</td>
+				<td>18</td>
+				<td>19</td>
+		</tr><tr>
+				<td>4 &#10141; 2</td>
+				<td>5 &#10141; 1</td>
+				<td>5 &#10141; 4</td>
+				<td>5 &#10141; 5</td>
+				<td>5 &#10141; 3</td>
+				<td>5 &#10141; 2</td>
+				<td>3 &#10141; 1</td>
+				<td>3 &#10141; 4</td>
+				<td>3 &#10141; 5</td>
+				<td>3 &#10141; 3</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+				<td>20</td>
+				<td>21</td>
+				<td>22</td>
+				<td>23</td>
+				<td>24</td>
+				<td>25</td>
+		</tr><tr>
+				<td>3 &#10141; 2</td>
+				<td>2 &#10141; 1</td>
+				<td>2 &#10141; 4</td>
+				<td>2 &#10141; 5</td>
+				<td>2 &#10141; 3</td>
+				<td>2 &#10141; 2</td>
+		</tr>
+	</table><br>
+	<figcaption><b>Figure 4</b> Test result for different sample sizes and transition probabilities. Links with no data point indicates that only signals have been observed from their corresponding zone with a time elapsed of at most 15 seconds.</figcaption>
 </figure>
+
+<p>From the result, our initial hypothesis that links with low transition rate have less chance to be detected appears to be wrong. When the probability of transiting from zone 3 to zone 4 (link #17 on Figure 4) is set to 0.01, the method finds the link at least 50% of the time for sample size above 1000. When set to 0.25, the method achives to find the same transition probability for that link with a specific transition time for all the 30 runs and sample size at least 500.</p>
+<p>While it is apparent that small sample size affects the ability for the method to detect all the zones, when a link has high transition rate, a sample size too large may overload the system with too much signal data. As observed for link 3-4, when the transition rate is raised higher than 0.5, the method inundates the cross-correlation vector for that link, inflating the significance of invalid transition times. As the threshold to filter the covariance is defined according to the mean and variance of the cross-correlation (see equation 5), the peak for that link therefore looses its significance. The similar situation is observed for link 1-2 (link #5 on Figure 4), as each simulated trajectory must start from zone 1. This link is almost never detected regardless of its transition rate.</p>
+<p>As targets much cross link 4-5 (link #8 on Figure 4) after crossing link 3-4 in the simulation, these two links are correlated. In the result, this correlation is also evident. However, redundant links such as 1-3, 1-4, 1-5 and 3-5 should also be coorelated with link 4-5. As discussed previously, any link related with zone 1 is rarely detected due to the crowdedness of the signals at zone 1. On the other hand, 1-4 and 3-5 are entry-entry or exit-exit links. Since the method only detect exit-entry links (which is adequate for detecting connections between camera view), unless some zones are misclassified, detecting these links would be impossible.</p>
+
+As probability increase, the capability to detect decreases
+This justified by the fact that too much signal can overwhelm the system 
+Not detecting link 1-2 because too much signal from zone 1
+misclassified signals may potentially cause the system to find false links in the case 
+where we have two completely disconnected camera views but close to each other (maybe seperated by a wall), zone in one may be classified to the zone of another. Because of the gaussian assumption, we do 
+not consider the fact that signals in some zones are bounded.
 
 <a href='#top'>[top]</a>
 
