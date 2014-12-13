@@ -124,6 +124,19 @@ for (p in levels(links$PROB)){
 	}
 }
 
+for (p in levels(links$PROB)){
+	for (n in levels(links$NUM)){
+		jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_",n,"_probs.jpeg",sep = "") , 
+			width=5, height=6, units="in", res=300)
+		plot(subset(links, PROB == p & NUM == n, select = c( LINK, TRANTIME )), 
+			xlab="link", ylab="transition time detected", ylim=c(0,20),
+			main=paste(n, "samples and", p, "probability"))
+		dev.off()
+	}
+}
+
+
+
 	
 # accuracy
 
@@ -163,14 +176,10 @@ for (i in 1:5){
 
 
 
-res1<-"/home/ytixu/courseDump/417/term_project/resultAll0.0100001000.csv"
-res2<-"/home/ytixu/courseDump/417/term_project/resultAll0.2500001000.csv"
-res3<-"/home/ytixu/courseDump/417/term_project/resultAll0.5000001000.csv"
-res4<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000.csv"
-res5<-"/home/ytixu/courseDump/417/term_project/resultAll0.9900001000.csv"
-
-reslist = list(res1, res2, res3, res4, res5)
-tran = c(0.01, 0.25, 0.50, 0.75, 0.99)
+res1<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000M.csv"
+res2<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000.csv"
+thr = c(-0.5, 0.5)
+reslist = list(res1, res2)
 links = c("('entry_micky', 'entry_micky')",
 		"('entry_micky', 'entry_minny')",
 		"('entry_micky', 'exit_daisy')",
@@ -201,7 +210,7 @@ OBSERVED = c()
 TRANTIME = c()
 AVGPROB = c()
 NDETECT = c()
-PROB = c()
+THR = c()
 ind = 1
 for (i in 1:5){
 	res<-read.csv(file=toString(reslist[i]), quote="|")
@@ -211,7 +220,6 @@ for (i in 1:5){
 			for (k in 1:length(links)){
 				if (links[k] == res$LINK[j]){
 					l = k
-					print(paste(links[k],res$LINK[j], "~~~"))
 				}
 			}
 			if (l == 0){
@@ -231,13 +239,22 @@ resP = data.frame(LINK, OBSERVED, TRANTIME, AVGPROB, NDETECT, PROB)
 resP$PROB <- as.factor(resP$PROB)
 resP$LINK <- as.factor(resP$LINK)
 resP$OBSERVED <- as.factor(resP$OBSERVED)
-levels(resP$LINK)<-c(1:20)
 
 for (p in levels(resP$PROB)){
 	jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_1000_solo.jpeg",sep = "") , 
 		width=5, height=6, units="in", res=300)
 	plot(subset(resP, PROB == p, select = c( LINK, NDETECT )), 
 		xlab="link", ylab="number of times detected", ylim=c(0,30),
-		main=paste(n, "samples and", p, "probability"))
+		main=paste("1000 samples and", p, "probability"))
 	dev.off()
 }
+
+for (p in levels(resP$PROB)){
+	jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_1000_solo_probs.jpeg",sep = "") , 
+		width=5, height=6, units="in", res=300)
+	plot(subset(resP, PROB == p, select = c( LINK, TRANTIME )), 
+		xlab="link", ylab="transition time detected", ylim=c(0,20),
+		main=paste("1000 samples and", p, "probability"))
+	dev.off()
+}
+

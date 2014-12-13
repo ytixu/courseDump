@@ -9,7 +9,7 @@ import numpy as np
 import utils
 
 # constants
-w_const = 0.5
+w_const = -0.5
 T = 15
 
 zones = {}
@@ -261,8 +261,8 @@ if __name__ == "__main__":
 	# resultOneLink = {}
 	ns = [100, 500, 1000, 2000, 3000, 4000, 5000]
 
-	for testprob in ([0.99, 0.01], [0.75, 0.25], [0.50, 0.50], [0.25, 0.75], [0.01, 0.99]):
-	# for testprob in ([0.25, 0.75],):
+	# for testprob in ([0.99, 0.01], [0.75, 0.25], [0.50, 0.50], [0.25, 0.75], [0.01, 0.99]):
+	for testprob in ([0.25, 0.75],):
 		resultAllLink = {}
 		utils.changeProb(testprob)
 		# for n in ns:
@@ -280,7 +280,7 @@ if __name__ == "__main__":
 			#getProbs('data_%d'%n, 'zone_%d'%n, n, 'target_%d'%n, n)
 		# json.dump(result, open("result.json", 'w'))
 		# oneLinkToCSV(resultOneLink,'result.csv')
-		allLinkToCSV(resultAllLink, 'resultAll%f1000.csv'%testprob[1], ns)
+		allLinkToCSV(resultAllLink, 'resultAll%f1000M.csv'%testprob[1], ns)
 		# allLinkToCSV(resultAllLink, 'result.csv', ns)
 
 		# get percent accuracy 
