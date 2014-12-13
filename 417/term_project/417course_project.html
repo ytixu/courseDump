@@ -124,7 +124,7 @@
 <p>Each camera view has a set of zones describing where targets enter or leave. These entry/exit zones can be represented as nodes in a network. Each edge between two nodes denote an transition which is either visibile or invisible to the cameras. Figure 1 shows an exmples of such network with two zones. </p> 
 
 <figure>
-	<img src="graphmodel.png">
+	<img src="image/graphmodel.png">
 	<figcaption><b>Figure 1</b> The network showing entry zone $i$ and exit zone $j$.</figcaption>
 </figure> 
 
@@ -207,7 +207,7 @@ However, if the most popular transition time is strictly negative, the following
 <a name="41"></a><h3>Design</h3>
 <p>We construct a compter simulated environment with two cameras. For simplicity, the entry/exit zones, their probability distribution and parameters are fixed, and all targets start from one zone and move to the others in a random walk fashion.</p>
 <figure>
-	<img src="exp1.png">
+	<img src="image/exp1.png">
 	<figcaption><b>Figure 2</b> The simulated setting showing the viewfield of the two cameras and their entry/exit zones. </figcaption>
 </figure>
 <p>During the simulation, targets are generated with a random entering time and a position sampled from the dirtibution at zone 1. Then, they move to the next according to the transition probabilities and a speed drawn from a fixed distribution. Tests are done on varying the transition probability $\alpha_{13}$ (and $\alpha_{12}$) and the number of sample for learning the zones and the topology. The other transition probabilities are fixed at 1.0. For simplicity, we assume that the number of sample is the same for both learning systems. We also assume that the zones are know up to their signal distribution. Thus, each simulation first generates data to learn the parameters defining the signal distribution for each zone, then produced the data to infer topology.</p> 
@@ -218,41 +218,41 @@ However, if the most popular transition time is strictly negative, the following
 <figure>
 	<div class="scollableFigure">
 		<table></tr>
-				<td><img class="flow" src="0.01_100.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.01_500.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.01_1000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.01_2000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.01_3000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.01_4000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.01_5000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.25_100.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.25_500.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.25_1000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.25_2000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.25_3000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.25_4000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.25_5000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.5_100.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.5_500.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.5_1000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.5_2000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.5_3000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.5_4000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.5_5000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.75_100.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.75_500.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.75_1000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.75_2000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.75_3000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.75_4000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.75_5000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.99_100.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.99_500.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.99_1000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.99_2000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.99_3000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.99_4000.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="0.99_5000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.01_100.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.01_500.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.01_1000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.01_2000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.01_3000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.01_4000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.01_5000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.25_100.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.25_500.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.25_1000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.25_2000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.25_3000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.25_4000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.25_5000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.5_100.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.5_500.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.5_1000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.5_2000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.5_3000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.5_4000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.5_5000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.75_100.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.75_500.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.75_1000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.75_2000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.75_3000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.75_4000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.75_5000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.99_100.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.99_500.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.99_1000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.99_2000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.99_3000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.99_4000.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/0.99_5000.jpeg" style="height:100%;"></td>
 		</tr></table>
 	</div>
 	<table>
@@ -335,36 +335,30 @@ However, if the most popular transition time is strictly negative, the following
 <figure>
 	<div class="scollableFigure">
 		<table></tr>
-				<td><img class="flow" src="accuracy0.01.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="accuracy0.25.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="accuracy0.5.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="accuracy0.75.jpeg" style="height:100%;"></td>
-				<td><img class="flow" src="accuracy0.99.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/accuracy0.01.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/accuracy0.25.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/accuracy0.5.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/accuracy0.75.jpeg" style="height:100%;"></td>
+				<td><img class="flow" src="image/accuracy0.99.jpeg" style="height:100%;"></td>
 		</tr></table>
 	</div><br>
 	<figcaption><b>Figure 4</b> The percentage accuracy of classifying a signal for each transition probability $\alpha_{13}$ and sample size to train the classifier. (Note that there is a total of 5 images in the scrollable table.)</figcaption>
 </figure>
 
-<p>Linking back to our main result, misclassification may explain why the link 3-5 is occasionally detected when $\alpha_{13}$ is high. Also, certain invalid links, such as 3-3 and 4-4, are found more often when the $\alpha_{13}$ is high. A possible senario is that some signals from zone 4 is classified to zone 3, and vice-versa. Since there is a valid link between the two zone, the method would find a peak for 3-3 and 4-4. However, this senario is only valid if signals for appearance and dissapearance of target are not distiguished by whether the zones to which they are associated to are entry zone or exit zones. In our implementation, we assumed that the distinction can be make by observing the signal itself. In the original paper, the authors did not clarify on this part of their design. </p>
+<p>Linking back to our main result, misclassification may explain why certain invalid links, such as 3-3 and 4-4, are found more often when the $\alpha_{13}$ is high. A possible senario is that some signals from zone 4 is classified to zone 3, and vice-versa. Since there is a valid link between the two zone, the method would find a peak for 3-3 and 4-4. However, this senario is only valid if signals for appearance and dissapearance of target are not distiguished by whether the zones to which they are associated to are entry zone or exit zones. In our implementation, we assumed that the distinction can be made by observing the signal itself. In the original paper, the authors did not clarify on this part of their design. </p>
+
+<p>The link 3-5 is occasionally detected when $\alpha_{13}$ is high. In this case, misclassification appears to enable the method to detect valid entry-entry link, which otherwise can never be detected. Entry-entry and exit-exit links that are redundant theory, may perhaps occasionally serve as a substitute to exit-entry links that are not detectable.</p>
 
 <a href='#top'>[top]</a>
 
 <a name="5"></a><h2>Conclusions </h2>
-<p>In our experiement, we constructed a scene with 2 cameras with a simple model for the behavior of the targets. Despite that it is a simulation, we were able to investigate on some edge cases where Network Calibration may have difficulty with. Mainly, when signals from a exit-entry zone pair is crowded, </p>
-<p>A direct consequence of misclassification is that the method may in some cases establish a wrong connection between two close camera. In a setting where two camera view are seperated by a wall, for example, the Gaussian assumption of the signals implies that the zones are extended infinitely far. A small accuracy error may enable the targets in the model to move through the wall. It may possible to improve the method by confining the zone within the boundary of the camera views. However, in a real experiment, noise from camera sensor may possibly cause signals to be detected beyond the bound.</p>
+<p>In our experiement, we constructed a scene with 2 cameras with a simple model for the behavior of the targets. Despite that it is a simulation, we were able to investigate on some edge cases where Network Calibration may have difficulty with. Mainly, when signals from a exit-entry zone pair is crowded, the peak in the correlation, if it exists, is burried in a sea of inflated noise.</p>
 
-As probability increase, the capability to detect decreases
-This justified by the fact that too much signal can overwhelm the system 
-Not detecting link 1-2 because too much signal from zone 1
-misclassified signals may potentially cause the system to find false links in the case 
-where we have two completely disconnected camera views but close to each other (maybe seperated by a wall), zone in one may be classified to the zone of another. Because of the gaussian assumption, we do 
-not consider the fact that signals in some zones are bounded.
+<p>Another issue we investigated on is the effect of misclassified signals. Due to the reasonably high accuracy of MAP in our experiement, it may be possible that links detected by misclassification can be filtered out with a higher threshold. Yet, in a scenario where there are much more camera zones, misclassification rate is likely to be higher. In such case, the choice of threshold may not be the best solution. As we have observed, it affects the detectability of popular links, thus cannot be easily increased. Nonetheless, if leaving misclassified signals lurking in the mode, the method may in some cases establish a wrong connection between two close cameras. In a setting where two camera view are seperated by a wall, for example, the Gaussian assumption of the signals implies that the zones are extended infinitely far. A small accuracy error may enable the targets in the model to move through the wall. It may possible to improve the method by confining the zone within the boundary of the camera views. However, in a real experiment, noise from camera sensor may possibly cause signals to be detected beyond the bound.</p>
 
+<p>An althernative way to improve the method might be to replace the threshold by a multiple thresholds, or by another function that takes into account not only the mean and variance of the cross-correlation, but also the sample size, the number of zones and the number or the rate of signal data recorded for a candidate link. Another way might be to inspect entry-entry and exit-exit links and connect cameras according to a link-zone ratio, i.e.: if most zone is a camera view are detected to have a link with the zones in another camera view, then the two camera are likely to be connected. This may give a purpose for the redundant links that the authors are concerned for in their paper. However, if the detected links are later on used to predict the behavoir of targets, then a method to remove redundant links may still be required.</p>
 
-In summary, our results indicates that....
-The advantages of the method are....
-The disadvantages of the method include....
-Other possible avenues for exploration include....
+<p>Overall, the method is simple and easy to implement. Its main benefit is that it is completely unsupervised, correspondance-free, and requires no pre-callibration for the cameras. On the other hand, the trajectory information discarded during the sampling trades-off the sampling size. As in the method by Javed et al, the training time in their experiement took 10 minutes, while Network Callibration, in its creators' experiement, lasted 13 hours.</p> 
 
 <a name="6"></a><h2>References</h2>
 <p><a name="r1"></a>[1] Makris, D.; Ellis, T.; Black, J. "Bridging the gaps between cameras",  Computer Vision and Pattern Recognition, 2004. CVPR 2004. Proceedings of the 2004 IEEE Computer Society Conference on, On page(s): II-205 - II-210 Vol.2 Volume: 2, 27 June-2 July 2004 </p>

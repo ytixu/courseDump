@@ -159,3 +159,85 @@ for (i in 1:5){
 			main=paste(tran[i], "probability"))
 	dev.off()
 }
+
+
+
+
+res1<-"/home/ytixu/courseDump/417/term_project/resultAll0.0100001000.csv"
+res2<-"/home/ytixu/courseDump/417/term_project/resultAll0.2500001000.csv"
+res3<-"/home/ytixu/courseDump/417/term_project/resultAll0.5000001000.csv"
+res4<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000.csv"
+res5<-"/home/ytixu/courseDump/417/term_project/resultAll0.9900001000.csv"
+
+reslist = list(res1, res2, res3, res4, res5)
+tran = c(0.01, 0.25, 0.50, 0.75, 0.99)
+links = c("('entry_micky', 'entry_micky')",
+		"('entry_micky', 'entry_minny')",
+		"('entry_micky', 'exit_daisy')",
+		"('entry_micky', 'exit_donald')",
+		"('entry_micky', 'exit_goofy')",
+		"('entry_minny', 'entry_micky')",
+		"('entry_minny', 'entry_minny')",
+		"('entry_minny', 'exit_daisy')", 
+		"('entry_minny', 'exit_donald')",
+		"('entry_minny', 'exit_goofy')", 
+		"('exit_daisy', 'entry_micky')",
+		"('exit_daisy', 'entry_minny')", 
+		"('exit_daisy', 'exit_daisy')",
+		"('exit_daisy', 'exit_donald')", 
+		"('exit_daisy', 'exit_goofy')",
+		"('exit_donald', 'entry_micky')",
+		"('exit_donald', 'entry_minny')",
+		"('exit_donald', 'exit_daisy')", 
+		"('exit_donald', 'exit_donald')",
+		"('exit_donald', 'exit_goofy')", 
+		"('exit_goofy', 'entry_micky')",
+		"('exit_goofy', 'entry_minny')", 
+		"('exit_goofy', 'exit_daisy')",
+		"('exit_goofy', 'exit_donald')", 
+		"('exit_goofy', 'exit_goofy')"  )
+LINK = c()
+OBSERVED = c()
+TRANTIME = c()
+AVGPROB = c()
+NDETECT = c()
+PROB = c()
+ind = 1
+for (i in 1:5){
+	res<-read.csv(file=toString(reslist[i]), quote="|")
+	for (j in 1:length(res$NUM)){
+		if (res$NUM[j] == 1000){
+			l = 0
+			for (k in 1:length(links)){
+				if (links[k] == res$LINK[j]){
+					l = k
+					print(paste(links[k],res$LINK[j], "~~~"))
+				}
+			}
+			if (l == 0){
+				print(l)
+			}
+			LINK[ind] = l
+			OBSERVED[ind] = res$OBSERVED[j]
+			TRANTIME[ind] = res$TRANTIME[j]
+			AVGPROB[ind] = res$AVGPROB[j]
+			NDETECT[ind] = res$NDETECT[j]
+			PROB[ind] = tran[i]
+			ind = ind + 1
+		}
+	}
+}
+resP = data.frame(LINK, OBSERVED, TRANTIME, AVGPROB, NDETECT, PROB)
+resP$PROB <- as.factor(resP$PROB)
+resP$LINK <- as.factor(resP$LINK)
+resP$OBSERVED <- as.factor(resP$OBSERVED)
+levels(resP$LINK)<-c(1:20)
+
+for (p in levels(resP$PROB)){
+	jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_1000_solo.jpeg",sep = "") , 
+		width=5, height=6, units="in", res=300)
+	plot(subset(resP, PROB == p, select = c( LINK, NDETECT )), 
+		xlab="link", ylab="number of times detected", ylim=c(0,30),
+		main=paste(n, "samples and", p, "probability"))
+	dev.off()
+}
