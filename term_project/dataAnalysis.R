@@ -1,4 +1,4 @@
-# need to setup working directory to courseDump
+# need to setup working directory to root of this folder
 
 # main result
 # I combine all the files in one before running this
