@@ -8,7 +8,6 @@ MAX_VAR = 1000
 
 # assume normal speed
 def randSpeed():
-	# 0.05
 	return np.random.normal(2,0.05)
 
 # fixed zones 
@@ -99,7 +98,6 @@ def genTargets(n):
 		exit = get_exit(start, random.random())
 		post = rand_zone(exit)
 		tranTime = get_dist(prior, post)
-		# if exit["ID"] == "exit_goofy": print tranTime
 		if hasExited:
 			targets.append(("enter", prior.tolist(), time, start["ID"]))
 			targets.append(("exit", post.tolist(), time+tranTime, exit["ID"]))
@@ -136,8 +134,6 @@ def addToDict(d, k, v, coord):
 
 def getZones(n):
 	tot = n
-	# entry_zones = {}
-	# exit_zones = {}
 	zs = {}
 	curr = ZONES.Mickey
 	while n:
@@ -150,10 +146,7 @@ def getZones(n):
 		n -= 1
 
 	var = 0
-	# for zs in (entry_zones, exit_zones):
-	# nn = 0
 	for k in zs:
-		# nn += zs[k]['n']
 		if zs[k]['n'] > 1:
 			for s in zs[k]['sample']:
 				zs[k]['v'] += (s-zs[k]['m'])*(s-zs[k]['m'])/(zs[k]['n']-1)
@@ -162,7 +155,6 @@ def getZones(n):
 			zs[k]['v'] = [[MAX_VAR, 0],[0, MAX_VAR]]
 		del zs[k]['sample']
 		zs[k]['m'] = zs[k]['m'].tolist()
-	# print nn
 	return zs
 
 def gen_data(zn, tn):
