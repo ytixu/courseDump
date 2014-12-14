@@ -1,6 +1,8 @@
+# need to setup working directory to courseDump
+
 # main result
 # I combine all the files in one before running this
-data.source<-"/home/ytixu/courseDump/term_project/result.csv"
+data.source<-"term_project/data/result.csv"
 links<-read.csv(file=data.source, quote="|")
 links$LINK <- as.factor(links$LINK)
 links$OBSERVED <- as.factor(links$OBSERVED)
@@ -15,7 +17,7 @@ plot(subset(links, PROB=="0.01" & LINK=="5", select = c( NUM, OBSERVED )))
 
 for (p in levels(links$PROB)){
 	for (n in levels(links$NUM)){
-		jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_",n,".jpeg",sep = "") , 
+		jpeg(paste("term_project/image",p,"_",n,".jpeg",sep = "") , 
 			width=5, height=6, units="in", res=300)
 		plot(subset(links, PROB == p & NUM == n, select = c( LINK, NDETECT )), 
 			xlab="link", ylab="number of times detected", ylim=c(0,30),
@@ -34,7 +36,7 @@ for (i in 1:length(links$LINK)){
 
 for (i in list(list("17", "3-4"), list("8", "4-5"))){
 	for (p in levels(links$PROB)){
-		jpeg(paste("/home/ytixu/courseDump/term_project/",p,"_link",toString(i[2]),
+		jpeg(paste("term_project/image",p,"_link",toString(i[2]),
 			".jpeg",sep = "") , width=3, height=6, units="in", res=300)
 		plot(subset(links, PROB == p & LINK == toString(i[1]), select = c( NUM, TRANTIME )), 
 			xlab="sample size", ylab="transition time detected", ylim=c(0,15),
@@ -45,7 +47,7 @@ for (i in list(list("17", "3-4"), list("8", "4-5"))){
 
 for (i in list(list("17", "3-4", "2"), list("8", "4-5", "4"))){
 	for (p in levels(links$PROB)){
-		jpeg(paste("/home/ytixu/courseDump/term_project/",p,"_link",toString(i[2]),
+		jpeg(paste("term_project/image",p,"_link",toString(i[2]),
 			"transProb.jpeg",sep = "") , width=3, height=6, units="in", res=300)
 		plot(subset(links, PROB == p & LINK == toString(i[1]), select = c( TRANTIME, AVGPROB )), 
 			xlab="transition time detected", ylab="average probability", ylim=c(0,1),
@@ -58,11 +60,11 @@ for (i in list(list("17", "3-4", "2"), list("8", "4-5", "4"))){
 
 	
 # accuracy
-acc1<-"/home/ytixu/courseDump/term_project/percentAcc0.010000.csv"
-acc2<-"/home/ytixu/courseDump/term_project/percentAcc0.250000.csv"
-acc3<-"/home/ytixu/courseDump/term_project/percentAcc0.500000.csv"
-acc4<-"/home/ytixu/courseDump/term_project/percentAcc0.750000.csv"
-acc5<-"/home/ytixu/courseDump/term_project/percentAcc0.990000.csv"
+acc1<-"term_project/result/percentAcc0.010000.csv"
+acc2<-"term_project/result/percentAcc0.250000.csv"
+acc3<-"term_project/result/percentAcc0.500000.csv"
+acc4<-"term_project/result/percentAcc0.750000.csv"
+acc5<-"term_project/result/percentAcc0.990000.csv"
 acclist = list(acc1, acc2, acc3, acc4, acc5)
 tran = c(0.99, 0.75,0.50, 0.25, 0.01)
 NUM = c()
@@ -82,7 +84,7 @@ accP = data.frame(NUM,ACC,TRAN)
 accP$NUM <- as.factor(accP$NUM)
 accP$TRAN <- as.factor(accP$TRAN)
 for (i in 1:5){
-	jpeg(paste("/home/ytixu/courseDump/term_project/accuracy",tran[i],".jpeg",sep = ""),
+	jpeg(paste("term_project/image/accuracy",tran[i],".jpeg",sep = ""),
 		width=5,height=6, units="in", res=300)
 	plot(subset(accP, TRAN == toString(tran[i]), select = c( NUM, ACC )), 
 			xlab="sample size", ylab="percentage accuracy", ylim=c(97.5,100),
@@ -92,8 +94,8 @@ for (i in 1:5){
 
 #varying treshold 
 
-res1<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000M.csv"
-res2<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000.csv"
+res1<-"term_project/data/resultAll0.7500001000M.csv"
+res2<-"term_project/data/resultAll0.7500001000.csv"
 thr = c(-0.5, 0.5)
 reslist = list(res1, res2)
 links = c("('entry_micky', 'entry_micky')",
@@ -157,7 +159,7 @@ resP$LINK <- as.factor(resP$LINK)
 resP$OBSERVED <- as.factor(resP$OBSERVED)
 
 for (p in levels(resP$PROB)){
-	jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_1000_solo.jpeg",sep = "") , 
+	jpeg(paste("term_project/image/",p,"_1000_solo.jpeg",sep = "") , 
 		width=5, height=6, units="in", res=300)
 	plot(subset(resP, PROB == p, select = c( LINK, NDETECT )), 
 		xlab="link", ylab="number of times detected", ylim=c(0,30),
@@ -166,7 +168,7 @@ for (p in levels(resP$PROB)){
 }
 
 for (p in levels(resP$PROB)){
-	jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_1000_solo_probs.jpeg",sep = "") , 
+	jpeg(paste("term_project/image/",p,"_1000_solo_probs.jpeg",sep = "") , 
 		width=5, height=6, units="in", res=300)
 	plot(subset(resP, PROB == p, select = c( LINK, TRANTIME )), 
 		xlab="link", ylab="transition time detected", ylim=c(0,20),
