@@ -1,104 +1,6 @@
-<td>1 &#10141; 1</td>
-<td>1 &#10141; 4</td>
-<td>1 &#10141; 5</td>
-<td>1 &#10141; 3</td>
-<td>1 &#10141; 2</td>
-<td>4 &#10141; 1</td>
-<td>4 &#10141; 4</td>
-<td>4 &#10141; 5</td>
-<td>4 &#10141; 3</td>
-<td>4 &#10141; 2</td>
-<td>5 &#10141; 1</td>
-<td>5 &#10141; 4</td>
-<td>5 &#10141; 5</td>
-<td>5 &#10141; 3</td>
-<td>5 &#10141; 2</td>
-<td>3 &#10141; 1</td>
-<td>3 &#10141; 4</td>
-<td>3 &#10141; 5</td>
-<td>3 &#10141; 3</td>
-<td>3 &#10141; 2</td>
-<td>2 &#10141; 1</td>
-<td>2 &#10141; 4</td>
-<td>2 &#10141; 5</td>
-<td>2 &#10141; 3</td>
-<td>2 &#10141; 2</td>
-
-
-data.source<-"/home/ytixu/courseDump/417/term_project/result300s.csv"
-links<-read.csv(file=data.source)
-links$OBSERVED <- as.factor(links$OBSERVED)
-links$NUM <- as.factor(links$NUM)
-
-plot(links$TIME, links$PROB)
-plot( subset( links, PROB>0.0, select = c( TIME, PROB ) ) )
-plot( subset( links, NUM=="5000", select = c( TIME, PROB ) ) )
-
-jpeg("/home/ytixu/courseDump/417/term_project/100_1_2" , width=4, height=4, units="in", res=300)
-plot(links$PROB~links$TIME, lwd=2, type="l", col="darkred")
-dev.off()
-
-jpeg("/home/ytixu/courseDump/417/term_project/exp1-signalVSnum.jpeg" , width=6, height=4.5, units="in", res=400)
-plot(links$NUM, links$OBSERVED, xlab="number of observations", ylab="1-3 signal detected")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp1-probVSnum.jpeg" , width=6, height=4.5, units="in", res=400)
-plot(links$NUM, links$PROB, xlab="number of observations", ylab="transition probability found")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp1-timeVSnum.jpeg" , width=6, height=4.5, units="in", res=400)
-plot(links$NUM, links$TIME, xlab="number of observations", ylab="transition time found")
-dev.off()
-
-
-jpeg("/home/ytixu/courseDump/417/term_project/exp5000-probVStime.jpeg" , width=4, height=5, units="in", res=300)
-plot( subset( links, NUM=="5000", select = c( TIME, PROB ) ) ,pch=20, main="5000 samples", xlab="transition time", ylab="transition probability")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp4000-probVStime.jpeg" , width=4, height=5, units="in", res=300)
-plot( subset( links, NUM=="4000", select = c( TIME, PROB ) ) ,pch=20, main="4000 samples", xlab="transition time", ylab="transition probability")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp3000-probVStime.jpeg" , width=4, height=5, units="in", res=300)
-plot( subset( links, NUM=="3000", select = c( TIME, PROB ) ) ,pch=20, main="3000 samples", xlab="transition time", ylab="transition probability")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp2000-probVStime.jpeg" , width=4, height=5, units="in", res=300)
-plot( subset( links, NUM=="2000", select = c( TIME, PROB ) ) ,pch=20, main="2000 samples", xlab="transition time", ylab="transition probability")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp1000-probVStime.jpeg" , width=4, height=5, units="in", res=300)
-plot( subset( links, NUM=="1000", select = c( TIME, PROB ) ) ,pch=20, main="1000 samples", xlab="transition time", ylab="transition probability")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp500-probVStime.jpeg" , width=4, height=5, units="in", res=300)
-plot( subset( links, NUM=="500", select = c( TIME, PROB ) ) ,pch=20, main="500 samples", xlab="transition time", ylab="transition probability")
-dev.off()
-jpeg("/home/ytixu/courseDump/417/term_project/exp100-probVStime.jpeg" , width=4, height=5, units="in", res=300)
-plot( subset( links, NUM=="100", select = c( TIME, PROB ) ) ,pch=20, main="100 samples", xlab="transition time", ylab="transition probability")
-dev.off()
-
-
-"('entry_micky', 'entry_micky')"
-"('entry_micky', 'entry_minny')"
-"('entry_micky', 'exit_daisy')"
-"('entry_micky', 'exit_donald')"
-"('entry_micky', 'exit_goofy')"
-"('entry_minny', 'entry_micky')"
-"('entry_minny', 'entry_minny')"
-"('entry_minny', 'exit_daisy')" 
-"('entry_minny', 'exit_donald')"
-"('entry_minny', 'exit_goofy')" 
-"('exit_daisy', 'entry_micky')"
-"('exit_daisy', 'entry_minny')" 
-"('exit_daisy', 'exit_daisy')"
-"('exit_daisy', 'exit_donald')" 
-"('exit_daisy', 'exit_goofy')"
-"('exit_donald', 'entry_micky')"
-"('exit_donald', 'entry_minny')"
-"('exit_donald', 'exit_daisy')" 
-"('exit_donald', 'exit_donald')"
-"('exit_donald', 'exit_goofy')" 
-"('exit_goofy', 'entry_micky')"
-"('exit_goofy', 'entry_minny')" 
-"('exit_goofy', 'exit_daisy')"
-"('exit_goofy', 'exit_donald')" 
-"('exit_goofy', 'exit_goofy')"   
-
-data.source<-"/home/ytixu/courseDump/417/term_project/result.csv"
+# main result
+# I combine all the files in one before running this
+data.source<-"/home/ytixu/courseDump/term_project/result.csv"
 links<-read.csv(file=data.source, quote="|")
 links$LINK <- as.factor(links$LINK)
 links$OBSERVED <- as.factor(links$OBSERVED)
@@ -108,11 +10,9 @@ levels(links$LINK)
 levels(links$LINK) <- c(1:25)
 
 
-
 plot(links$LINK, links$NDETECT)
 plot(subset(links, PROB=="0.01" & LINK=="5", select = c( NUM, OBSERVED )))
 
-# I combine all the files in one before running this
 for (p in levels(links$PROB)){
 	for (n in levels(links$NUM)){
 		jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_",n,".jpeg",sep = "") , 
@@ -124,28 +24,45 @@ for (p in levels(links$PROB)){
 	}
 }
 
-for (p in levels(links$PROB)){
-	for (n in levels(links$NUM)){
-		jpeg(paste("/home/ytixu/courseDump/417/term_project/",p,"_",n,"_probs.jpeg",sep = "") , 
-			width=5, height=6, units="in", res=300)
-		plot(subset(links, PROB == p & NUM == n, select = c( LINK, TRANTIME )), 
-			xlab="link", ylab="transition time detected", ylim=c(0,20),
-			main=paste(n, "samples and", p, "probability"))
+# set transition time of non-detected links to be 20
+# because we don't want to plot it on the graph
+for (i in 1:length(links$LINK)){
+	if (links$NDETECT[i] == 0){
+		links$TRANTIME[i] = 20
+	}
+}
+
+for (i in list(list("17", "3-4"), list("8", "4-5"))){
+	for (p in levels(links$PROB)){
+		jpeg(paste("/home/ytixu/courseDump/term_project/",p,"_link",toString(i[2]),
+			".jpeg",sep = "") , width=3, height=6, units="in", res=300)
+		plot(subset(links, PROB == p & LINK == toString(i[1]), select = c( NUM, TRANTIME )), 
+			xlab="sample size", ylab="transition time detected", ylim=c(0,15),
+			main=paste(p, "probability,", toString(i[2])))
+		dev.off()
+	}
+}
+
+for (i in list(list("17", "3-4", "2"), list("8", "4-5", "4"))){
+	for (p in levels(links$PROB)){
+		jpeg(paste("/home/ytixu/courseDump/term_project/",p,"_link",toString(i[2]),
+			"transProb.jpeg",sep = "") , width=3, height=6, units="in", res=300)
+		plot(subset(links, PROB == p & LINK == toString(i[1]), select = c( TRANTIME, AVGPROB )), 
+			xlab="transition time detected", ylab="average probability", ylim=c(0,1),
+			xlim=c(0,15), main=paste(p, "probability,", toString(i[2])))
+		abline(v=as.numeric(i[3]),lty=3)
 		dev.off()
 	}
 }
 
 
-
 	
 # accuracy
-
-
-acc1<-"/home/ytixu/courseDump/417/term_project/percentAcc0.010000.csv"
-acc2<-"/home/ytixu/courseDump/417/term_project/percentAcc0.250000.csv"
-acc3<-"/home/ytixu/courseDump/417/term_project/percentAcc0.500000.csv"
-acc4<-"/home/ytixu/courseDump/417/term_project/percentAcc0.750000.csv"
-acc5<-"/home/ytixu/courseDump/417/term_project/percentAcc0.990000.csv"
+acc1<-"/home/ytixu/courseDump/term_project/percentAcc0.010000.csv"
+acc2<-"/home/ytixu/courseDump/term_project/percentAcc0.250000.csv"
+acc3<-"/home/ytixu/courseDump/term_project/percentAcc0.500000.csv"
+acc4<-"/home/ytixu/courseDump/term_project/percentAcc0.750000.csv"
+acc5<-"/home/ytixu/courseDump/term_project/percentAcc0.990000.csv"
 acclist = list(acc1, acc2, acc3, acc4, acc5)
 tran = c(0.99, 0.75,0.50, 0.25, 0.01)
 NUM = c()
@@ -165,16 +82,15 @@ accP = data.frame(NUM,ACC,TRAN)
 accP$NUM <- as.factor(accP$NUM)
 accP$TRAN <- as.factor(accP$TRAN)
 for (i in 1:5){
-	jpeg(paste("/home/ytixu/courseDump/417/term_project/accuracy",tran[i],".jpeg",sep = ""),
-		width=6,height=6, units="in", res=300)
+	jpeg(paste("/home/ytixu/courseDump/term_project/accuracy",tran[i],".jpeg",sep = ""),
+		width=5,height=6, units="in", res=300)
 	plot(subset(accP, TRAN == toString(tran[i]), select = c( NUM, ACC )), 
-			xlab="sample size", ylab="percentage accuracy",
+			xlab="sample size", ylab="percentage accuracy", ylim=c(97.5,100),
 			main=paste(tran[i], "probability"))
 	dev.off()
 }
 
-
-
+#varying treshold 
 
 res1<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000M.csv"
 res2<-"/home/ytixu/courseDump/417/term_project/resultAll0.7500001000.csv"
