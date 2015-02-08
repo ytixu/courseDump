@@ -1,0 +1,35 @@
+# Server version 0.08 running on 142.157.113.15:8123
+# Game ID: 196
+# Board class: halma.CCBoard
+# Timeout: 1000
+# Date: Tue Apr 08 12:15:00 EDT 2014
+# Player 1: Player-0, 's260520039Player', running on 127.0.0.1
+# Player 2: Player-1, 'random', running on 142.157.113.15
+# Player 3: Player-2, 'random', running on 142.157.113.15
+# Player 4: Player-3, 'Human', running on 142.157.113.15
+START Player-0 s260520039Player
+START Player-1 random
+START Player-2 random
+START Player-3 Human
+0 (2,2) (3,3)
+1 (12,0) (12,2)
+1 null null
+2 (1,13) (3,13)
+2 (3,13) (1,13)
+2 (1,13) (3,13)
+2 (3,13) (1,13)
+2 null null
+3 (13,13) (12,12)
+0 (0,0) (2,2)
+0 (2,2) (4,4)
+0 null null
+1 (14,2) (12,0)
+1 (12,0) (14,2)
+1 (14,2) (14,4)
+1 (14,4) (14,2)
+1 null null
+2 (0,12) (2,12)
+2 null null
+GAMEOVER DISCONNECTION Player-0
+WINNER Player-1
+# Game ended: Tue Apr 08 12:15:04 EDT 2014

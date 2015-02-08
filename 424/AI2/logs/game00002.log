@@ -1,0 +1,19 @@
+# Server version 0.08 running on GOLDEN.gateway.2wire.net:8123
+# Game ID: 2
+# Board class: halma.CCBoard
+# Timeout: 1000
+# Date: Sat Mar 29 16:46:00 EDT 2014
+# Player 1: Player-0, 'Human', running on GOLDEN.gateway.2wire.net
+# Player 2: Player-1, 'random', running on GOLDEN.gateway.2wire.net
+# Player 3: Player-2, 'random', running on GOLDEN.gateway.2wire.net
+# Player 4: Player-3, 'Human', running on GOLDEN.gateway.2wire.net
+START Player-0 Human
+START Player-1 random
+START Player-2 random
+START Player-3 Human
+0 (2,2) (3,3)
+1 (14,3) (14,4)
+2 (2,13) (3,12)
+GAMEOVER USER CANCEL
+UNDECIDED
+# Game ended: Sat Mar 29 17:07:40 EDT 2014

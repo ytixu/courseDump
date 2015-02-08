@@ -1,0 +1,41 @@
+# Server version 0.08 running on GOLDEN.gateway.2wire.net:8123
+# Game ID: 92
+# Board class: halma.CCBoard
+# Timeout: 300000
+# Date: Mon Apr 07 13:58:54 EDT 2014
+# Player 1: Player-0, 's260520039Player', running on 127.0.0.1
+# Player 2: Player-1, 'random', running on GOLDEN.gateway.2wire.net
+# Player 3: Player-2, 'Human', running on GOLDEN.gateway.2wire.net
+# Player 4: Player-3, 'random', running on GOLDEN.gateway.2wire.net
+START Player-0 s260520039Player
+START Player-1 random
+START Player-2 Human
+START Player-3 random
+0 (2,2) (3,3)
+1 (13,0) (11,0)
+1 null null
+2 (1,12) (2,12)
+3 (14,12) (15,11)
+0 (0,0) (2,2)
+0 (2,2) (4,4)
+0 null null
+1 (15,3) (15,4)
+2 (2,12) (3,12)
+3 (14,14) (12,12)
+3 (12,12) (14,14)
+3 (14,14) (14,12)
+3 (14,12) (14,14)
+3 (14,14) (14,12)
+3 null null
+0 (2,0) (0,0)
+0 null null
+1 (15,0) (13,0)
+1 (13,0) (11,2)
+1 (11,2) (13,0)
+1 (13,0) (15,0)
+1 (15,0) (13,0)
+1 (13,0) (15,0)
+1 null null
+GAMEOVER DISCONNECTION Player-0
+WINNER Player-1
+# Game ended: Mon Apr 07 14:00:54 EDT 2014

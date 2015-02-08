@@ -1,0 +1,20 @@
+# Server version 0.08 running on 142.157.79.122:8123
+# Game ID: 14
+# Board class: halma.CCBoard
+# Timeout: 1000
+# Date: Wed Apr 02 13:18:30 EDT 2014
+# Player 1: Player-0, 'random', running on 142.157.79.122
+# Player 2: Player-1, 'random', running on 142.157.79.122
+# Player 3: Player-2, 's260520039Player', running on 127.0.0.1
+# Player 4: Player-3, 'random', running on 142.157.79.122
+START Player-0 random
+START Player-1 random
+START Player-2 s260520039Player
+START Player-3 random
+0 (2,2) (3,2)
+1 (13,0) (11,0)
+1 (11,0) (13,0)
+1 null null
+GAMEOVER ILLEGAL MOVE: Player 0 move from (N,3) to (M,4)
+WINNER Player-0
+# Game ended: Wed Apr 02 13:18:30 EDT 2014

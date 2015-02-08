@@ -1,0 +1,182 @@
+1	random	random	random	random	UNDECIDED	NOBODY	83	game00001.log	USER CANCEL
+2	Human	random	random	Human	UNDECIDED	NOBODY	0	game00002.log	USER CANCEL
+4	s260520039Player	Human	random	random	Player-1	Human	1	game00004.log	ILLEGAL MOVE: Player 0 move from (E,5) to (E,5)
+5	s260520039Player	Human	random	random	Player-1	Human	1	game00005.log	TIMEOUT Player-0
+6	s260520039Player	random	random	Human	Player-1	random	2	game00006.log	TIMEOUT Player-0
+7	s260520039Player	random	random	Human	Player-1	random	2	game00007.log	TIMEOUT Player-0
+8	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00008.log	ILLEGAL MOVE: Player 0 move from (C,18) to (D,19)
+9	random	s260520039Player	s260520039Player	s260520039Player	Player-0	random	0	game00009.log	ILLEGAL MOVE: Player 0 move from (C,18) to (D,19)
+10	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00010.log	ILLEGAL MOVE: Player 0 move from (C,18) to (D,19)
+11	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00011.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+12	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00012.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+13	random	s260520039Player	random	random	Player-0	random	0	game00013.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+14	random	random	s260520039Player	random	Player-0	random	0	game00014.log	ILLEGAL MOVE: Player 0 move from (N,3) to (M,4)
+15	s260520039Player	random	random	random	Player-1	random	2	game00015.log	ILLEGAL MOVE: Player 0 move from (C,3) to (D,4)
+16	s260520039Player	random	random	random	Player-1	random	2	game00016.log	ILLEGAL MOVE: Player 0 move from (C,3) to (D,4)
+17	s260520039Player	random	random	random	Player-1	random	2	game00017.log	ILLEGAL MOVE: Player 0 move from (C,3) to (D,4)
+22	s260520039Player	random	random	random	Player-1	random	2	game00022.log	TIMEOUT Player-0
+24	s260520039Player	random	random	random	Player-1	random	2	game00024.log	TIMEOUT Player-0
+25	random	Human	random	random	UNDECIDED	NOBODY	1	game00025.log	USER CANCEL
+27	s260520039Player	random	random	random	Player-1	random	2	game00027.log	TIMEOUT Player-0
+28	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00028.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+29	random	s260520039Player	random	random	Player-0	random	0	game00029.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+30	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00030.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+31	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00031.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+32	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	0	game00032.log	ILLEGAL MOVE: Player 0 move from (C,14) to (D,13)
+33	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00033.log	DISCONNECTION Player-3
+34	s260520039Player	random	random	random	Player-1	random	2	game00034.log	TIMEOUT Player-0
+35	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00035.log	DISCONNECTION Player-3
+36	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00036.log	DISCONNECTION Player-3
+37	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00037.log	DISCONNECTION Player-3
+39	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00039.log	DISCONNECTION Player-3
+40	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00040.log	DISCONNECTION Player-3
+41	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00041.log	DISCONNECTION Player-3
+42	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00042.log	DISCONNECTION Player-3
+43	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00043.log	DISCONNECTION Player-3
+44	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00044.log	DISCONNECTION Player-3
+45	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00045.log	DISCONNECTION Player-0
+46	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00046.log	DISCONNECTION Player-0
+47	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00047.log	DISCONNECTION Player-3
+48	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	2	game00048.log	DISCONNECTION Player-1
+49	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00049.log	DISCONNECTION Player-3
+50	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00050.log	DISCONNECTION Player-3
+51	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00051.log	DISCONNECTION Player-3
+52	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00052.log	DISCONNECTION Player-3
+53	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00053.log	DISCONNECTION Player-3
+55	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	2	game00055.log	DISCONNECTION Player-3
+56	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	2	game00056.log	DISCONNECTION Player-2
+59	s260520039Player	s260520039Player	random	random	Player-0	s260520039Player	2	game00059.log	DISCONNECTION Player-1
+60	s260520039Player	random	random	random	Player-1	random	100	game00060.log	
+62	s260520039Player	random	random	random	Player-1	random	8	game00062.log	DISCONNECTION Player-0
+64	s260520039Player	random	Human	random	Player-1	random	2	game00064.log	DISCONNECTION Player-0
+65	s260520039Player	random	Human	random	Player-1	random	2	game00065.log	DISCONNECTION Player-0
+66	s260520039Player	random	Human	random	UNDECIDED	NOBODY	18	game00066.log	USER CANCEL
+67	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	58	game00067.log	DISCONNECTION Player-3
+69	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	0	game00069.log	ILLEGAL MOVE: Player 0 end turn
+70	s260520039Player	random	random	random	Player-1	random	12	game00070.log	DISCONNECTION Player-0
+71	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	28	game00071.log	DISCONNECTION Player-1
+72	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	27	game00072.log	DISCONNECTION Player-3
+73	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	38	game00073.log	DISCONNECTION Player-3
+74	s260520039Player	random	random	random	Player-1	random	52	game00074.log	DISCONNECTION Player-0
+75	s260520039Player	random	Human	random	UNDECIDED	NOBODY	0	game00075.log	USER CANCEL
+77	s260520039Player	random	random	random	Player-1	random	97	game00077.log	DISCONNECTION Player-0
+81	s260520039Player	Human	random	random	Player-1	Human	2	game00081.log	DISCONNECTION Player-0
+82	s260520039Player	random	Human	Human	Player-1	random	2	game00082.log	DISCONNECTION Player-0
+83	s260520039Player	random	Human	random	Player-1	random	2	game00083.log	DISCONNECTION Player-0
+86	s260520039Player	Human	random	random	Player-1	Human	2	game00086.log	DISCONNECTION Player-0
+89	s260520039Player	random	Human	random	Player-1	random	2	game00089.log	DISCONNECTION Player-0
+91	s260520039Player	random	Human	random	Player-1	random	2	game00091.log	DISCONNECTION Player-0
+92	s260520039Player	random	Human	random	Player-1	random	2	game00092.log	DISCONNECTION Player-0
+94	s260520039Player	Human	random	random	Player-1	Human	3	game00094.log	DISCONNECTION Player-0
+97	s260520039Player	random	random	random	Player-1	random	96	game00097.log	DISCONNECTION Player-0
+98	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	8	game00098.log	DISCONNECTION Player-3
+99	s260520039Player	random	random	random	Player-1	random	100	game00099.log	
+100	s260520039Player	random	random	random	Player-1	random	100	game00100.log	
+101	s260520039Player	random	random	random	Player-1	random	100	game00101.log	
+102	s260520039Player	random	random	Human	UNDECIDED	NOBODY	9	game00102.log	USER CANCEL
+103	Human	random	random	random	UNDECIDED	NOBODY	10	game00103.log	USER CANCEL
+106	s260520039Player	random	random	random	Player-1	random	100	game00106.log	
+107	s260520039Player	random	random	random	Player-1	random	100	game00107.log	
+108	s260520039Player	random	random	random	Player-1	random	100	game00108.log	
+110	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	24	game00110.log	DISCONNECTION Player-3
+111	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	32	game00111.log	DISCONNECTION Player-3
+112	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	63	game00112.log	DISCONNECTION Player-3
+113	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	52	game00113.log	DISCONNECTION Player-2
+114	s260520039Player	random	random	random	Player-1	random	68	game00114.log	DISCONNECTION Player-0
+115	s260520039Player	random	Human	random	Player-1	random	3	game00115.log	DISCONNECTION Player-0
+116	s260520039Player	random	random	random	Player-1	random	8	game00116.log	DISCONNECTION Player-0
+117	s260520039Player	random	random	random	Player-1	random	58	game00117.log	DISCONNECTION Player-0
+118	s260520039Player	random	random	random	UNDECIDED	NOBODY	17	game00118.log	USER CANCEL
+120	s260520039Player	random	random	random	Player-1	random	33	game00120.log	DISCONNECTION Player-0
+121	random	random	random	random	Player-1	random	100	game00121.log	
+122	s260520039Player	random	random	random	Player-1	random	100	game00122.log	
+123	s260520039Player	random	random	random	Player-1	random	17	game00123.log	DISCONNECTION Player-0
+124	s260520039Player	random	random	random	Player-1	random	100	game00124.log	
+125	s260520039Player	random	random	random	Player-1	random	100	game00125.log	
+126	s260520039Player	random	random	random	Player-1	random	0	game00126.log	TIMEOUT Player-0
+127	s260520039Player	random	random	random	Player-1	random	6	game00127.log	TIMEOUT Player-0
+128	s260520039Player	random	random	random	Player-1	random	6	game00128.log	TIMEOUT Player-0
+129	s260520039Player	random	random	random	Player-1	random	6	game00129.log	TIMEOUT Player-0
+130	s260520039Player	random	random	random	Player-1	random	99	game00130.log	DISCONNECTION Player-0
+131	s260520039Player	random	random	random	Player-1	random	52	game00131.log	DISCONNECTION Player-0
+132	s260520039Player	random	random	random	Player-1	random	66	game00132.log	DISCONNECTION Player-0
+133	s260520039Player	random	random	random	Player-1	random	9	game00133.log	DISCONNECTION Player-0
+134	s260520039Player	random	random	random	Player-1	random	17	game00134.log	TIMEOUT Player-0
+135	s260520039Player	random	random	random	Player-1	random	27	game00135.log	DISCONNECTION Player-0
+136	s260520039Player	random	random	random	Player-1	random	17	game00136.log	DISCONNECTION Player-0
+137	s260520039Player	random	random	random	Player-1	random	10	game00137.log	DISCONNECTION Player-0
+138	s260520039Player	random	random	random	Player-1	random	42	game00138.log	DISCONNECTION Player-0
+139	s260520039Player	random	random	random	Player-1	random	53	game00139.log	DISCONNECTION Player-0
+140	s260520039Player	random	random	random	Player-1	random	100	game00140.log	
+141	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	83	game00141.log	DISCONNECTION Player-3
+142	s260520039Player	random	random	random	Player-1	random	100	game00142.log	
+143	s260520039Player	random	random	random	Player-1	random	99	game00143.log	DISCONNECTION Player-0
+144	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	77	game00144.log	DISCONNECTION Player-3
+145	s260520039Player	random	random	random	Player-1	random	81	game00145.log	DISCONNECTION Player-0
+146	s260520039Player	random	random	random	Player-1	random	100	game00146.log	
+149	s260520039Player	random	random	random	Player-1	random	100	game00149.log	
+152	s260520039Player	random	random	random	Player-1	random	100	game00152.log	
+153	s260520039Player	random	random	random	Player-0	s260520039Player	100	game00153.log	
+154	random	random	random	s260520039Player	Player-1	random	18	game00154.log	DISCONNECTION Player-3
+155	s260520039Player	random	random	random	Player-1	random	0	game00155.log	TIMEOUT Player-0
+156	s260520039Player	random	random	random	Player-1	random	0	game00156.log	TIMEOUT Player-0
+157	s260520039Player	random	random	random	Player-1	random	36	game00157.log	DISCONNECTION Player-0
+158	s260520039Player	random	random	random	Player-1	random	72	game00158.log	DISCONNECTION Player-0
+159	s260520039Player	random	random	random	Player-1	random	6	game00159.log	TIMEOUT Player-0
+160	s260520039Player	random	random	random	Player-1	random	31	game00160.log	DISCONNECTION Player-0
+161	s260520039Player	random	random	random	Player-1	random	6	game00161.log	TIMEOUT Player-0
+162	s260520039Player	random	random	random	Player-1	random	6	game00162.log	TIMEOUT Player-0
+163	s260520039Player	random	random	random	Player-0	s260520039Player	100	game00163.log	
+164	s260520039Player	random	random	random	Player-1	random	6	game00164.log	TIMEOUT Player-0
+165	s260520039Player	random	random	random	Player-1	random	6	game00165.log	TIMEOUT Player-0
+166	s260520039Player	random	random	random	Player-1	random	6	game00166.log	TIMEOUT Player-0
+167	s260520039Player	random	random	random	Player-1	random	90	game00167.log	DISCONNECTION Player-0
+168	s260520039Player	random	random	random	Player-0	s260520039Player	100	game00168.log	
+169	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	120	game00169.log	
+170	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	6	game00170.log	TIMEOUT Player-0
+171	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	131	game00171.log	
+172	s260520039Player	random	random	random	Player-0	s260520039Player	100	game00172.log	
+173	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	134	game00173.log	
+174	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	40	game00174.log	DISCONNECTION Player-3
+175	s260520039Player	s260520039Player	random	random	Player-1	s260520039Player	100	game00175.log	
+176	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	17	game00176.log	ILLEGAL MOVE: Player 0 end turn
+177	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	78	game00177.log	DISCONNECTION Player-3
+178	s260520039Player	random	random	random	Player-1	random	45	game00178.log	DISCONNECTION Player-0
+179	s260520039Player	random	random	random	Player-1	random	100	game00179.log	
+180	s260520039Player	random	random	random	Player-1	random	52	game00180.log	DISCONNECTION Player-0
+181	s260520039Player	random	random	random	Player-1	random	100	game00181.log	
+183	s260520039Player	random	random	random	Player-1	random	100	game00183.log	
+184	s260520039Player	random	random	random	Player-1	random	100	game00184.log	
+185	s260520039Player	random	random	random	Player-1	random	100	game00185.log	
+186	s260520039Player	random	random	random	Player-1	random	100	game00186.log	
+187	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	100	game00187.log	
+188	s260520039Player	random	random	random	Player-1	random	100	game00188.log	
+189	s260520039Player	random	random	random	Player-1	random	100	game00189.log	
+190	s260520039Player	random	random	random	Player-1	random	6	game00190.log	TIMEOUT Player-0
+191	s260520039Player	random	random	random	Player-0	s260520039Player	100	game00191.log	
+192	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	100	game00192.log	
+193	s260520039Player	random	random	random	Player-0	s260520039Player	100	game00193.log	
+194	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	100	game00194.log	
+195	random	s260520039Player	random	random	Player-0	random	92	game00195.log	DISCONNECTION Player-1
+196	s260520039Player	random	random	Human	Player-1	random	1	game00196.log	DISCONNECTION Player-0
+197	random	s260520039Player	Human	random	Player-0	random	6	game00197.log	TIMEOUT Player-1
+198	s260520039Player	Human	Human	Human	Player-1	Human	0	game00198.log	DISCONNECTION Player-0
+200	s260520039Player	random	random	random	Player-1	random	5	game00200.log	TIMEOUT Player-0
+201	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	8	game00201.log	DISCONNECTION Player-0
+202	s260520039Player	s260520039Player	random	random	Player-0	s260520039Player	6	game00202.log	DISCONNECTION Player-1
+203	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	100	game00203.log	
+206	random	s260520039Player	random	random	Player-0	random	7	game00206.log	DISCONNECTION Player-1
+207	random	s260520039Player	random	random	Player-0	random	74	game00207.log	DISCONNECTION Player-1
+208	s260520039Player	random	random	random	Player-1	random	65	game00208.log	DISCONNECTION Player-0
+209	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	10	game00209.log	DISCONNECTION Player-3
+211	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-0	s260520039Player	100	game00211.log	
+212	s260520039Player	random	random	random	Player-0	s260520039Player	100	game00212.log	
+213	random	s260520039Player	random	random	Player-1	s260520039Player	100	game00213.log	
+214	random	s260520039Player	random	random	Player-0	random	36	game00214.log	DISCONNECTION Player-1
+215	random	s260520039Player	random	random	Player-0	random	12	game00215.log	DISCONNECTION Player-1
+216	s260520039Player	s260520039Player	random	random	Player-0	s260520039Player	46	game00216.log	DISCONNECTION Player-1
+217	s260520039Player	s260520039Player	random	random	Player-0	s260520039Player	21	game00217.log	DISCONNECTION Player-1
+218	Human	s260520039Player	random	random	Player-0	Human	6	game00218.log	DISCONNECTION Player-1
+219	random	s260520039Player	Human	random	Player-0	random	5	game00219.log	DISCONNECTION Player-1
+220	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	100	game00220.log	
+221	s260520039Player	s260520039Player	s260520039Player	s260520039Player	Player-1	s260520039Player	100	game00221.log	
