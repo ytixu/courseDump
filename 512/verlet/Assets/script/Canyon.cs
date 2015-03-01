@@ -105,6 +105,7 @@ public class Canyon : MonoBehaviour {
 		}
 		transform.GetComponent<MeshFilter>().mesh = new Mesh();
 		transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine, true);
+		transform.gameObject.AddComponent<MeshCollider>();
 		transform.gameObject.active = true;
 		transform.gameObject.renderer.material = wallMat;
 	}
