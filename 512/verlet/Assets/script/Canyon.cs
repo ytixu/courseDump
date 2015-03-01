@@ -12,9 +12,12 @@ public class Canyon : MonoBehaviour {
 
 	public Material wallMat;
 
+	public VerletCannon vc;
+	public BallCannon bc;
+
 	// Use this for initialization
 	void Start () {
-		midpointBisection ();
+		initialize ();
 	}
 	
 	// Update is called once per frame
@@ -22,28 +25,33 @@ public class Canyon : MonoBehaviour {
 	
 	}
 
-	public void midpointBisection(){
+	public void initialize(){
 		int l = (int)Mathf.Pow (2, depth);
 		float[] lineLeft = new float[l];
 		float[] lineRight = new float[l];
-		randomize (lineLeft, 0, l - 1, 1);
-		randomize (lineRight, 0, l - 1, 1);
+		midpointBisection (lineLeft, 0, l - 1, 1);
+		midpointBisection (lineRight, 0, l - 1, 1);
 		resize (lineLeft, lineRight, l);
 		// draw
 		combine(drawCanyon (lineRight, 10f, l),drawCanyon (lineLeft, -10f, l));
+		// set cannons
+		vc.transform.parent = transform;
+		bc.transform.parent = transform;
+		vc.transform.localPosition = new Vector3 (lineLeft [hight]-0.2f, conv(hight)-3);
+		bc.transform.localPosition = new Vector3 (lineRight [hight]+0.2f, conv(hight)-3);
 	}
 	
 	// midpoint bisection a straight line recursively
 	// only move the x component
-	private void randomize(float[] line, int s, int e, float sd){
+	private void midpointBisection(float[] line, int s, int e, float sd){
 		//print(s + " " +  e);
 		if (s > e) return;
 		int middle = (e + s) / 2;
 		//print (middle);
 		line [middle] = (line [e] - line [s])/2f + (Random.value - 0.5f) * sd; 
 		sd *= roughness;
-		randomize (line, s, middle-1, sd);
-		randomize (line, middle + 1, e, sd);
+		midpointBisection (line, s, middle-1, sd);
+		midpointBisection (line, middle + 1, e, sd);
 	}
 
 	// resize the x component according to width and height

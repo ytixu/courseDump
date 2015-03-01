@@ -46,6 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\BallCannon.cs" />
+     <Compile Include="Assets\VerletCannon.cs" />
      <Compile Include="Assets\script\Canyon.cs" />
      <Compile Include="Assets\script\DogData.cs" />
      <Compile Include="Assets\script\Line.cs" />
