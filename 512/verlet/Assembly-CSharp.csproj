@@ -46,13 +46,13 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\BallCannon.cs" />
-     <Compile Include="Assets\VerletCannon.cs" />
+     <Compile Include="Assets\script\BallCannon.cs" />
      <Compile Include="Assets\script\Canyon.cs" />
      <Compile Include="Assets\script\DogData.cs" />
      <Compile Include="Assets\script\Line.cs" />
      <Compile Include="Assets\script\Point.cs" />
      <Compile Include="Assets\script\Verlet.cs" />
+     <Compile Include="Assets\script\VerletCannon.cs" />
      <Compile Include="Assets\script\VerletNode.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>

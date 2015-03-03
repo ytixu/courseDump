@@ -8,7 +8,12 @@ public class Verlet : MonoBehaviour {
 	public Point aPoint;
 	public Line aLine;
 
+	private static Vector3 acc = new Vector3(0, -0.01f, 0);  // gravity * time^2
+
 	private VerletNode root;
+
+	private float thr = 0.01f; // threshold for the distance between two points
+	private bool isGood; // whether we can stop iterating
 
 	// Use this for initialization
 	void Start () {
@@ -17,37 +22,72 @@ public class Verlet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		
 	}
 
-	public void initialize(Vector2 v){
+	public void initialize(Vector3 v, Vector3 preV){
 		transform.localScale = new Vector3 (size, size);
 		transform.localPosition = new Vector3 (v.x, v.y);
-		root = constructVerletTree (0);
+		root = constructVerletTree (0, v-preV);
 	}
 
 	// recursive construction of the tree
-	private VerletNode constructVerletTree(int index){
+	private VerletNode constructVerletTree(int index, Vector3 preV){
 		DogData.PosPointPair value = DogData.dogGraph [index];
 		// create point
 		Point newP = (Point)Instantiate (aPoint);
+		newP.name = index.ToString();
 		newP.initialize (value.pos, this);
 		// create node
-		VerletNode node = new VerletNode (newP);
+		VerletNode node = new VerletNode (newP, preV);
 		// iterate child
 		foreach (DogData.DistPointPair p in value.child){
 			// recursion
-			VerletNode c = constructVerletTree(p.pointID);
+			VerletNode c = constructVerletTree(p.pointID, preV);
 			// create line
 			Line newLine = null;
 			if (p.visible){
 				newLine = (Line) Instantiate(aLine);
 				newLine.initialize(this);
-				newLine.setPosition(node.p.transform.localPosition, c.p.transform.localPosition); 
+				newLine.setPosition(node.p.transform.position, c.p.transform.position); 
 			}
 			// add child
 			node.child.Add(new VerletNode.ChildNode { l = newLine, n = c, dist = p.dist });
 		}
 		return node;
+	}
+
+	// recurively update the position of the points
+	private void updatePosition(VerletNode node){
+		Vector3 newPos = 2 * node.currPos - node.prePos + acc;
+		node.prePos = node.currPos;
+		node.currPos = newPos;
+		node.tranverse = 1 - node.tranverse;
+		foreach (VerletNode.ChildNode n in node.child) {
+			if (n.n.tranverse != node.tranverse)
+				updatePosition(n.n);
+		}
+	}
+
+	// recursively iterate to satisfy all distance constraint of the verlet
+	private void repositionPoints(VerletNode node){
+		foreach(VerletNode.ChildNode n in node.child){
+			Vector3 d = node.currPos - n.n.currPos;
+			if (Vector3.Magnitude(d) - n.dist > thr){
+				isGood = false;
+				d = d/2;
+				node.currPos = (node.currPos - d);
+				n.n.currPos = (n.n.currPos + d);
+			}
+
+		}
+	}
+
+	private void repaint(){
+
+	}
+
+	private void animate(){
+
 	}
 }

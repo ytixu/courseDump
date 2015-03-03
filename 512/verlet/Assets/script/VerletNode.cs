@@ -5,6 +5,10 @@ public class VerletNode {
 
 	public Point p;
 	public ArrayList child;
+	public Vector3 currPos;
+	public Vector3 prePos;
+
+	public int tranverse = 0;
 
 	public class ChildNode{
 		public Line l { get; set; }
@@ -12,8 +16,10 @@ public class VerletNode {
 		public float dist { get; set; }
 	}
 
-	public VerletNode(Point point){
+	public VerletNode(Point point, Vector3 preV){
 		child = new ArrayList ();
 		p = point;
+		currPos = point.transform.position;
+		prePos = currPos - preV;
 	}
 }
