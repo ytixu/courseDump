@@ -10,10 +10,11 @@ public class Verlet : MonoBehaviour {
 
 	private static Vector3 acc = new Vector3(0, -0.01f, 0);  // gravity * time^2
 
-	private VerletNode root;
+	private VerletNode root; // tree for the verlet's points and lines
 
 	private float thr = 0.01f; // threshold for the distance between two points
 	private bool isGood; // whether we can stop iterating
+	private bool canRepaint = false;
 
 	// Use this for initialization
 	void Start () {
@@ -22,13 +23,18 @@ public class Verlet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (canRepaint){
+			canRepaint = false;
+			repaint(root);
+			animate();
+		}
 	}
 
 	public void initialize(Vector3 v, Vector3 preV){
 		transform.localScale = new Vector3 (size, size);
 		transform.localPosition = new Vector3 (v.x, v.y);
-		root = constructVerletTree (0, v-preV);
+		root = constructVerletTree (0, (v-preV)/3f);
+		//animate ();
 	}
 
 	// recursive construction of the tree
@@ -62,10 +68,8 @@ public class Verlet : MonoBehaviour {
 		Vector3 newPos = 2 * node.currPos - node.prePos + acc;
 		node.prePos = node.currPos;
 		node.currPos = newPos;
-		node.tranverse = 1 - node.tranverse;
 		foreach (VerletNode.ChildNode n in node.child) {
-			if (n.n.tranverse != node.tranverse)
-				updatePosition(n.n);
+			updatePosition(n.n);
 		}
 	}
 
@@ -79,15 +83,27 @@ public class Verlet : MonoBehaviour {
 				node.currPos = (node.currPos - d);
 				n.n.currPos = (n.n.currPos + d);
 			}
-
 		}
 	}
 
-	private void repaint(){
-
+	private void repaint(VerletNode node){
+		node.p.transform.position = node.currPos;
+		foreach (VerletNode.ChildNode n in node.child){
+			print (n.n.p.name);
+			if (n.l != null){
+				n.l.setPosition(node.currPos, n.n.currPos);
+			}
+			repaint (n.n);
+		}
 	}
 
 	private void animate(){
-
+		updatePosition (root);
+		isGood = false;
+		while(! isGood){
+			isGood = true;
+			repositionPoints(root);
+		}
+		canRepaint = true;
 	}
 }

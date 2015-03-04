@@ -11,6 +11,8 @@ public class Canyon : MonoBehaviour {
 	public float slope; // positive value for the slope of the walls
 
 	public Material wallMat;
+	public GameObject leftWall;
+	public GameObject rightWall;
 
 	public VerletCannon vc;
 	public BallCannon bc;
@@ -106,6 +108,7 @@ public class Canyon : MonoBehaviour {
 		transform.GetComponent<MeshFilter>().mesh = new Mesh();
 		transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine, true);
 		transform.gameObject.AddComponent<MeshCollider>();
+		gameObject.GetComponent<MeshCollider> ().isTrigger = true;
 		transform.gameObject.active = true;
 		transform.gameObject.renderer.material = wallMat;
 	}

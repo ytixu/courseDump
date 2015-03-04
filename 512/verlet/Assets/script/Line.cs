@@ -19,11 +19,11 @@ public class Line : MonoBehaviour {
 		// cache line renderer
 		alr = gameObject.GetComponent<LineRenderer> ();
 		transform.parent = ver.transform;
-		alr.SetWidth (0.01f, 0.01f);
+		alr.SetWidth (0.02f, 0.02f);
 	}
 
 	public void setPosition(Vector3 s, Vector3 e){
-		print (s.ToString () + e.ToString ());
+		//print (s.ToString () + e.ToString ());
 		alr.SetPosition (0, s);
 		alr.SetPosition (1, e);
 	}

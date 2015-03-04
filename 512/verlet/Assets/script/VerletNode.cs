@@ -8,8 +8,6 @@ public class VerletNode {
 	public Vector3 currPos;
 	public Vector3 prePos;
 
-	public int tranverse = 0;
-
 	public class ChildNode{
 		public Line l { get; set; }
 		public VerletNode n { get; set; }
