@@ -22,7 +22,7 @@ public class Wind : MonoBehaviour {
 	}
 
 	public float getWind(){
-		return value/10000f;
+		return value/1000f;
 	}
 
 	// random walk fashion

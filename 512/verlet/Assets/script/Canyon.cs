@@ -164,21 +164,20 @@ public class Canyon : MonoBehaviour {
 
 	/**
 	 * This function is called by other object to check if the latter has collided a walls
-	 * if colliding on left wall, return -1
-	 * if colliding on right wall, return 1
-	 * if colliding on top or bottom, return 2
-	 * else return 0
+	 * if colliding, return the position where there's a collision
 	 */
-	public int hasCollide(float posx, float posy, float radius){
+	public Vector2 hasCollide(float posx, float posy, float radius){
 		float temp = posy - radius;
 		if (temp >= top){
-			return 0;
-		}else if (temp <= bottom){
-			return 2;
+			return Vector2.zero;
 		}
-		// get y position in array
+		// get relevant y position on wall
+		float y = 0;
+		if (temp <= bottom){
+			y = bottom;
+		}
+		// get relevant x position on wall
 		int ind = convInv (temp);
-		// get x position on wall
 		float y0 = conv (ind);
 		float y1 = conv (ind+1);
 		if (posx < 0){ // check for leftwall
@@ -186,15 +185,15 @@ public class Canyon : MonoBehaviour {
 			float x1 = leftWall[ind+1];
 			float ratio = (posy-y0)/(y1-y0);
 			float x = x0 + ratio*(x1-x0);
-			if (posx - radius < x) return -1;
+			if (posx - radius < x) return new Vector2(x, y);
 
 		}else{ // check for right wall
 			float x0 = rightWall[ind];
 			float x1 = rightWall[ind+1];
 			float ratio = (posy-y0)/(y1-y0);
 			float x = x0 + ratio*(x1-x0);
-			if (posx + radius > x) return 1;
+			if (posx + radius > x) return new Vector2(x, y);
 		}
-		return 0;
+		return new Vector2(0,y);
 	}
 }

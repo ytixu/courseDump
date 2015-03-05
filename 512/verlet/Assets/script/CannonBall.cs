@@ -42,6 +42,8 @@ public class CannonBall : MonoBehaviour {
 	}
 
 	public void updatePosition(){
+		float tempx = px;
+		float tempy = py;
 		vx += wind.getWind ();
 		vy += g;
 		px += vx;
@@ -51,9 +53,29 @@ public class CannonBall : MonoBehaviour {
 			Destroy (gameObject);
 			return;
 		}
-		print (canyon.hasCollide (px, py, radius).ToString());
-
+		Vector2 col = canyon.hasCollide (px, py, radius);
+		if (Mathf.Abs (col.x) > 0){
+			if (px < 0){
+				px = col.x + radius;
+				// bouncing
+				vx = -vx;
+			}else{
+				px = col.x - radius;
+			}
+		}
+		if (Mathf.Abs (col.y) > 0){
+			py = col.y + radius;
+			// if not moving anymore 
+			if (Mathf.Abs(tempx - px) < 0.01 && Mathf.Abs(tempy - py) < 0.01){
+				fired = false;
+				Invoke("destroy", 0.5f);
+			}
+		}
+		//print (col.ToString () +  px);
 		transform.position = new Vector3 (px, py);
 	}
 
+	private void destroy(){
+		Destroy (gameObject);
+	}
 }
