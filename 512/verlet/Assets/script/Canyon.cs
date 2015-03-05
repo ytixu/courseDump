@@ -11,11 +11,12 @@ public class Canyon : MonoBehaviour {
 	public float slope; // positive value for the slope of the walls
 
 	public Material wallMat;
-	public GameObject leftWall;
-	public GameObject rightWall;
-
 	public VerletCannon vc;
 	public BallCannon bc;
+
+	// storing the position of the walls for collision detection
+	public Vector2[] leftWall; 
+	public Vector2[] rightWall;
 
 	// Use this for initialization
 	void Start () {
@@ -29,6 +30,8 @@ public class Canyon : MonoBehaviour {
 
 	public void initialize(){
 		int l = (int)Mathf.Pow (2, depth);
+		rightWall = new Vector2[l];
+		leftWall = new Vector2[l];
 		float[] lineLeft = new float[l];
 		float[] lineRight = new float[l];
 		midpointBisection (lineLeft, 0, l - 1, 1);
@@ -116,20 +119,29 @@ public class Canyon : MonoBehaviour {
 	private Mesh[] drawCanyon(float[] line, float end, int length){
 		Mesh[] ms = new Mesh[length-1];
 
+		float y1 = 0;
+		float y2 = 0;
 		for(int i=0; i<length-1; i++){
-			float y1 = conv(i);
-			float y2 = conv(i+1);
+			y1 = conv(i);
+			y2 = conv(i+1);
 			if (end > 0){
 				ms[i] = createMesh(new Vector3[]{new Vector3(line[i], y1),
 					new Vector3(end, y1),
 					new Vector3(line[i+1], y2),
 					new Vector3(end, y2)});
+				rightWall[i] = new Vector2(line[i], y1);
 			}else{
 				ms[i] = createMesh(new Vector3[]{new Vector3(end, y1),
 					new Vector3(line[i], y1),
 					new Vector3(end, y2),
 					new Vector3(line[i+1], y2)});
+				leftWall[i] = new Vector2(line[i], y1);
 			}
+		}
+		if (end > 0){
+			rightWall[length-1] = new Vector2(line[length-1], y2);
+		}else{
+			leftWall[length-1] = new Vector2(line[length-1], y2);
 		}
 		return ms;
 	}

@@ -9,6 +9,7 @@ public class Wind : MonoBehaviour {
 	public GameObject head;
 
 	private float value;
+	private int count = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -21,7 +22,7 @@ public class Wind : MonoBehaviour {
 	}
 
 	public float getWind(){
-		return value;
+		return value/10000f;
 	}
 
 	// random walk fashion
@@ -34,7 +35,12 @@ public class Wind : MonoBehaviour {
 		if (temp > range || temp < -range){
 			step = -step;
 		}
-		value += step;
+		if (value * step > 0) count ++;
+		value = temp;
+		if (count > 10 && Random.value > 5f/count){
+			value = -value;
+			count = 0;
+		}
 	}
 
 	private void drawArrow(){
@@ -52,7 +58,7 @@ public class Wind : MonoBehaviour {
 	private void scheduleWind(){
 		randomValue ();
 		drawArrow ();
-		print (value.ToString());
+		//print (value.ToString());
 		Invoke ("scheduleWind", 0.5f);
 	}
 }

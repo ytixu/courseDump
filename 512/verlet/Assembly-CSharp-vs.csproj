@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>E:/Unity/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>E:/Unity/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -52,12 +52,13 @@
      <Compile Include="Assets\script\DogData.cs" />
      <Compile Include="Assets\script\Line.cs" />
      <Compile Include="Assets\script\Point.cs" />
+     <Compile Include="Assets\script\Screen.cs" />
      <Compile Include="Assets\script\Verlet.cs" />
      <Compile Include="Assets\script\VerletCannon.cs" />
      <Compile Include="Assets\script\VerletNode.cs" />
      <Compile Include="Assets\script\Wind.cs" />
  <Reference Include="UnityEngine.UI">
- <HintPath>E:/Unity/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.1/UnityEngine.UI.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
