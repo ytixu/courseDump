@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CannonBall : MonoBehaviour {
 	public Wind wind;
+	public Canyon canyon;
 
 	private float radius = 0.25f;
 
@@ -45,11 +46,13 @@ public class CannonBall : MonoBehaviour {
 		vy += g;
 		px += vx;
 		py += vy;
-		print (py + " " + px);
+		//print (py + " " + px);
 		if (Screen.isOutOfScene (px, py)) {
 			Destroy (gameObject);
 			return;
 		}
+		print (canyon.hasCollide (px, py, radius).ToString());
+
 		transform.position = new Vector3 (px, py);
 	}
 
