@@ -14,10 +14,8 @@ public class VerletNode {
 		public float dist { get; set; }
 	}
 
-	public VerletNode(Point point, Vector3 preV){
+	public VerletNode(Point point){
 		child = new ArrayList ();
 		p = point;
-		currPos = point.transform.position;
-		prePos = currPos - preV;
 	}
 }

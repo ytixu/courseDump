@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Verlet : MonoBehaviour {
+	public Canyon canyon;
 
 	public float size;
 	public Point aPoint;
@@ -13,7 +14,7 @@ public class Verlet : MonoBehaviour {
 	private VerletNode root; // tree for the verlet's points and lines
 	private VerletNode[] nodeList;
 
-	private float thr = 0.01f; // threshold for the distance between two points
+	private float thr = 0.1f; // threshold for the distance between two points
 	private bool isGood; // whether we can stop iterating
 	private bool canRepaint = false;
 
@@ -29,8 +30,9 @@ public class Verlet : MonoBehaviour {
 	
 	// Update is called once per frame
 	//void Update () {
-	//	if (fired) updatePosition ();
+	//	
 	void Update () {
+		if (fired) updateAllPosition ();
 		if (canRepaint){
 			canRepaint = false;
 			repaint();
@@ -46,13 +48,12 @@ public class Verlet : MonoBehaviour {
 		Vector3 temp = (v - preV) / 6f;
 		currPos = v;
 		prePos = v-temp;
-		root = constructVerletTree (0, temp);
-		//fired = true;
-		animate();
+		root = constructVerletTree (0);
+		fired = true;
 	}
 
 	// recursive construction of the tree
-	private VerletNode constructVerletTree(int index, Vector3 preV){
+	private VerletNode constructVerletTree(int index){
 		//print (index); 
 		if (nodeList [index] != null){
 			print(index);
@@ -64,12 +65,12 @@ public class Verlet : MonoBehaviour {
 		newP.name = index.ToString();
 		newP.initialize (value.pos, this);
 		// create node
-		VerletNode node = new VerletNode (newP, preV);
+		VerletNode node = new VerletNode (newP);
 		nodeList [index] = node;
 		// iterate child
 		foreach (DogData.DistPointPair p in value.child){
 			// recursion
-			VerletNode c = constructVerletTree(p.pointID, preV);
+			VerletNode c = constructVerletTree(p.pointID);
 			// create line
 			Line newLine = null;
 			if (p.visible){
@@ -78,7 +79,7 @@ public class Verlet : MonoBehaviour {
 				newLine.setPosition(node.p.transform.position, c.p.transform.position); 
 			}
 			// add child
-			node.child.Add(new VerletNode.ChildNode { l = newLine, n = c, dist = p.dist });
+			node.child.Add(new VerletNode.ChildNode { l = newLine, n = c, dist = p.dist*size });
 		}
 		return node;
 	}
@@ -87,17 +88,27 @@ public class Verlet : MonoBehaviour {
 	private void updatePosition(){
 		foreach (VerletNode node in nodeList) {
 			Vector3 newPos = 2 * node.currPos - node.prePos + acc;
+			// collision
+			Vector2[] col = canyon.hasCollide (newPos.x, newPos.y, 0.05f);
+			if (!col[0].Equals(Vector2.zero)){
+				if (Mathf.Abs(col[0][0]) > 0){
+					newPos.x = col[0][0];
+				}
+				if (Mathf.Abs (col[0][1]) > 0){
+					destroy();
+				}
+			}
 			node.prePos = node.currPos;
 			node.currPos = newPos;
 		}
 	}
 	
-	// recursively iterate to satisfy all distance constraint of the verlet
+	// iterate to satisfy all distance constraint of the verlet
 	private void repositionPoints(){
 		foreach(VerletNode node in nodeList){
 			foreach(VerletNode.ChildNode n in node.child){
 				Vector3 d = node.currPos - n.n.currPos;
-				print (d.ToString());
+				//print (Vector3.Magnitude(d).ToString() + " " + n.dist.ToString());
 				if (Vector3.Magnitude(d) - n.dist > thr){
 					isGood = false;
 					d = d/2;
@@ -128,5 +139,60 @@ public class Verlet : MonoBehaviour {
 			repositionPoints();
 		}
 		canRepaint = true;
+	}
+
+
+	private void updateAllPosition(){
+		Vector3 newP = currPos * 2 - prePos + acc;
+		// check if it has gone out of the scene
+		if (Screen.isOutOfScene (newP.x, newP.y)) {
+			Destroy (gameObject);
+			return;
+		}
+		prePos = currPos;
+		currPos = newP;
+		transform.localPosition = newP;
+		repaintLines (root);
+		// check collision
+		Vector2[] col = canyon.hasCollide (newP.x + 0.6f, newP.y + 0.6f, 0.6f); // approximation of the circle collider
+		if (!col[0].Equals(Vector2.zero)){
+			fired = false;
+			setPos();
+			animate();
+		}
+	}
+
+	private void setPos(){
+		Vector3 temp = currPos - prePos;
+		foreach (VerletNode n in nodeList) {
+			n.currPos = n.p.transform.position;
+			n.prePos = n.currPos - temp;
+		}
+	}
+
+	// recurively update all lines
+	private void repaintLines(VerletNode node){
+		foreach (VerletNode.ChildNode n in node.child){
+			if (n.l != null){
+				n.l.setPosition(node.p.transform.position, n.n.p.transform.position);
+			}
+			repaintLines (n.n);
+		}
+	}
+
+	private void destroy(){
+		Destroy (gameObject);
+	}
+
+	public bool checkCollision(Vector3 pos){
+		print ("COOO");
+		foreach (VerletNode n in nodeList){
+			//print (Vector3.Magnitude(n.p.transform.position - pos).ToString()  + " " + n.p.name + " " + 1+rad);
+			if (Vector3.Magnitude(n.p.transform.position - pos) < 1.05){
+				destroy();
+				return true;
+			}
+		}
+		return false;
 	}
 }

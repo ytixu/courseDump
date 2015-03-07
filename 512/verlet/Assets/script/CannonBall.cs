@@ -7,12 +7,13 @@ using System.Collections;
 public class CannonBall : MonoBehaviour {
 	public Wind wind;
 	public Canyon canyon;
+	public VerletCannon verCannon;
 
 	private float radius = 0.25f;
 	private float elasticity = 0.8f;
 
 	// gravity
-	private float g = -0.001f;
+	private float g = -0.002f;
 
 	// velocity
 	private float vx;
@@ -61,7 +62,6 @@ public class CannonBall : MonoBehaviour {
 			Destroy (gameObject);
 			return;
 		}
-
 		// collision detection
 		Vector2[] col = canyon.hasCollide (px, py, radius);
 		// collision handeler 
@@ -89,10 +89,13 @@ public class CannonBall : MonoBehaviour {
 				}
 			}
 		}
+
 		vx += wind.getWind ();
 		vy += g;
 		//print (col.ToString () +  px);
 		transform.position = new Vector3 (px, py);
+		// collision with dogs
+		verCannon.verletCollision (transform.position);
 	}
 
 	private void destroy(){
