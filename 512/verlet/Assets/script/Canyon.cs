@@ -37,23 +37,24 @@ public class Canyon : MonoBehaviour {
 		float[] lineRight = new float[l];
 		top = conv (l - 1);
 		bottom = conv (0);
+		// computer canyon walls
 		midpointBisection (lineLeft, 0, l - 1, 1);
 		midpointBisection (lineRight, 0, l - 1, 1);
 		resize (lineLeft, lineRight, l);
-		// draw
+		// draw canyon
 		combine(drawCanyon (lineRight, end, l),drawCanyon (lineLeft, -end, l));
 		// set cannons
 		vc.transform.parent = transform;
 		bc.transform.parent = transform;
 		vc.transform.localPosition = new Vector3 (lineLeft [hight]-0.2f, conv(hight));
 		bc.transform.localPosition = new Vector3 (lineRight [hight]+0.2f, conv(hight));
-		// walls
+
 		rightWall = lineRight;
 		leftWall = lineLeft;
 	}
 	
-	// midpoint bisection a straight line recursively
-	// only move the x component
+	// midpoint bisection of a straight line recursively
+	// only move the x component of the walls
 	private void midpointBisection(float[] line, int s, int e, float sd){
 		//print(s + " " +  e);
 		if (s > e) return;
@@ -65,7 +66,7 @@ public class Canyon : MonoBehaviour {
 		midpointBisection (line, middle + 1, e, sd);
 	}
 
-	// resize the x component according to width and height
+	// resize the x component according to the position of the cannons and the slope
 	private void resize(float[] l, float[] r, int s){
 		float diff = (width - r [hight] + l [hight])/2f;
 		for (int i = hight; i<s; i++){
@@ -78,16 +79,17 @@ public class Canyon : MonoBehaviour {
 		}
 	}
 
-	// mapping array index to y coordinate
+	// helper function for mapping array index to y coordinate
 	private float conv(int i){
 		return i*3.5f/depth-4;
 	}
 
-	// mapping y coordinate to array index (floor of the value)
+	// helper function for mapping y coordinate to array index (floor of the value)
 	private int convInv(float x){
 		return (int)((x + 4) * depth / 3.5f);
 	}
 
+	// creating a quad mesh
 	private Mesh createMesh(Vector3[] vs){
 		Mesh mesh = new Mesh();
 		mesh.Clear();
@@ -99,6 +101,7 @@ public class Canyon : MonoBehaviour {
 		return mesh;
 	}
 
+	// combining the meshes for the wall and add another one for the bottom of canyon
 	private void combine(Mesh[] msL, Mesh[] msR){
 		transform.GetComponent<MeshFilter> ();
 		
@@ -120,18 +123,18 @@ public class Canyon : MonoBehaviour {
 			combine[i].transform = meshFilters[0].transform.localToWorldMatrix;
 			i++;
 		}
+		// add the bottom
 		combine[i].mesh = createMesh(new Vector3[]{
 			new Vector3(-end, bottom), new Vector3(end, bottom), 
 			new Vector3(-end, bottom-2), new Vector3(end, bottom-2)});
 		combine[i].transform = meshFilters[0].transform.localToWorldMatrix;
 		transform.GetComponent<MeshFilter>().mesh = new Mesh();
 		transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine, true);
-		transform.gameObject.AddComponent<MeshCollider>();
-		gameObject.GetComponent<MeshCollider> ().isTrigger = true;
 		transform.gameObject.active = true;
 		transform.gameObject.renderer.material = wallMat;
 	}
 
+	// convert the list of x coordinates to meshes
 	private Mesh[] drawCanyon(float[] line, float end, int length){
 		Mesh[] ms = new Mesh[length-1];
 
@@ -145,31 +148,31 @@ public class Canyon : MonoBehaviour {
 					new Vector3(end, y1),
 					new Vector3(line[i+1], y2),
 					new Vector3(end, y2)});
-				//rightWall[i] = new Vector2(line[i], y1);
 			}else{
 				ms[i] = createMesh(new Vector3[]{new Vector3(end, y1),
 					new Vector3(line[i], y1),
 					new Vector3(end, y2),
 					new Vector3(line[i+1], y2)});
-				//leftWall[i] = new Vector2(line[i], y1);
 			}
 		}
-		//if (end > 0){
-		//	rightWall[length-1] = new Vector2(line[length-1], y2);
-		//}else{
-		//	leftWall[length-1] = new Vector2(line[length-1], y2);
-		//}
 		return ms;
 	}
 
 	/**
 	 * This function is called by other object to check if the latter has collided a walls
 	 * if colliding, return the position where there's a collision
+	 * and the normal of the wall at that position
+	 * 
+	 * This algorithm first checks if the object has penetrated the bottom of the canyon.
+	 * Then it go gets the section of the canyon wall in leftWall or rightWall array 
+	 * that is relevant for where the object is.
+	 * This section is a line. So we can project the object's x component onto that line and get the
+	 * corresponding x coordinate. Then we compare the x coordinates to check interpenetration.
 	 */
-	public Vector2 hasCollide(float posx, float posy, float radius){
+	public Vector2[] hasCollide(float posx, float posy, float radius){
 		float temp = posy - radius;
 		if (temp >= top){
-			return Vector2.zero;
+			return new Vector2[0];
 		}
 		// get relevant y position on wall
 		float y = 0;
@@ -185,15 +188,22 @@ public class Canyon : MonoBehaviour {
 			float x1 = leftWall[ind+1];
 			float ratio = (posy-y0)/(y1-y0);
 			float x = x0 + ratio*(x1-x0);
-			if (posx - radius < x) return new Vector2(x, y);
-
+			if (posx - radius < x){
+				if (x1<x0)
+				return new Vector2[]{new Vector2(x, y), new Vector2(y0-y1, x0-x1)};
+				return new Vector2[]{new Vector2(x, y), new Vector2(y0-y1, x1-x0)};
+			}
 		}else{ // check for right wall
 			float x0 = rightWall[ind];
 			float x1 = rightWall[ind+1];
 			float ratio = (posy-y0)/(y1-y0);
 			float x = x0 + ratio*(x1-x0);
-			if (posx + radius > x) return new Vector2(x, y);
+			if (posx + radius > x){
+				if (x1<x0)
+				return new Vector2[]{new Vector2(x, y), new Vector2(y0-y1, x0-x1)};
+				return new Vector2[]{new Vector2(x, y), new Vector2(y0-y1, x1-x0)};
+			}
 		}
-		return new Vector2(0,y);
+		return new Vector2[]{new Vector2(0,y), new Vector2(0,-1)};
 	}
 }

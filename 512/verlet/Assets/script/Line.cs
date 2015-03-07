@@ -19,6 +19,7 @@ public class Line : MonoBehaviour {
 		// cache line renderer
 		alr = gameObject.GetComponent<LineRenderer> ();
 		transform.parent = ver.transform;
+		transform.localPosition = Vector3.zero;
 		alr.SetWidth (0.02f, 0.02f);
 	}
 

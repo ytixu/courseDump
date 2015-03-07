@@ -1,10 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * This is for the cannon that shoots projectiles
+ */
 public class BallCannon : MonoBehaviour {
 
-	private GameObject muzzle;
-	public CannonBall ball;
+	private GameObject muzzle; // where CannonBall will be placed once fired
+	public CannonBall ball; 
 
 	// Use this for initialization
 	void Start () {
@@ -16,13 +19,8 @@ public class BallCannon : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space)){
 			CannonBall b = (CannonBall) Instantiate(ball);
 			b.transform.parent = transform;
-			//b.transform.localPosition = muzzle.transform.localPosition;
-			//Vector3 temp = muzzle.transform.position - transform.position;
-			//print(temp);
 			b.initialize(transform.localEulerAngles.z, 0.1f, muzzle.transform.position);
-			//b.rigidbody2D.AddForce(new Vector2(temp.x, temp.y)*700);
 		}
 	}
-
 
 }
