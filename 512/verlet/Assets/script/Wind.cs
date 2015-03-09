@@ -32,17 +32,19 @@ public class Wind : MonoBehaviour {
 			step = -step;
 		}
 		float temp = value + step;
+		// check if out of range
 		if (temp > range || temp < -range){
 			step = -step;
 		}
 		if (value * step > 0) count ++;
 		value = temp;
+		// check if it has been a long time that the wind direction hasn't change
 		if (count > 10 && Random.value > 5f/count){
 			value = -value;
 			count = 0;
 		}
 	}
-
+	
 	private void drawArrow(){
 		float temp = (float)Mathf.Abs(value / range);
 		bar.transform.localScale = new Vector3 (temp*2, 0.1f, 0);
@@ -55,10 +57,10 @@ public class Wind : MonoBehaviour {
 		}
 	}
 
+	// main loop
 	private void scheduleWind(){
 		randomValue ();
 		drawArrow ();
-		//print (value.ToString());
 		Invoke ("scheduleWind", 0.5f);
 	}
 }

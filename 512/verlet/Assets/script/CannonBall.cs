@@ -38,9 +38,8 @@ public class CannonBall : MonoBehaviour {
 	// this is called when fired from the cannon
 	// we set up the initial velocity and position
 	public void initialize(float angle, float vel, Vector3 pos){
-		vy = -vel * (float)Mathf.Sin (angle);
-		vx = -vel * (float)Mathf.Cos (angle);
-		//print (vy + " " + vx);
+		vy = vel * (float)Mathf.Sin (angle);
+		vx = vel * (float)Mathf.Cos (angle);
 		transform.position = pos;
 		transform.localScale = new Vector3 (radius*2, radius*2, 0);
 		px = pos.x;
@@ -55,7 +54,6 @@ public class CannonBall : MonoBehaviour {
 		// computer new velocity and position
 		px += vx;
 		py += vy;
-		//print (py + " " + px);
 
 		// check if it has gone out of the scene
 		if (Screen.isOutOfScene (px, py)) {
@@ -65,7 +63,7 @@ public class CannonBall : MonoBehaviour {
 		// collision detection
 		Vector2[] col = canyon.hasCollide (px, py, radius);
 		// collision handeler 
-		if (col.Length > 0){
+		if (col.Length > 1){
 			Vector2 colPos = col[0];
 			Vector2 normal = col[1];
 			normal.Normalize();
@@ -82,7 +80,7 @@ public class CannonBall : MonoBehaviour {
 			}
 			if (Mathf.Abs (colPos.y) > 0){
 				py = colPos.y + radius;
-				// at the bottom of the canyon and if not moving anymore 
+				// if not moving anymore 
 				if (Mathf.Abs(tempx - px) < 0.01 && Mathf.Abs(tempy - py) < 0.01){
 					fired = false;
 					Invoke("destroy", 0.5f);
@@ -92,7 +90,6 @@ public class CannonBall : MonoBehaviour {
 
 		vx += wind.getWind ();
 		vy += g;
-		//print (col.ToString () +  px);
 		transform.position = new Vector3 (px, py);
 		// collision with dogs
 		verCannon.verletCollision (transform.position);

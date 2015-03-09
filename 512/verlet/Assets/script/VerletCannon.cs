@@ -21,6 +21,7 @@ public class VerletCannon : MonoBehaviour {
 			Verlet v = (Verlet) Instantiate(verlet);
 			v.initialize(muzzle.transform.position, transform.position);
 			verlets.Add(v);
+			transform.localEulerAngles = new Vector3(0,0,-30 - Random.value*45);
 		}
 	}
 

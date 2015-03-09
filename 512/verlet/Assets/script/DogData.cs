@@ -9,11 +9,10 @@ using System.Collections.Generic;
 public class DogData {
 	// for the neighbours of a point
 	public class DistPointPair{
-		public float dist { get; set; }
 		public int pointID { get; set; }
 		public bool visible { get; set; } // visibility of the edge
 	}
-
+	
 	// for the point itself
 	public class PosPointPair{
 		public ArrayList child { get; set; }
@@ -24,48 +23,51 @@ public class DogData {
 	{
 		// starting at the eye of the beast
 		{ 0, new PosPointPair { pos = Vector2.zero,
-				child = new ArrayList{new DistPointPair {dist=(float)Mathf.Sqrt(2), pointID=1, visible=false},
-					new DistPointPair {dist=(float)Mathf.Sqrt(2)*2f, pointID=4, visible=false}}
+				child = new ArrayList{new DistPointPair {pointID=1, visible=false},
+					new DistPointPair {pointID=4, visible=false}}
 			}},
 		{ 1, new PosPointPair { pos = new Vector2(-1,-1),
-				child = new ArrayList{new DistPointPair {dist=3f, pointID=2, visible=true},
-					new DistPointPair {dist=3f, pointID=3, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=2, visible=true},
+					new DistPointPair {pointID=3, visible=true},
+					new DistPointPair {pointID=8, visible=false}}}},
 		{ 2, new PosPointPair { pos = new Vector2(2,-1),
-				child = new ArrayList{new DistPointPair {dist=3f, pointID=4, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=4, visible=true}}}},
 		{ 3, new PosPointPair { pos = new Vector2(-1,2),
-				child = new ArrayList{new DistPointPair {dist=3f, pointID=4, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=4, visible=true}}}},
 		{ 4, new PosPointPair { pos = new Vector2(2,2),
-				child = new ArrayList{new DistPointPair {dist=(float)Mathf.Sqrt(2)*2f, pointID=5, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=5, visible=true}}}},
 		{ 5, new PosPointPair { pos = new Vector2(4,4),
-				child = new ArrayList{new DistPointPair {dist=5, pointID=6, visible=true},
-					new DistPointPair {dist=10, pointID=7, visible=true},
-					new DistPointPair {dist=(float)Mathf.Sqrt(5*5+8*8), pointID=10, visible=false}}}},
+				child = new ArrayList{new DistPointPair {pointID=6, visible=true},
+					new DistPointPair {pointID=7, visible=true},
+					new DistPointPair {pointID=10, visible=false},
+					new DistPointPair {pointID=8, visible=false}}}},
 		{ 6, new PosPointPair { pos = new Vector2(4,9),
-				child = new ArrayList{new DistPointPair {dist=2, pointID=11, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=11, visible=true},
+					new DistPointPair {pointID=7, visible=false}}}},
 		{ 7, new PosPointPair { pos = new Vector2(14,4),
-				child = new ArrayList{new DistPointPair {dist=5, pointID=8, visible=true},
-					new DistPointPair {dist=(float)Mathf.Sqrt(5*5+8*8), pointID=11, visible=false},
-					new DistPointPair {dist=(float)Mathf.Sqrt(2)*2f, pointID=9, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=8, visible=true},
+					new DistPointPair {pointID=11, visible=false},
+					new DistPointPair {pointID=9, visible=true}}}},
 		{ 8, new PosPointPair { pos = new Vector2(14,9),
-				child = new ArrayList{new DistPointPair {dist=2, pointID=10, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=10, visible=true}}}},
 		{ 9, new PosPointPair { pos = new Vector2(16,3),
 				child = new ArrayList{}}},
 		{ 10, new PosPointPair { pos = new Vector2(12,9),
-				child = new ArrayList{new DistPointPair {dist=6, pointID=11, visible=true},
-					new DistPointPair {dist=2, pointID=12, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=11, visible=true},
+					new DistPointPair {pointID=12, visible=true}}}},
 		{ 11, new PosPointPair { pos = new Vector2(6,9),
-				child = new ArrayList{new DistPointPair {dist=2, pointID=13, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=13, visible=true}}}},
 		{ 12, new PosPointPair { pos = new Vector2(12,11),
-				child = new ArrayList{new DistPointPair {dist=2, pointID=14, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=14, visible=true}}}},
 		{ 13, new PosPointPair { pos = new Vector2(6,11),
-				child = new ArrayList{new DistPointPair {dist=2, pointID=15, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=15, visible=true}}}},
 		{ 14, new PosPointPair { pos = new Vector2(12,13),
-				child = new ArrayList{new DistPointPair {dist=2, pointID=16, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=16, visible=true}}}},
 		{ 15, new PosPointPair { pos = new Vector2(6,13),
-				child = new ArrayList{new DistPointPair {dist=2, pointID=17, visible=true}}}},
+				child = new ArrayList{new DistPointPair {pointID=17, visible=true}}}},
 		{ 16, new PosPointPair { pos = new Vector2(10,13),
 				child = new ArrayList()}},
 		{ 17, new PosPointPair { pos = new Vector2(4,13),
 				child = new ArrayList()}}
-	};
-}
+		};
+	}

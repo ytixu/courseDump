@@ -1,6 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/**
+ * Data structure for storing the verlet graph.
+ * Each node contains:
+ * point GameObject,
+ * current position, 
+ * previous position
+ * 
+ * Each edge contains:
+ * line GameObject,
+ * distance 
+ */
+
 public class VerletNode {
 
 	public Point p;

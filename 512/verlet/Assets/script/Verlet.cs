@@ -44,7 +44,6 @@ public class Verlet : MonoBehaviour {
 		nodeList = new VerletNode[DogData.dogGraph.Count];
 		transform.localScale = new Vector3 (size, size);
 		transform.localPosition = new Vector3 (v.x, v.y);
-		print (v.ToString () + preV.ToString ());
 		Vector3 temp = (v - preV) / 6f;
 		currPos = v;
 		prePos = v-temp;
@@ -54,9 +53,7 @@ public class Verlet : MonoBehaviour {
 
 	// recursive construction of the tree
 	private VerletNode constructVerletTree(int index){
-		//print (index); 
 		if (nodeList [index] != null){
-			print(index);
 			return nodeList [index];
 		}
 		DogData.PosPointPair value = DogData.dogGraph [index];
@@ -86,21 +83,31 @@ public class Verlet : MonoBehaviour {
 	}
 
 	// update the position of the points
+	// according to verlet integration
 	private void updatePosition(){
 		foreach (VerletNode node in nodeList) {
 			Vector3 newPos = 2 * node.currPos - node.prePos + acc;
 			// collision
 			Vector2[] col = canyon.hasCollide (newPos.x, newPos.y, 0.05f);
+			if (col.Length == 0) continue;
 			if (!col[0].Equals(Vector2.zero)){
-				if (Mathf.Abs(col[0][0]) > 0){
+				if (Mathf.Abs(col[0][0]) > 0){ // if collide with wall
+					newPos.y = (col[0][0]-node.currPos.x)/(newPos.x-node.currPos.x)
+						*(newPos.y-node.currPos.y) + node.currPos.y;
 					newPos.x = col[0][0];
 				}
-				if (Mathf.Abs (col[0][1]) > 0){
+				if (Mathf.Abs (col[0][1]) > 0){ // if landing
 					destroy();
 				}
 			}
 			node.prePos = node.currPos;
 			node.currPos = newPos;
+			// check if a point has gone outside of the screen
+			// this is sufficient to decide whether we should destroy the verlet
+			if (Screen.isOutOfScene (newPos.x, newPos.y)) {
+				destroy ();
+				return;
+			}
 		}
 	}
 	
@@ -110,35 +117,34 @@ public class Verlet : MonoBehaviour {
 			foreach(VerletNode.ChildNode n in node.child){
 				float dist = Vector3.Distance(node.currPos, n.n.currPos);
 				float d = (float)Mathf.Abs(dist - n.dist);
-				print (d.ToString() + " " + dist.ToString());
 				if (d > thr){
 					isGood = false;
 					Vector3 diff = (node.currPos - n.n.currPos)*d/2f/dist;
-					print (diff.ToString());
 					node.currPos = (node.currPos - diff);
 					n.n.currPos = (n.n.currPos + diff);
 				}
 			}
 		}
 	}
-	
+
+	// reposition the lines and points
 	private void repaint(){
 		foreach(VerletNode node in nodeList){
 			node.p.transform.position = node.currPos;
 			foreach (VerletNode.ChildNode n in node.child){
-				print (n.n.p.name);
 				if (n.l != null){
 					n.l.setPosition(node.currPos, n.n.currPos);
 				}
 			}
 		}
 	}
-	
+
+	// animate the verlet
 	private void animate(){
 		updatePosition ();
 		isGood = false;
 		int n = 0;
-		while(! isGood && n < 1){ 
+		while(! isGood && n < 3){ 
 			isGood = true;
 			repositionPoints();
 			n ++;
@@ -146,7 +152,9 @@ public class Verlet : MonoBehaviour {
 		canRepaint = true;
 	}
 
-
+	// update the entire verlet object's position 
+	// treating it as one single point 
+	// this is used to get better efficiency
 	private void updateAllPosition(){
 		Vector3 newP = currPos * 2 - prePos + acc;
 		// check if it has gone out of the scene
@@ -160,13 +168,16 @@ public class Verlet : MonoBehaviour {
 		repaintLines (root);
 		// check collision
 		Vector2[] col = canyon.hasCollide (newP.x + 0.6f, newP.y + 0.6f, 0.6f); // approximation of the circle collider
+		if (col.Length == 0) return;
 		if (!col[0].Equals(Vector2.zero)){
+			// now treat each point individually
 			fired = false;
 			setPos();
 			animate();
 		}
 	}
 
+	// helper function to initialize the positions of the points
 	private void setPos(){
 		Vector3 temp = currPos - prePos;
 		foreach (VerletNode n in nodeList) {
@@ -175,7 +186,7 @@ public class Verlet : MonoBehaviour {
 		}
 	}
 
-	// recurively update all lines
+	// recurively update all lines only
 	private void repaintLines(VerletNode node){
 		foreach (VerletNode.ChildNode n in node.child){
 			if (n.l != null){
@@ -189,8 +200,8 @@ public class Verlet : MonoBehaviour {
 		Destroy (gameObject);
 	}
 
+	// this is called by CannonBall object to see if there is a collision with a verlet
 	public bool checkCollision(Vector3 pos){
-		print ("COOO");
 		foreach (VerletNode n in nodeList){
 			if (Vector3.Magnitude(n.p.transform.position - pos) < 1.05){
 				destroy();

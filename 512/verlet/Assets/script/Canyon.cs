@@ -18,8 +18,11 @@ public class Canyon : MonoBehaviour {
 	// storing the position of the walls for collision detection
 	public float[] leftWall; 
 	public float[] rightWall;
-	public float bottom;
-	public float top;
+	// cache these values
+	public float bottom; // bottom of the canyon (y coordinate)
+	public float top; // top of the canyon (y coordinate)
+	public float left; // top left edge (x coordinate)
+	public float right; // top right edge (x coordinate)
 
 	// Use this for initialization
 	void Start () {
@@ -51,6 +54,8 @@ public class Canyon : MonoBehaviour {
 
 		rightWall = lineRight;
 		leftWall = lineLeft;
+		left = leftWall [l-1];
+		right = rightWall [l - 1];
 	}
 	
 	// midpoint bisection of a straight line recursively
@@ -163,7 +168,7 @@ public class Canyon : MonoBehaviour {
 	 * if colliding, return the position where there's a collision
 	 * and the normal of the wall at that position
 	 * 
-	 * This algorithm first checks if the object has penetrated the bottom of the canyon.
+	 * This algorithm first checks if the object has penetrated the bottom or top of the canyon.
 	 * Then it go gets the section of the canyon wall in leftWall or rightWall array 
 	 * that is relevant for where the object is.
 	 * This section is a line. So we can project the object's x component onto that line and get the
@@ -171,7 +176,10 @@ public class Canyon : MonoBehaviour {
 	 */
 	public Vector2[] hasCollide(float posx, float posy, float radius){
 		float temp = posy - radius;
-		if (temp >= top){
+		// check if the object is landing on top of the canyon
+		if (Mathf.Abs(temp - top) < 0.01 && (posx > right || posx < left)){
+			return new Vector2[]{new Vector2(0,top), new Vector2(0,-1)};
+		}else if (temp >= top){ // if object is in the air
 			return new Vector2[0];
 		}
 		// get relevant y position on wall
@@ -181,6 +189,7 @@ public class Canyon : MonoBehaviour {
 		}
 		// get relevant x position on wall
 		int ind = convInv (temp);
+		print (ind + " " + temp.ToString());
 		float y0 = conv (ind);
 		float y1 = conv (ind+1);
 		if (posx < 0){ // check for leftwall

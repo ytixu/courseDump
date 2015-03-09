@@ -19,7 +19,8 @@ public class BallCannon : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.Space)){
 			CannonBall b = (CannonBall) Instantiate(ball);
 			b.transform.parent = transform;
-			b.initialize(transform.localEulerAngles.z, 0.1f, muzzle.transform.position);
+			b.initialize(Mathf.PI/180*(transform.localEulerAngles.z+90), 0.15f, muzzle.transform.position);
+			transform.localEulerAngles = new Vector3(0,0,75-Random.value*45);
 		}
 	}
 
