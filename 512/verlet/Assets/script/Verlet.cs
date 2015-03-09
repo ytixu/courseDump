@@ -14,7 +14,7 @@ public class Verlet : MonoBehaviour {
 	private VerletNode root; // tree for the verlet's points and lines
 	private VerletNode[] nodeList;
 
-	private float thr = 0.1f; // threshold for the distance between two points
+	private float thr = 0.01f; // threshold for the distance between two points
 	private bool isGood; // whether we can stop iterating
 	private bool canRepaint = false;
 
@@ -79,7 +79,8 @@ public class Verlet : MonoBehaviour {
 				newLine.setPosition(node.p.transform.position, c.p.transform.position); 
 			}
 			// add child
-			node.child.Add(new VerletNode.ChildNode { l = newLine, n = c, dist = p.dist*size });
+			node.child.Add(new VerletNode.ChildNode { l = newLine, n = c, 
+				dist = Vector3.Distance(node.p.transform.position, c.p.transform.position)});
 		}
 		return node;
 	}
@@ -107,13 +108,15 @@ public class Verlet : MonoBehaviour {
 	private void repositionPoints(){
 		foreach(VerletNode node in nodeList){
 			foreach(VerletNode.ChildNode n in node.child){
-				Vector3 d = node.currPos - n.n.currPos;
-				//print (Vector3.Magnitude(d).ToString() + " " + n.dist.ToString());
-				if (Vector3.Magnitude(d) - n.dist > thr){
+				float dist = Vector3.Distance(node.currPos, n.n.currPos);
+				float d = (float)Mathf.Abs(dist - n.dist);
+				print (d.ToString() + " " + dist.ToString());
+				if (d > thr){
 					isGood = false;
-					d = d/2;
-					node.currPos = (node.currPos - d);
-					n.n.currPos = (n.n.currPos + d);
+					Vector3 diff = (node.currPos - n.n.currPos)*d/2f/dist;
+					print (diff.ToString());
+					node.currPos = (node.currPos - diff);
+					n.n.currPos = (n.n.currPos + diff);
 				}
 			}
 		}
@@ -134,9 +137,11 @@ public class Verlet : MonoBehaviour {
 	private void animate(){
 		updatePosition ();
 		isGood = false;
-		while(! isGood){
+		int n = 0;
+		while(! isGood && n < 1){ 
 			isGood = true;
 			repositionPoints();
+			n ++;
 		}
 		canRepaint = true;
 	}
@@ -187,7 +192,6 @@ public class Verlet : MonoBehaviour {
 	public bool checkCollision(Vector3 pos){
 		print ("COOO");
 		foreach (VerletNode n in nodeList){
-			//print (Vector3.Magnitude(n.p.transform.position - pos).ToString()  + " " + n.p.name + " " + 1+rad);
 			if (Vector3.Magnitude(n.p.transform.position - pos) < 1.05){
 				destroy();
 				return true;
