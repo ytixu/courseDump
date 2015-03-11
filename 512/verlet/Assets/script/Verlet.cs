@@ -15,7 +15,6 @@ public class Verlet : MonoBehaviour {
 	private VerletNode[] nodeList;
 
 	private float thr = 0.01f; // threshold for the distance between two points
-	private bool isGood; // whether we can stop iterating
 	private bool canRepaint = false;
 
 	private Vector3 currPos;
@@ -44,7 +43,8 @@ public class Verlet : MonoBehaviour {
 		nodeList = new VerletNode[DogData.dogGraph.Count];
 		transform.localScale = new Vector3 (size, size);
 		transform.localPosition = new Vector3 (v.x, v.y);
-		Vector3 temp = (v - preV) / 6f;
+		transform.localEulerAngles = new Vector3 (0, 0, 180);
+		Vector3 temp = (v - preV) /8f;
 		currPos = v;
 		prePos = v-temp;
 		root = constructVerletTree (0);
@@ -92,8 +92,8 @@ public class Verlet : MonoBehaviour {
 			if (col.Length == 0) continue;
 			if (!col[0].Equals(Vector2.zero)){
 				if (Mathf.Abs(col[0][0]) > 0){ // if collide with wall
-					newPos.y = (col[0][0]-node.currPos.x)/(newPos.x-node.currPos.x)
-						*(newPos.y-node.currPos.y) + node.currPos.y;
+					//newPos.y = (col[0][0]-node.currPos.x)/(newPos.x-node.currPos.x)
+					//	*(newPos.y-node.currPos.y) + node.currPos.y;
 					newPos.x = col[0][0];
 				}
 				if (Mathf.Abs (col[0][1]) > 0){ // if landing
@@ -111,25 +111,26 @@ public class Verlet : MonoBehaviour {
 		}
 	}
 	
-	// iterate to satisfy all distance constraint of the verlet
+	// one iteration to satisfy distance constraints of the verlet
 	private void repositionPoints(){
 		foreach(VerletNode node in nodeList){
 			foreach(VerletNode.ChildNode n in node.child){
-				float dist = Vector3.Distance(node.currPos, n.n.currPos);
-				float d = (float)Mathf.Abs(dist - n.dist);
-				if (d > thr){
-					isGood = false;
-					Vector3 diff = (node.currPos - n.n.currPos)*d/2f/dist;
-					node.currPos = (node.currPos - diff);
-					n.n.currPos = (n.n.currPos + diff);
-				}
+				Vector3 delta = node.currPos - n.n.currPos;
+				float deltaLength = Mathf.Sqrt(Vector3.Dot (delta,delta));
+				float diff = (deltaLength-n.dist) / deltaLength;
+				node.currPos = node.currPos - delta * 0.5f * diff;
+				n.n.currPos = n.n.currPos + delta * 0.5f * diff;
 			}
 		}
 	}
 
 	// reposition the lines and points
 	private void repaint(){
-		foreach(VerletNode node in nodeList){
+		for(int i=0; i<nodeList.Length; i++){
+			VerletNode node = nodeList[i];
+			if (i==0){// update position of the verlet 
+				transform.position = node.currPos;
+			}
 			node.p.transform.position = node.currPos;
 			foreach (VerletNode.ChildNode n in node.child){
 				if (n.l != null){
@@ -142,10 +143,8 @@ public class Verlet : MonoBehaviour {
 	// animate the verlet
 	private void animate(){
 		updatePosition ();
-		isGood = false;
 		int n = 0;
-		while(! isGood && n < 3){ 
-			isGood = true;
+		while(n < 3){ 
 			repositionPoints();
 			n ++;
 		}
