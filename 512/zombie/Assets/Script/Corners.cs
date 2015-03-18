@@ -9,26 +9,27 @@ public class Corners : MonoBehaviour {
 
 	// data for the tracks (storing the vertices)
 	// each row represents a track
-	// direction is anticlockwise
-	// first column represent the start of the rightmost part of the tracks
+	// direction is clockwise
 	private Vector2[][] corners = {
 		new Vector2[]{
-			new Vector2 (33.5f, 1.5f), 
-			new Vector2 (33.5f, 19.5f), 
-			new Vector2 (3.5f, 19.5f), 
-			new Vector2 (3.5f, 1.5f)
+			new Vector2 (33.5f, 1.5f),
+				new Vector2 (3.5f, 1.5f),
+				new Vector2 (3.5f, 19.5f), 
+				new Vector2 (33.5f, 19.5f)
 		},new Vector2[]{
-			new Vector2 (32.5f, 2.5f), 
-			new Vector2 (32.5f, 18.5f), 
-			new Vector2 (4.5f, 18.5f),
-			new Vector2 (4.5f, 2.5f)
+			new Vector2 (32.5f, 2.5f),
+				new Vector2 (4.5f, 2.5f),
+				new Vector2 (4.5f, 18.5f),
+				new Vector2 (32.5f, 18.5f)
 		},new Vector2[]{
-			new Vector2 (31.5f, 3.5f), 
-			new Vector2 (31.5f, 17.5f), 
-			new Vector2 (5.5f, 17.5f),
-			new Vector2 (5.5f, 3.5f)
+			new Vector2 (31.5f, 3.5f),
+				new Vector2 (5.5f, 3.5f),
+				new Vector2 (5.5f, 17.5f),
+				new Vector2 (31.5f, 17.5f)
 		}
 	};
+
+	public GameObject tileParent;
 
 	// this is to store the corner index to specify which corner a zombie is walking to
 	public class CornerIndex{
@@ -50,7 +51,7 @@ public class Corners : MonoBehaviour {
 	void Start(){
 		foreach (Vector2[] vs in corners){
 			foreach (Vector2 v in vs){
-				GameObject tile = (GameObject) Instantiate(GameObject.CreatePrimitive(PrimitiveType.Quad));
+				GameObject tile = (GameObject) Instantiate(tileParent);
 				tile.transform.parent = this.transform;
 				tile.transform.localPosition = new Vector3(v.x, v.y, 0);
 				tile.transform.localScale = new Vector3(1,1,1);
@@ -83,9 +84,11 @@ public class Corners : MonoBehaviour {
 	public float distanceLeft(CornerIndex ci, Vector3 position){
 		Vector2 temp = getCorner(ci);
 		if (ci.j % 2 == 0){
-			return Mathf.Abs(temp.y-position.y);
+			//print (temp.ToString() + " " + position.ToString () + " y");
+			return (float) Mathf.Abs(temp.y - position.y);
 		}else{
-			return Mathf.Abs(temp.x - position.x);
+			//print (temp.ToString() + " " + position.ToString () + " x");
+			return (float) Mathf.Abs(temp.x - position.x);
 		}
 	}
 }

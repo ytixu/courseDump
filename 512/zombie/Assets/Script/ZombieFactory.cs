@@ -34,18 +34,17 @@ public class ZombieFactory : MonoBehaviour {
 		float sum = 0;
 		Vector2[,] diff = new Vector2[3,3];
 		for (int i = 0; i<3; i++){
-			// ignore the first entry of each track (see Coners.cs)
-			for (int j=1; j<3; j++){
-				diff[i,j-1] = cn.getCorner(i,j)-cn.getCorner(i,j+1);
+			for (int j=1; j<4; j++){
+				diff[i,j-1] = cn.getCorner(i,j-1)-cn.getCorner(i,j);
 				sum += Vector2.SqrMagnitude(diff[i,j-1]);
 			}
 		}
 		Dictionary<float, Corners.CornerIndex> cdf = new Dictionary<float, Corners.CornerIndex> ();
 		float cumu = 0;
 		for (int i=0; i<3; i++){
-			for (int j = 0; j<3; j++){
-				cumu += Vector2.SqrMagnitude(diff[i,j])/sum;
-				cdf.Add(cumu, new Corners.CornerIndex(i,j+1));
+			for (int j = 1; j<4; j++){
+				cumu += Vector2.SqrMagnitude(diff[i,j-1])/sum;
+				cdf.Add(cumu, new Corners.CornerIndex(i,j));
 			}
 		}
 		// TODO: check if the last key is 1
@@ -56,7 +55,8 @@ public class ZombieFactory : MonoBehaviour {
 					// create a zombie here
 					Zombie z = (Zombie) Instantiate (zombie);
 					Corners.CornerIndex idx = cdf[f];
-					z.initialize(randomType(), idx, diff[idx.i,idx.j]*Random.value+cn.getCorner(idx));
+					z.transform.parent = transform;
+					z.initialize(randomType(), idx, diff[idx.i,idx.j-1]*Random.value+cn.getCorner(idx));
 					break;
 				}
 			}

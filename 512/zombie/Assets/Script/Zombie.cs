@@ -12,16 +12,16 @@ public class Zombie : MonoBehaviour {
 	}
 
 	// states
-	private bool moving;
-	private Vector2 position;
-	private Vector2 unitVelocity;
-	private float speed;
+	private bool moving = false;
+	public Vector2 position;
+	public Vector2 unitVelocity;
+	public float speed;
 	//public Vector2 Velocity{
 	//	get{ return velocity; }
 	//	set{ velocity = value; }
 	//}
-	private float distanceLeft;
-	private Corners.CornerIndex nextCorner;
+	public float distanceLeft;
+	public Corners.CornerIndex nextCorner;
 	private bool attack = false;
 
 	// Use this for initialization
@@ -33,12 +33,15 @@ public class Zombie : MonoBehaviour {
 	void Update () {
 		if (moving){
 			Vector2 nextPos = unitVelocity*speed + position;
-			if (cn.distanceLeft(nextCorner, nextPos) > distanceLeft){ // then turn
-				unitVelocity = position - cn.turn (nextCorner);
+			float newDistance = cn.distanceLeft(nextCorner, nextPos);
+			if (newDistance > distanceLeft){ // then turn
+				unitVelocity = cn.turn (nextCorner) - position;
 				unitVelocity.Normalize();
 				nextPos = unitVelocity*speed + position;
+				newDistance = cn.distanceLeft(nextCorner, nextPos);
 			}
 			position = nextPos;
+			distanceLeft = newDistance;
 			transform.localPosition = new Vector3(position.x, 0, position.y);
 		}
 	}
@@ -47,10 +50,12 @@ public class Zombie : MonoBehaviour {
 		moving = true;
 		type = t;
 		speed = zb.getSpeed (t);
-		nextCorner = ci;
+		nextCorner = new Corners.CornerIndex(ci.i, ci.j);
 		position = pos;
-		unitVelocity = position - cn.getCorner (ci);
+		distanceLeft = cn.distanceLeft (nextCorner, position);
+		unitVelocity = cn.getCorner (ci)-position;
 		unitVelocity.Normalize();
 		transform.localPosition = new Vector3 (pos.x, 0, pos.y);
+		transform.Find("character").renderer.material = zb.getColor (t);
 	}
 }

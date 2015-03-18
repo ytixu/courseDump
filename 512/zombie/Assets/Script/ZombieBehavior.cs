@@ -23,7 +23,9 @@ public class ZombieBehavior : MonoBehaviour{
 	}
 
 	public Material[] ZombieColor;
-
+	public Material getColor(ZombieType t){
+		return ZombieColor[(int) t];
+	}
 
 
 	/**
