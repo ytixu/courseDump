@@ -27,8 +27,20 @@ public class ZombieBehavior : MonoBehaviour{
 		return ZombieColor[(int) t];
 	}
 
+	public float phoneAddictSwitchTrackProb;
 
 	/**
-	 * 
+	 * FSM for the zombies 
 	 */
+
+	public void behave(Zombie z){
+		switch(z.getType()){
+		case ZombieType.PHONEADDICT:
+			if (Random.value < phoneAddictSwitchTrackProb){
+
+				z.cn.changeTrack(z.nextCorner);
+				//z.position = 
+			}
+		}
+	}
 }
