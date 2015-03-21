@@ -58,7 +58,7 @@ public class ZombieBehavior : MonoBehaviour{
 			}else if (behavior < 0.75f){ // change lane
 				if (Random.value > phoneAddictProb[2]) break;
 				//print ("lane " + z.name + " " + z.nextCorner.i + " " + z.nextCorner.j + " " + z.direction);
-				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner));
+				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner, z));
 				//print (z.nextCorner.i + " " + z.nextCorner.j);
 				return true;
 			}else{ // change direction
@@ -70,13 +70,13 @@ public class ZombieBehavior : MonoBehaviour{
 			break;
 		case ZombieType.MODERN:
 			if (z.zombieAhead(1)){ // change lane
-				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner));
+				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner, z));
 				return true;
 			}
 			break;
 		case ZombieType.SHAMBLER:
 			if (Random.value < shamblerChangeLaneProb){ // change lane
-				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner));
+				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner, z));
 				return true;
 			}
 			break;

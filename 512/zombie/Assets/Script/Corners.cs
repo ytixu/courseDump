@@ -75,23 +75,21 @@ public class Corners : MonoBehaviour {
 		ci.j = (4 + ci.j - 1) % 4;
 		return getCorner(ci);
 	}
-
-	// this is called by a zombie when it wantes to change track
+	
 	// switch to a random track adjacent to the current one
-	public Vector2 changeTrack(CornerIndex ci){
+	public Vector2 changeTrack(CornerIndex ci, Zombie z){
 		if (ci.i == 2 || (Random.value > 0.5 && ci.i > 0)){
-			ci.i --;
-			return trackDelta[ci.j];
-		}else{
+			if (!z.zombieNearBy(trackDelta[ci.j])){	
+				ci.i --;
+				return trackDelta[ci.j];
+			}
+		}else if (!z.zombieNearBy(trackDelta[(ci.j+2)%4])){
 			ci.i ++;
 			return trackDelta[(ci.j+2)%4];
 		}
+		return Vector2.zero;
 	}
-
-	//public Vector2 changeTrack(Vector2 v, CornerIndex ci){
-		//if (ci.
-	//}
-
+	
 	// this is called by a zombie to compute the (heuristic) distance between current position
 	// and the position of the next corner
 	// This distance ignore the x-component if zombie is moving in the y direction

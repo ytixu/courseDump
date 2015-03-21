@@ -26,7 +26,7 @@ public class Zombie : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	void Update () {
@@ -71,18 +71,21 @@ public class Zombie : MonoBehaviour {
 	}
 
 	public bool zombieAhead(float d){
-		return zombieAhead (transform.position, d);
+		return collisionCheck (transform.position, d, transform.forward);
 	}
-
-
+	
 	public bool zombieAhead(Vector2 pos, float d){
-		return zombieAhead (zf.transform.TransformPoint(new Vector3(pos.x, 0, pos.y)), d);
+		return collisionCheck (zf.transform.TransformPoint(new Vector3(pos.x, 0, pos.y)), d, transform.forward);
 	}
 
-	public bool zombieAhead(Vector3 pos, float d){
+	public bool zombieNearBy(Vector2 direction){
+		return collisionCheck (transform.position, 1, new Vector3(direction.x, 0, direction.y));
+	}
+
+	public bool collisionCheck(Vector3 pos, float d, Vector3 direction){
 		//Vector3 fwd = transform.TransformDirection(Vector3.forward);
 		RaycastHit hit;
-		if (Physics.Raycast (pos, transform.forward, out hit, d)){
+		if (Physics.Raycast (pos, direction, out hit, d)){
 			//print (name + " " + hit.collider.name);
 			if (hit.collider.tag == "Zombie") return true;
 		}
@@ -104,5 +107,12 @@ public class Zombie : MonoBehaviour {
 		unitVelocity = cn.getCorner (ci)-position;
 		unitVelocity.Normalize();
 		transform.localPosition = new Vector3 (pos.x, 0, pos.y);
+	}
+
+	/**
+	 * called by survivor
+	 */
+	public Vector3 distanceFromFOV(Vector3 pos){
+
 	}
 }

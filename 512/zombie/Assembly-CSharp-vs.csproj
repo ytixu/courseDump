@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\Corners.cs" />
+     <Compile Include="Assets\Script\Survivor.cs" />
      <Compile Include="Assets\Script\Zombie.cs" />
      <Compile Include="Assets\Script\ZombieBehavior.cs" />
      <Compile Include="Assets\Script\ZombieCollider.cs" />
