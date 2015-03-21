@@ -31,6 +31,10 @@ public class Corners : MonoBehaviour {
 
 	public GameObject tileParent;
 
+	private Vector2[] trackDelta = new Vector2[]{
+		new Vector2(1,0), new Vector2(0,-1), new Vector2(-1,0), new Vector2(0,1)
+	};
+
 	// this is to store the corner index to specify which corner a zombie is walking to
 	public class CornerIndex{
 		public int i;
@@ -66,30 +70,45 @@ public class Corners : MonoBehaviour {
 		ci.j = (ci.j + 1) % 4;
 		return getCorner(ci);
 	}
+	public Vector2 turnReverse(CornerIndex ci){
+		//print (ci.j + " " + (4 + ci.j - 1) % 4);
+		ci.j = (4 + ci.j - 1) % 4;
+		return getCorner(ci);
+	}
 
 	// this is called by a zombie when it wantes to change track
 	// switch to a random track adjacent to the current one
-	public void changeTrack(CornerIndex ci){
-		if (Random.value > 0.5 && ci.i > 0){
-			ci.i = ci.i - 1;
+	public Vector2 changeTrack(CornerIndex ci){
+		if (ci.i == 2 || (Random.value > 0.5 && ci.i > 0)){
+			ci.i --;
+			return trackDelta[ci.j];
 		}else{
-			ci.i = ci.i + 1;
+			ci.i ++;
+			return trackDelta[(ci.j+2)%4];
 		}
 	}
+
+	//public Vector2 changeTrack(Vector2 v, CornerIndex ci){
+		//if (ci.
+	//}
 
 	// this is called by a zombie to compute the (heuristic) distance between current position
 	// and the position of the next corner
 	// This distance ignore the x-component if zombie is moving in the y direction
 	// or the y-component if zombie is moving in the x direction
-	public float distanceLeft(CornerIndex ci, Vector3 position){
+	public float distanceLeft(CornerIndex ci, Vector3 position, bool direction){
 		Vector2 temp = getCorner(ci);
-		if (ci.j % 2 == 0){
+		if ((ci.j % 2 == 0 && direction) || (ci.j % 2 == 1 && !direction)){
 			//print (temp.ToString() + " " + position.ToString () + " y");
 			return (float) Mathf.Abs(temp.y - position.y);
 		}else{
 			//print (temp.ToString() + " " + position.ToString () + " x");
 			return (float) Mathf.Abs(temp.x - position.x);
 		}
+	}
+
+	public CornerIndex randomCorner(){
+		return new CornerIndex(Random.Range(0,3), Random.Range(0,4));
 	}
 }
 

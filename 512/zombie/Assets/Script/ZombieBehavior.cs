@@ -8,6 +8,7 @@ using System.Collections;
 public class ZombieBehavior : MonoBehaviour{
 
 	public float speed;
+	private float incSpeed;
 	public enum ZombieType{
 		CLASSIC, SHAMBLER, MODERN, PHONEADDICT
 	}
@@ -27,20 +28,61 @@ public class ZombieBehavior : MonoBehaviour{
 		return ZombieColor[(int) t];
 	}
 
-	public float phoneAddictSwitchTrackProb;
+	public float[] phoneAddictProb;
+	public float shamblerChangeLaneProb;
+
+	void Start(){
+		incSpeed = speed/10;
+	}
 
 	/**
 	 * FSM for the zombies 
 	 */
-
-	public void behave(Zombie z){
+	public bool behave(Zombie z){
 		switch(z.getType()){
 		case ZombieType.PHONEADDICT:
-			if (Random.value < phoneAddictSwitchTrackProb){
-
-				z.cn.changeTrack(z.nextCorner);
-				//z.position = 
+			float behavior = Random.value;
+			if (behavior < 0.25f || !z.moving){ // stop or resume
+				if (Random.value < phoneAddictProb[0]){
+					z.moving = !z.moving;
+				}
+				break;
+			}else if (behavior < 0.5f){ // change speed
+				if (Random.value > phoneAddictProb[1]) break;
+				if (z.speed + incSpeed > speed*2 || (Random.value < 0.5 && z.speed-incSpeed > speed/2)){
+					z.speed -= incSpeed;
+				}else{
+					z.speed += incSpeed;
+				}
+				break;
+			}else if (behavior < 0.75f){ // change lane
+				if (Random.value > phoneAddictProb[2]) break;
+				//print ("lane " + z.name + " " + z.nextCorner.i + " " + z.nextCorner.j + " " + z.direction);
+				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner));
+				//print (z.nextCorner.i + " " + z.nextCorner.j);
+				return true;
+			}else{ // change direction
+				if (Random.value > phoneAddictProb[3]) break;
+				//print ("cange " + z.name + " " + z.nextCorner.i + " " + z.nextCorner.j + " " + z.direction);
+				z.changeDirection();
+				//print (z.nextCorner.i + " " + z.nextCorner.j + " " + z.direction);
 			}
+			break;
+		case ZombieType.MODERN:
+			if (z.zombieAhead(1)){ // change lane
+				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner));
+				return true;
+			}
+			break;
+		case ZombieType.SHAMBLER:
+			if (Random.value < shamblerChangeLaneProb){ // change lane
+				z.changeNextPos(z.position + z.cn.changeTrack(z.nextCorner));
+				return true;
+			}
+			break;
+		default:
+			break;
 		}
+		return false;
 	}
 }

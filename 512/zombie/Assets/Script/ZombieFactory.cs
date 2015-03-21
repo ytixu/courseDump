@@ -6,6 +6,7 @@ public class ZombieFactory : MonoBehaviour {
 	public Corners cn;
 	public int n; // number of zombies
 	public Zombie zombie;
+	private Zombie[] zombies;
 	
 	public float p; // probability of respawing
 	public float[] r; // ratios of the types 
@@ -25,12 +26,14 @@ public class ZombieFactory : MonoBehaviour {
 				return ZombieBehavior.ZombieType.PHONEADDICT;
 			}
 		}
+		//return ZombieBehavior.ZombieType.PHONEADDICT;
 	}
 
 	// Use this for initialization
 	void Start () {
 		// compute the probability density for a uniform initialization of the zombie position 
 		// at the start of the game
+		zombies = new Zombie[n];
 		float sum = 0;
 		Vector2[,] diff = new Vector2[3,3];
 		for (int i = 0; i<3; i++){
@@ -53,18 +56,32 @@ public class ZombieFactory : MonoBehaviour {
 			foreach (float f in cdf.Keys){
 				if (rnd < f){
 					// create a zombie here
-					Zombie z = (Zombie) Instantiate (zombie);
+					zombies[i] = (Zombie) Instantiate (zombie);
+					zombies[i].name = i.ToString();
 					Corners.CornerIndex idx = cdf[f];
-					z.transform.parent = transform;
-					z.initialize(randomType(), idx, diff[idx.i,idx.j-1]*Random.value+cn.getCorner(idx));
+					zombies[i].transform.parent = transform;
+					zombies[i].transform.localEulerAngles = new Vector3(0,90*((idx.j-2)%4),0);
+					zombies[i].initialize(randomType(), idx, diff[idx.i,idx.j-1]*Random.value+cn.getCorner(idx));
 					break;
 				}
 			}
 		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+		respawn ();
+	}
+
+	private void respawn(){
+		if (Random.value < p){
+			int index = Random.Range (0,n-1);
+			zombies[index].active = false;
+			Corners.CornerIndex ci = cn.randomCorner();
+			zombies[index].transform.localEulerAngles = new Vector3(0,90*((ci.j-2)%4),0);
+			//print (ci.i +" " + ci.j + " " + (4+ci.j-1)%4);
+			zombies[index].initialize(randomType(), ci, cn.getCorner(ci.i, (4+ci.j-1)%4));
+
+		}
 	}
 }
