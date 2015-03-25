@@ -112,7 +112,7 @@ public class Zombie : MonoBehaviour {
 	/**
 	 * called by survivor
 	 */
-	public Vector3 distanceFromFOV(Vector3 pos){
+	//public Vector3 distanceFromFOV(Vector3 pos){
 
-	}
+	//}
 }
