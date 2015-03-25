@@ -1,15 +1,16 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 public class Survivor : MonoBehaviour {
 
-	private Dictionary<Vector3, bool> collectibles;
+	private Dictionary<GameObject, bool> collectibles;
 	// a position is false if survivor has already passed there
 
 	// states 
 	private Vector3 target;
+	private GameObject targetObj;
 	private int picked; // this is to keep track of the number of places the survivor needs to go
 						// =0 if it has successfully arrive to the goal with all the collectible object picked
 	private float speed;
@@ -23,22 +24,21 @@ public class Survivor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (active)
+			behave ();
 	}
 
 	public void initialize(GameObject collects, float s){
 		picked = 1;
-		collectibles = new Dictionary<Vector3, bool> ();
+		collectibles = new Dictionary<GameObject, bool> ();
 		foreach (Transform c in collects.transform)
 		{
-			collectibles.Add(c.transform.position, false);
-			picked += 1;
+			collectibles.Add(c.gameObject, false);
+			picked += 2;
 		}
-		target = closestCollectible ();
+		getClosestCollectible ();
 		speed = s;
 		active = true;
-		/////
-		behave ();
 	}
 
 	/**
@@ -62,36 +62,46 @@ public class Survivor : MonoBehaviour {
 
 	// check if hitting wall
 	private bool hitWall(Vector3 newPos){
-		Vector3 direction = newPos - transform.position;
-		if (Mathf.Abs(direction.x) > 0){
-			if (collisionCheck(newPos, 0.4f, WallDimention.X_DIR*Mathf.Sign(direction.x),"Wall"))
-				return true;
-		}else if (Mathf.Abs(direction.z) > 0){
-			if (collisionCheck(newPos,0.4f, WallDimention.Z_DIR*Mathf.Sign(direction.z), "Wall"))
-				return true;
+		foreach (Vector3 v in WallDimention.dimensions){
+			foreach (int i in WallDimention.directions){
+				if (collisionCheck(newPos, 0.4f, v*i,"Wall"))
+					return true;
+			}
+		}
+		foreach (int i in WallDimention.directions){
+			foreach (int j in WallDimention.directions){
+				if (collisionCheck(newPos, 0.5f, WallDimention.X_DIR*i+WallDimention.Z_DIR*j,"Wall"))
+					return true;
+			}
 		}
 		return false;
 	}
 
-	private Vector3 closestCollectible(){
+	private void getClosestCollectible(){
 		float minDist = 1000;
-		Vector3 optTarget = WallDimention.GOAL; // if all collectibles are picked, 
+		target = WallDimention.GOAL; // if all collectibles are picked, 
 												// then just return the goal state
-		foreach (Vector3 v in collectibles.Keys){
-			if (collectibles[v]) continue;
+		foreach (GameObject go in collectibles.Keys){
+			if (collectibles[go]) continue;
+			Vector3 v = go.transform.GetChild(0).transform.position;
 			float dist = Vector3.Distance(v, transform.position);
-			if (dist < 2) return v;
+			if (dist < 2){
+				target = v;
+				targetObj = go;
+				return;
+			}
 			if (dist < minDist){
 				minDist = dist;
-				optTarget = v;
+				target = v;
+				targetObj = go;
 			}
 		}
-		return optTarget;
+		print ("next target " + target.ToString ());
 	}
 
 	// check if we have arrive to the target position
 	private bool arriveToTarget(){
-		if (Vector3.Distance(target, transform.position) < 0.2f){
+		if (Vector3.Distance(target, transform.position) < 1){
 			picked -= 1;
 			return true;
 		}
@@ -99,40 +109,47 @@ public class Survivor : MonoBehaviour {
 	}
 
 	// get the next 4 positions (up, down, left, right) and order them by the value of their potential
-	private void nextPositions(){
+	private KeyValuePair<Vector3, float>[] nextPositions(){
 		Dictionary<Vector3, float> newPoss = new Dictionary<Vector3, float> ();
 		Vector3 temp = transform.position;
 		foreach (Vector3 v in WallDimention.dimensions){
 			foreach (int i in WallDimention.directions){
 				Vector3 newPos = temp + v*i*speed; 
-				print(speed );
 				newPoss[newPos] = WallDimention.away(newPos,target);
 			}
 		}
 		// sorting
 		var sortedPos = from entry in newPoss orderby entry.Value ascending select entry;
-		KeyValuePair<Vector3, float>[] newP = sortedPos.ToArray();
-		foreach (Vector3 v in newPoss.Keys){
-			print (v.ToString()+ " " + v.ToString());
-		}
-		foreach (KeyValuePair<Vector3, float> v in newP){
-			print (v.Key.ToString()+ " " + v.Value.ToString());
-		}
+		return sortedPos.ToArray();
 	}
 
 	public void behave(){
 		// check if we have arrived to the target position
+		print ("target " + target.ToString () + " " + picked);
 		if (arriveToTarget()){
-			if (picked != 0) 
-				collectibles[target] = true;
-			else{
+			if (targetObj != null) collectibles[targetObj] = true;
+			if (picked == 0){
 				destroy();
 				return;
 			}
-			target = closestCollectible();
+			print ("arrived target "+target.ToString());
+			if (targetObj != null){
+				target = targetObj.transform.position;
+				targetObj = null;
+				return;
+			}
+			getClosestCollectible();
 		}
 		// move
-		nextPositions ();
+		foreach (KeyValuePair<Vector3, float> pair in nextPositions ()){
+			if (hitWall(pair.Key)){
+				print ("collision");
+				continue;
+			}else{
+				transform.position = pair.Key;
+				break;
+			}
+		}
 	}
 
 	private void destroy(){

@@ -7,10 +7,10 @@ using System.Collections;
 
 public class WallDimention {
 
-	public static int MAX_X = 30;
-	public static int MAX_Z = 16;
-	public static int MIN_X = 7;
-	public static int MIN_Z = 5;
+	public static float MAX_X = 30.5f;
+	public static float MAX_Z = 16.5f;
+	public static float MIN_X = 6.5f;
+	public static float MIN_Z = 4.5f;
 
 	public static int SIZE_X = 21;
 	public static int SIZE_Z = 9;
@@ -42,15 +42,15 @@ public class WallDimention {
 	public static float away(Vector3 pos, Vector3 target){
 		float dist = Vector3.Distance (pos, target);
 		// if the distance is less that 2, then just return that distance
-		if (dist < 2) return dist;
+		if (dist < 2.5) return dist;
 		// check if pos is "inWall"
 		float in_wall = inWall (pos);
 		if (in_wall > 0) return (in_wall+dist)*1000;
 		// check if pos and target are at opposite sides
-		if (Mathf.Abs(pos.x - target.x) > MAX_X){
-			return (float) (Mathf.Abs(pos.x - CENTER_X)+dist)*10;
-		}else if (Mathf.Abs(pos.z -target.z) > MAX_Z){
-			return (float) (Mathf.Abs(pos.z - CENTER_Z)+dist)*10;
+		if (Mathf.Abs(pos.x - target.x) > SIZE_X){
+			return (float) Mathf.Abs(pos.x - CENTER_X)*10;
+		}else if (Mathf.Abs(pos.z -target.z) > SIZE_Z){
+			return (float) Mathf.Abs(pos.z - CENTER_Z)*10;
 		}
 		// otherwise just return that distance
 		return dist;

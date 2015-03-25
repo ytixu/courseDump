@@ -19,8 +19,8 @@ public class SurvivorFactory : MonoBehaviour {
 
 	public void respawn(){
 		Survivor s = (Survivor)Instantiate (survivor);
+		s.transform.position = transform.position;
 		print (zb.speed);
 		s.initialize (collects, zb.speed*1.5f);
-		s.transform.position = transform.position;
 	}
 }
