@@ -24,6 +24,8 @@ public class Zombie : MonoBehaviour {
 	public Vector2 nextPos;
 	public bool active = false;
 
+	public GameObject seen;
+
 	// Use this for initialization
 	void Start () {
 
@@ -111,8 +113,24 @@ public class Zombie : MonoBehaviour {
 
 	/**
 	 * called by survivor
+	 * estimate whether the survivor will be in zombie's FOV on the next step
 	 */
-	//public Vector3 distanceFromFOV(Vector3 pos){
-
-	//}
+	public bool inFOV(Vector3 pos){
+		int shortDist = 2;
+		if (distanceLeft < 1){
+			shortDist = 5;
+		}
+		Vector3 center = transform.position + (3 + speed) * transform.forward;
+		Vector3 FOV_long = 5 * transform.forward;
+		Vector3 FOV_short = shortDist*Vector3.Cross (Vector3.up, transform.forward);
+		Vector3 a = center + FOV_long - FOV_short;
+		Vector3 b = center - FOV_long - FOV_short;
+		Vector3 c = center + FOV_long + FOV_short;
+		Vector3 d = center - FOV_long + FOV_short;
+		if (pos.x < Mathf.Max(a.x, b.x, c.x, d.x) && pos.x > Mathf.Min(a.x,b.x,c.x,d.x) &&
+		    pos.z < Mathf.Max(a.z, b.z,c.z,d.z) && pos.z > Mathf.Min (a.z,b.z,c.z,d.z)){
+			return true;
+		}
+		return false;
+	}
 }

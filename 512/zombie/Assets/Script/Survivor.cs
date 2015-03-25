@@ -8,6 +8,8 @@ public class Survivor : MonoBehaviour {
 	private Dictionary<GameObject, bool> collectibles;
 	// a position is false if survivor has already passed there
 
+	public ZombieFactory zf;
+
 	// states 
 	private Vector3 target;
 	private GameObject targetObj;
@@ -72,6 +74,15 @@ public class Survivor : MonoBehaviour {
 			foreach (int j in WallDimention.directions){
 				if (collisionCheck(newPos, 0.5f, WallDimention.X_DIR*i+WallDimention.Z_DIR*j,"Wall"))
 					return true;
+			}
+		}
+		return false;
+	}
+
+	private bool inZombieFOV(Vector3 newPos){
+		foreach (Zombie z in zf.getVisibleZombies(newPos)) {
+			if (z.inFOV(newPos)){
+				return true;
 			}
 		}
 		return false;
@@ -142,8 +153,8 @@ public class Survivor : MonoBehaviour {
 		}
 		// move
 		foreach (KeyValuePair<Vector3, float> pair in nextPositions ()){
-			if (hitWall(pair.Key)){
-				print ("collision");
+			if (hitWall(pair.Key) || inZombieFOV(pair.Key)){
+				//print ("collision");
 				continue;
 			}else{
 				transform.position = pair.Key;

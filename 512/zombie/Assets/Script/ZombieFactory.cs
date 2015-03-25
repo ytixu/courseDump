@@ -84,4 +84,26 @@ public class ZombieFactory : MonoBehaviour {
 
 		}
 	}
+
+	/**
+	 * Called by survivor to check which zombies are visible
+	 * Cast a ray to check zombie and see who are visible
+	 */
+	public List<Zombie> getVisibleZombies(Vector3 pos){
+		List<Zombie> lst = new List<Zombie>();
+		foreach (Zombie z in zombies){
+			float d = Vector3.Distance(pos, z.transform.position);
+			RaycastHit hit;
+			if (Physics.Raycast (pos, z.transform.position - pos, out hit, d)){
+				if (hit.collider.tag == "Zombie"){
+					if (d < 10) lst.Add(z); // assume that zombies at distance greater 
+											// than 10 will not see survivor
+					z.seen.transform.localScale = new Vector3(1.3f, 0.01f, 1.3f);
+				}else{
+					z.seen.transform.localScale = Vector3.zero;
+				}
+			}
+		}
+		return lst;
+	}
 }
