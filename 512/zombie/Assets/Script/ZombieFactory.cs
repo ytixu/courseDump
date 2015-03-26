@@ -79,10 +79,21 @@ public class ZombieFactory : MonoBehaviour {
 			zombies[index].active = false;
 			Corners.CornerIndex ci = cn.randomCorner();
 			zombies[index].transform.localEulerAngles = new Vector3(0,90*((ci.j-2)%4),0);
-			//print (ci.i +" " + ci.j + " " + (4+ci.j-1)%4);
 			zombies[index].initialize(randomType(), ci, cn.getCorner(ci.i, (4+ci.j-1)%4));
 
 		}
+	}
+
+	// called by the survivor to check how far away from the zombies a position is
+	public float away(Vector3 pos){
+		float minDist = 1000;
+		foreach (Zombie z in zombies){
+			float dist = Vector3.Distance(z.transform.position + 3*z.transform.forward, pos);
+			if (dist < minDist){
+				minDist = dist;
+			}
+		}
+		return -minDist;
 	}
 
 	/**
@@ -98,12 +109,20 @@ public class ZombieFactory : MonoBehaviour {
 				if (hit.collider.tag == "Zombie"){
 					if (d < 10) lst.Add(z); // assume that zombies at distance greater 
 											// than 10 will not see survivor
-					z.seen.transform.localScale = new Vector3(1.3f, 0.01f, 1.3f);
-				}else{
-					z.seen.transform.localScale = Vector3.zero;
 				}
 			}
 		}
 		return lst;
+	}
+
+	public void highlightVisibleZombies(Vector3 pos){
+		List<Zombie> visibleZombies = getVisibleZombies (pos);
+		foreach (Zombie z in zombies){
+			if (visibleZombies.Contains (z)){
+				z.seen.transform.localScale = new Vector3(1.3f, 0.01f, 1.3f);
+			}else{
+				z.seen.transform.localScale = Vector3.zero; 
+			}
+		}
 	}
 }

@@ -71,7 +71,6 @@ public class Corners : MonoBehaviour {
 		return getCorner(ci);
 	}
 	public Vector2 turnReverse(CornerIndex ci){
-		//print (ci.j + " " + (4 + ci.j - 1) % 4);
 		ci.j = (4 + ci.j - 1) % 4;
 		return getCorner(ci);
 	}
@@ -97,10 +96,8 @@ public class Corners : MonoBehaviour {
 	public float distanceLeft(CornerIndex ci, Vector3 position, bool direction){
 		Vector2 temp = getCorner(ci);
 		if ((ci.j % 2 == 0 && direction) || (ci.j % 2 == 1 && !direction)){
-			//print (temp.ToString() + " " + position.ToString () + " y");
 			return (float) Mathf.Abs(temp.y - position.y);
 		}else{
-			//print (temp.ToString() + " " + position.ToString () + " x");
 			return (float) Mathf.Abs(temp.x - position.x);
 		}
 	}

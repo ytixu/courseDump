@@ -6,6 +6,7 @@ public class Zombie : MonoBehaviour {
 	public ZombieBehavior zb;
 	public Corners cn;
 	public ZombieFactory zf;
+	public SurvivorFactory sf;
 
 	private ZombieBehavior.ZombieType type;
 	public ZombieBehavior.ZombieType getType(){
@@ -22,9 +23,8 @@ public class Zombie : MonoBehaviour {
 	public bool attack = false;
 	public int direction = 1;
 	public Vector2 nextPos;
-	public bool active = false;
-
 	public GameObject seen;
+	public bool active = false;
 
 	// Use this for initialization
 	void Start () {
@@ -33,18 +33,17 @@ public class Zombie : MonoBehaviour {
 	
 	void Update () {
 		if (!active) return;
+		if (sf.currentSurvivor && inCurrentFOV(sf.currentSurvivor.transform.position)){
+			sf.destroySurvivor();
+		}
 		if (!zb.behave(this)){
 			if (moving) nextPos = unitVelocity*speed + position;
 		}
 		if (moving){
 			float newDistance = cn.distanceLeft(nextCorner, nextPos, direction==1);
-			//print (newDistance.ToString() + " " + distanceLeft.ToString() + " " 
-			//      + nextCorner.j + " " + nextPos.ToString() + " " + this.name);
 			if (newDistance > distanceLeft && distanceLeft < 1){ // then turn
-				//print ("--- " + name + " " + nextCorner.j + " " + direction);
 				if (direction < 1) unitVelocity = cn.turnReverse (nextCorner) - position;
 				else unitVelocity = cn.turn (nextCorner) - position;
-				//print ( nextCorner.j + " " + direction);
 				unitVelocity.Normalize();
 				nextPos = unitVelocity*speed + position;
 				newDistance = cn.distanceLeft(nextCorner, nextPos, direction==1);
@@ -85,10 +84,8 @@ public class Zombie : MonoBehaviour {
 	}
 
 	public bool collisionCheck(Vector3 pos, float d, Vector3 direction){
-		//Vector3 fwd = transform.TransformDirection(Vector3.forward);
 		RaycastHit hit;
 		if (Physics.Raycast (pos, direction, out hit, d)){
-			//print (name + " " + hit.collider.name);
 			if (hit.collider.tag == "Zombie") return true;
 		}
 		return false;
@@ -111,17 +108,8 @@ public class Zombie : MonoBehaviour {
 		transform.localPosition = new Vector3 (pos.x, 0, pos.y);
 	}
 
-	/**
-	 * called by survivor
-	 * estimate whether the survivor will be in zombie's FOV on the next step
-	 */
-	public bool inFOV(Vector3 pos){
-		int shortDist = 2;
-		if (distanceLeft < 1){
-			shortDist = 5;
-		}
-		Vector3 center = transform.position + (3 + speed) * transform.forward;
-		Vector3 FOV_long = 5 * transform.forward;
+	private bool evalFOV(Vector3 pos, Vector3 center, float shortDist, float longDist){
+		Vector3 FOV_long = longDist * transform.forward;
 		Vector3 FOV_short = shortDist*Vector3.Cross (Vector3.up, transform.forward);
 		Vector3 a = center + FOV_long - FOV_short;
 		Vector3 b = center - FOV_long - FOV_short;
@@ -132,5 +120,28 @@ public class Zombie : MonoBehaviour {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * To check if a survivor is in its field of view.
+	 */
+	public bool inCurrentFOV(Vector3 pos){
+		Vector3 center = transform.position + 3 * transform.forward;
+		return evalFOV (pos, center, 1.5f, 4.5f);
+	}
+
+	/**
+	 * called by survivor
+	 * estimate whether the survivor will be in zombie's FOV on the next step
+	 */
+	public bool inFOV(Vector3 pos, float s, float l, float c){
+		float shortDist = s;
+		float longDist = l;
+		if (distanceLeft < 3){
+			shortDist = c;
+			longDist = c;
+		}
+		Vector3 center = transform.position + (3 + speed) * transform.forward;
+		return evalFOV (pos, center, shortDist, longDist);
 	}
 }

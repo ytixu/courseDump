@@ -9,15 +9,18 @@ public class Survivor : MonoBehaviour {
 	// a position is false if survivor has already passed there
 
 	public ZombieFactory zf;
+	public SurvivorFactory sf;
 
 	// states 
 	private Vector3 target;
 	private GameObject targetObj;
+	private bool reachedTarget = false;
 	private int picked; // this is to keep track of the number of places the survivor needs to go
 						// =0 if it has successfully arrive to the goal with all the collectible object picked
 	private float speed;
 	private bool active = false;
-	
+	private float resetTime = 0;
+	private bool isSeen = false;
 
 	// Use this for initialization
 	void Start () {
@@ -26,8 +29,15 @@ public class Survivor : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (active)
+		if (resetTime < Time.time && isSeen){
+			isSeen = false;
+			getClosestCollectible();
+			reachedTarget = false;
+		}
+		if (active){
 			behave ();
+			zf.highlightVisibleZombies(transform.position);
+		}
 	}
 
 	public void initialize(GameObject collects, float s){
@@ -56,7 +66,6 @@ public class Survivor : MonoBehaviour {
 	private bool collisionCheck(Vector3 pos, float d, Vector3 direction, string obj){
 		RaycastHit hit;
 		if (Physics.Raycast (pos, direction, out hit, d)){
-			//print (name + " " + hit.collider.name);
 			if (hit.collider.tag == obj) return true;
 		}
 		return false;
@@ -66,14 +75,23 @@ public class Survivor : MonoBehaviour {
 	private bool hitWall(Vector3 newPos){
 		foreach (Vector3 v in WallDimention.dimensions){
 			foreach (int i in WallDimention.directions){
-				if (collisionCheck(newPos, 0.4f, v*i,"Wall"))
+				if (collisionCheck(newPos, 0.35f, v*i,"Wall"))
 					return true;
 			}
 		}
 		foreach (int i in WallDimention.directions){
 			foreach (int j in WallDimention.directions){
-				if (collisionCheck(newPos, 0.5f, WallDimention.X_DIR*i+WallDimention.Z_DIR*j,"Wall"))
+				if (collisionCheck(newPos, 0.4f, WallDimention.X_DIR*i+WallDimention.Z_DIR*j,"Wall"))
 					return true;
+			}
+		}
+		return false;
+	}
+
+	private bool closeZombieFOV(Vector3 newPos){
+		foreach (Zombie z in zf.getVisibleZombies(newPos)) {
+			if (z.inFOV(newPos, 2, 8, 10)){
+				return true;
 			}
 		}
 		return false;
@@ -81,7 +99,7 @@ public class Survivor : MonoBehaviour {
 
 	private bool inZombieFOV(Vector3 newPos){
 		foreach (Zombie z in zf.getVisibleZombies(newPos)) {
-			if (z.inFOV(newPos)){
+			if (z.inFOV(newPos, 1.8f, 5, 8)){
 				return true;
 			}
 		}
@@ -107,12 +125,11 @@ public class Survivor : MonoBehaviour {
 				targetObj = go;
 			}
 		}
-		print ("next target " + target.ToString ());
 	}
 
 	// check if we have arrive to the target position
 	private bool arriveToTarget(){
-		if (Vector3.Distance(target, transform.position) < 1){
+		if (Vector3.Distance(target, transform.position) < 0.8){
 			picked -= 1;
 			return true;
 		}
@@ -121,13 +138,26 @@ public class Survivor : MonoBehaviour {
 
 	// get the next 4 positions (up, down, left, right) and order them by the value of their potential
 	private KeyValuePair<Vector3, float>[] nextPositions(){
+		bool isSeenCurrent = closeZombieFOV (transform.position) || isSeen;
 		Dictionary<Vector3, float> newPoss = new Dictionary<Vector3, float> ();
 		Vector3 temp = transform.position;
 		foreach (Vector3 v in WallDimention.dimensions){
 			foreach (int i in WallDimention.directions){
 				Vector3 newPos = temp + v*i*speed; 
-				newPoss[newPos] = WallDimention.away(newPos,target);
+				if (!isSeenCurrent) newPoss[newPos] = WallDimention.away(newPos,target);
+				else newPoss[newPos] = zf.away(newPos);
 			}
+		}
+		foreach (int i in WallDimention.directions){
+			foreach (int j in WallDimention.directions){
+				Vector3 newPos = temp + (WallDimention.X_DIR*i+WallDimention.Z_DIR*j).normalized*speed;
+				if (!isSeenCurrent) newPoss[newPos] = WallDimention.away (newPos, target);
+				else newPoss[newPos] = zf.away(newPos);
+			}
+		}
+		if (isSeenCurrent && !isSeen){
+			isSeen = true;
+			resetTime = Time.time + 0.5f;
 		}
 		// sorting
 		var sortedPos = from entry in newPoss orderby entry.Value ascending select entry;
@@ -136,17 +166,19 @@ public class Survivor : MonoBehaviour {
 
 	public void behave(){
 		// check if we have arrived to the target position
-		print ("target " + target.ToString () + " " + picked);
 		if (arriveToTarget()){
-			if (targetObj != null) collectibles[targetObj] = true;
+			print (picked);
 			if (picked == 0){
-				destroy();
+				print ("WIN");
+				sf.destroySurvivor();
 				return;
 			}
-			print ("arrived target "+target.ToString());
-			if (targetObj != null){
+			if (reachedTarget){
+				collectibles[targetObj] = true;
+				reachedTarget = false;
+			} else if (!reachedTarget){
 				target = targetObj.transform.position;
-				targetObj = null;
+				reachedTarget = true;
 				return;
 			}
 			getClosestCollectible();
@@ -154,16 +186,11 @@ public class Survivor : MonoBehaviour {
 		// move
 		foreach (KeyValuePair<Vector3, float> pair in nextPositions ()){
 			if (hitWall(pair.Key) || inZombieFOV(pair.Key)){
-				//print ("collision");
 				continue;
 			}else{
 				transform.position = pair.Key;
 				break;
 			}
 		}
-	}
-
-	private void destroy(){
-		GameObject.Destroy (gameObject);
 	}
 }
