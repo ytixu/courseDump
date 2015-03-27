@@ -1,0 +1,11 @@
+The parameters are 
+
+p = 0.005
+N = 2
+r = 0.999
+
+Note that despawn/respawn of a zombie is possible at each frame. 
+
+
+Justification:
+It seems that with only zombies that have phone, the survivor can get enough time to hide (compared to modern zombies) and the occational stops makes it easier for the survivor to pass around. 

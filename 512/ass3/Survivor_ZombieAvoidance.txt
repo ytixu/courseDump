@@ -1,0 +1,16 @@
+To avoid being seen by zombies, I implemented three ideas
+
+1) Zombie detection 
+To detect zombies, we preform ray casting to each zombie in the game. If for a particular zombie in the game, a ray casted from the position of the survivor hits another game object before reaching the zombie, then the survivor does not see that zombie and so the latter does not get detected. 
+
+2) Zombie's FOV and zombie's surrounding
+We distinguish two different type of "closeness" to a zombie. The first type is when the survivor is inside the zombie's field of view (the 9x3 rectangle as defined in the assignment instructions). The second type is when the survivor is near the zombie's field of view (a 16x4 rectangle centered at the center of the zombie's FOV). 
+
+The first type is used when the survivor decides where it moves to; i.e.: if a position is inside a zombie's FOV, then the survivor must not move to there. For the purpose of guaranteeing that the survivor is not detected by the zombie, we inflate the 9x3 rectangle by 0.5 and 0.3.
+
+The second type is used to evaluate is a position is near a zombie. This allows the survivor to "sense danger" and to switch to another behavior - to run away from the zombie. We maintain this "running-away" behavior for 0.5 seconds. If after 0.5 second, the zombie is no longer close, the survivor switch back to its default behavior (which is to aim at the orange dots - which I called "collectibles" -  or the goal state). 
+
+To accommodate to the sudden rotation in the zombie's FOV when the zombie turn at the corner of the tracks, we set the rectangles for the first and second type to be 16x16 and 20x20 respectively.
+
+3) Potential field
+At each frame, the survivor can choose a direction to move toward from a set of 8 directions (front, back, left, right and the diagonals). The new position for each direction is computed according to the speed. A potential value for each position is then assigned. There are two potential function: one for the default behavior of the survivor and one for the "running-away" behavior. The running away behavior assign the potential value to be the negative of the minimum distance from the survivor and a zombie. That is, the larger is the minimum distance from the survivor to a zombie, the better is the position. Note that this function is not perfect as it creates local minimums at the corner of the room which is not good when the zombie is moving on the outer track. 

@@ -34,9 +34,10 @@ public class Survivor : MonoBehaviour {
 			reachedTarget = false;
 		}
 		// update position
-		if (active){
+		if (active){ // this is just to check that this survivor is not the survivor that serves as a template
+					 // to instantiate a survivor
 			behave ();
-			zf.highlightVisibleZombies(transform.position);
+			zf.highlightVisibleZombies(transform.position); // this is to highlight the zombies that are visible
 		}
 	}
 

@@ -28,23 +28,6 @@ public class WallDimention {
 	
 	public static Vector3 GOAL = new Vector3 (0.5f, 0, CENTER_Z);
 
-	// these are places where the survivor can hide in the wall
-	public static Vector3[] hide = new Vector3[]{
-		new Vector3(8.5f, 0, 12.5f),
-		new Vector3(8.5f, 0, 8.5f),
-		new Vector3(28.5f, 0, 12.5f),
-		new Vector3(28.5f, 0, 8.5f),
-		new Vector3(12.5f, 0, 6.5f),
-		new Vector3(14.5f, 0, 6.5f),
-		new Vector3(18.5f, 0, 6.5f),
-		new Vector3(22.5f, 0, 6.5f),
-		new Vector3(26.5f, 0, 6.5f),
-		new Vector3(12.5f, 0, 14.5f),
-		new Vector3(14.5f, 0, 14.5f),
-		new Vector3(18.5f, 0, 14.5f),
-		new Vector3(22.5f, 0, 14.5f),
-		new Vector3(26.5f, 0, 14.5f)
-	};
 
 	// this is a heuristic that estimates how much a location is 
 	// inside the box defined by the constants

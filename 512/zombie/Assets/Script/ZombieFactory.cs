@@ -82,7 +82,9 @@ public class ZombieFactory : MonoBehaviour {
 		}
 	}
 
-	// called by the survivor to check how far away from the zombies a position is
+	// POTENTIAL FUNCTION:
+	// check how far away from the zombies a position is
+	// use the minimum distance
 	public float away(Vector3 pos){
 		float minDist = 1000;
 		foreach (Zombie z in zombies){
@@ -94,27 +96,34 @@ public class ZombieFactory : MonoBehaviour {
 		return -minDist;
 	}
 
-	/**
-	 * Called by survivor to check which zombies are visible
-	 * Cast a ray to check zombie and see who are visible
-	 */
-	public List<Zombie> getVisibleZombies(Vector3 pos){
+	// check which zombies are visible to a certain range
+	// ray cast to all zombies
+	private List<Zombie> visibleZombies(Vector3 pos, float max_dist){
 		List<Zombie> lst = new List<Zombie>();
 		foreach (Zombie z in zombies){
 			float d = Vector3.Distance(pos, z.transform.position);
 			RaycastHit hit;
 			if (Physics.Raycast (pos, z.transform.position - pos, out hit, d)){
 				if (hit.collider.tag == "Zombie"){
-					if (d < 10) lst.Add(z); // assume that zombies at distance greater 
-											// than 10 will not see survivor
+					if (d < max_dist) lst.Add(z);
 				}
 			}
 		}
 		return lst;
 	}
 
+	/**
+	 * Called by survivor to check which zombies are visible
+	 * Cast a ray to check zombie and see who are visible
+	 */
+	public List<Zombie> getVisibleZombies(Vector3 pos){
+		return visibleZombies (pos, 15); // assume that for zombies at distance greater than 20
+										 //will not see the survivor.
+	}
+
+	// to indicate all the zombies that are visible to the survivor
 	public void highlightVisibleZombies(Vector3 pos){
-		List<Zombie> visibleZombies = getVisibleZombies (pos);
+		List<Zombie> visibleZombies = this.visibleZombies (pos, 1000);
 		foreach (Zombie z in zombies){
 			if (visibleZombies.Contains (z)){
 				z.seen.transform.localScale = new Vector3(1.3f, 0.01f, 1.3f);
