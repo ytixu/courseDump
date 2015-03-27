@@ -3,10 +3,12 @@ using System.Collections;
 
 /**
  * this class helps to calculate the potential field
+ * note that it's called WallDimention because initially, I just wanted this class to store the location 
+ * and size of the walls in the middle of the game room
  */
 
 public class WallDimention {
-
+	
 	public static float MAX_X = 30.5f;
 	public static float MAX_Z = 16.5f;
 	public static float MIN_X = 6.5f;
@@ -18,14 +20,15 @@ public class WallDimention {
 	public static float CENTER_X = 18.5f;
 	public static float CENTER_Z = 10.5f;
 
+	// this is used by Survivor to get the next positions
 	public static Vector3 X_DIR = new Vector3(1,0,0);
 	public static Vector3 Z_DIR = new Vector3(0,0,1);
-
 	public static Vector3[] dimensions = new Vector3[]{ X_DIR, Z_DIR };
 	public static int[] directions = new int[]{ 1, -1 };
 	
 	public static Vector3 GOAL = new Vector3 (0.5f, 0, CENTER_Z);
 
+	// these are places where the survivor can hide in the wall
 	public static Vector3[] hide = new Vector3[]{
 		new Vector3(8.5f, 0, 12.5f),
 		new Vector3(8.5f, 0, 8.5f),
@@ -54,8 +57,11 @@ public class WallDimention {
 		return -1;
 	}
 
-	// this is a heuristic that estimates how much away we are from a target
+
+	// POTENTIAL FUNCITON:
+	// how much away we are from a target
 	public static float away(Vector3 pos, Vector3 target){
+		// if we are near the starting position
 		if (pos.x > 34.5){
 			return pos.x*1000;
 		}

@@ -6,12 +6,13 @@ public class ZombieFactory : MonoBehaviour {
 	public Corners cn;
 	public int n; // number of zombies
 	public Zombie zombie;
-	private Zombie[] zombies;
+	private Zombie[] zombies; // list of active zombies
 	
 	public float p; // probability of respawing
 	public float[] r; // ratios of the types 
 	// [classic/shambler, (classic+shamber)/(modern+phoneAddict), modern/phoneAddict]
 
+	// get a random zombie type according to r	
 	private ZombieBehavior.ZombieType randomType(){
 		if (Random.value < r[1]){
 			if (Random.value < r[0]){
@@ -26,10 +27,8 @@ public class ZombieFactory : MonoBehaviour {
 				return ZombieBehavior.ZombieType.PHONEADDICT;
 			}
 		}
-		//return ZombieBehavior.ZombieType.PHONEADDICT;
 	}
 
-	// Use this for initialization
 	void Start () {
 		// compute the probability density for a uniform initialization of the zombie position 
 		// at the start of the game
@@ -50,7 +49,6 @@ public class ZombieFactory : MonoBehaviour {
 				cdf.Add(cumu, new Corners.CornerIndex(i,j));
 			}
 		}
-		// TODO: check if the last key is 1
 		for (int i=0; i<n; i++){
 			float rnd = Random.value;
 			foreach (float f in cdf.Keys){

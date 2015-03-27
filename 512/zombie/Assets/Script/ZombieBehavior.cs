@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/**
- * Static class of all zombie behavior.
- */
-
 public class ZombieBehavior : MonoBehaviour{
 
-	public float speed;
-	private float incSpeed;
+	public float speed; // v
+	private float incSpeed; // for zombie with a smart phone, the variation of its speed per time frame
 	public enum ZombieType{
 		CLASSIC, SHAMBLER, MODERN, PHONEADDICT
 	}
+	// get the speed of the zombie according to the type
 	public float getSpeed(ZombieType t){
 		switch(t){
 		case ZombieType.SHAMBLER:
@@ -28,6 +25,7 @@ public class ZombieBehavior : MonoBehaviour{
 		return ZombieColor[(int) t];
 	}
 
+	// probability parameters for each type of zombies
 	public float[] phoneAddictProb;
 	public float shamblerChangeLaneProb;
 
@@ -36,7 +34,10 @@ public class ZombieBehavior : MonoBehaviour{
 	}
 
 	/**
-	 * FSM for the zombies 
+	 * sub-FSM for the zombies 
+	 * according to the type of the zombie, we compute the next position where the zombie goes to
+	 * return true if we computed the next position
+	 * otherwise return false and we'll compute the position in a later state of the FSM
 	 */
 	public bool behave(Zombie z){
 		switch(z.getType()){

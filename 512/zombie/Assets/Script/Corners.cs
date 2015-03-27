@@ -2,7 +2,7 @@
 using System.Collections;
 /**
  * This class computes the direction where the zombie must go to
- * where the latter arrives at a corner
+ * when the latter arrives at a corner
  */
 
 public class Corners : MonoBehaviour {
@@ -31,6 +31,8 @@ public class Corners : MonoBehaviour {
 
 	public GameObject tileParent;
 
+	// this is the directions which the zombie must go to when they change track
+	// ordered by the second index according to the corner array
 	private Vector2[] trackDelta = new Vector2[]{
 		new Vector2(1,0), new Vector2(0,-1), new Vector2(-1,0), new Vector2(0,1)
 	};
@@ -45,6 +47,7 @@ public class Corners : MonoBehaviour {
 		}
 	}
 
+	// helper function to access an entry in the corner array
 	public Vector2 getCorner(CornerIndex ci){
 		return corners [ci.i] [ci.j];
 	}
@@ -53,6 +56,7 @@ public class Corners : MonoBehaviour {
 	}
 
 	void Start(){
+		// to place the tiles to indicate there the zombies can appear (i.e.: the corners of the tracks)
 		foreach (Vector2[] vs in corners){
 			foreach (Vector2 v in vs){
 				GameObject tile = (GameObject) Instantiate(tileParent);
@@ -64,18 +68,30 @@ public class Corners : MonoBehaviour {
 		}
 	}
 
+	// this is called by the zombieFactory to choose a random corner where the zombie may appear at 
+	// or targeting for
+	public CornerIndex randomCorner(){
+		return new CornerIndex(Random.Range(0,3), Random.Range(0,4));
+	}
+
+	/***
+	 * Functions called by zombies:
+	 */
+
 	// this is called by a zombie when it arrives at a corner
 	// returns the next corner to go to
 	public Vector2 turn(CornerIndex ci){
 		ci.j = (ci.j + 1) % 4;
 		return getCorner(ci);
 	}
+	// this is called by Phone Addict Zombies when they are travelling at the opposite direction
 	public Vector2 turnReverse(CornerIndex ci){
 		ci.j = (4 + ci.j - 1) % 4;
 		return getCorner(ci);
 	}
 	
 	// switch to a random track adjacent to the current one
+	// return the shif in position
 	public Vector2 changeTrack(CornerIndex ci, Zombie z){
 		if (ci.i == 2 || (Random.value > 0.5 && ci.i > 0)){
 			if (!z.zombieNearBy(trackDelta[ci.j])){	
@@ -100,10 +116,6 @@ public class Corners : MonoBehaviour {
 		}else{
 			return (float) Mathf.Abs(temp.x - position.x);
 		}
-	}
-
-	public CornerIndex randomCorner(){
-		return new CornerIndex(Random.Range(0,3), Random.Range(0,4));
 	}
 }
 
