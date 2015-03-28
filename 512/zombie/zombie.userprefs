@@ -1,14 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\ZombieFactory.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\..\..\example\New Unity Project\Assets\Fractal.cs">
     <Files>
-      <File FileName="Assets\Script\SurvivorFactory.cs" Line="10" Column="2" />
-      <File FileName="Assets\Script\Corners.cs" Line="72" Column="21" />
-      <File FileName="Assets\Script\Zombie.cs" Line="161" Column="25" />
-      <File FileName="Assets\Script\Survivor.cs" Line="187" Column="31" />
-      <File FileName="Assets\Script\WallDimension.cs" Line="30" Column="1" />
-      <File FileName="Assets\Script\ZombieBehavior.cs" Line="48" Column="27" />
-      <File FileName="Assets\Script\ZombieFactory.cs" Line="74" Column="15" />
+      <File FileName="..\..\..\..\example\New Unity Project\Assets\Fractal.cs" Line="70" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
